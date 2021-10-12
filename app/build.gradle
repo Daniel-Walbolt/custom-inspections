@@ -33,13 +33,20 @@ android {
 
             res {
 
-                srcDirs 'src\\main\\res', 'src\\main\\res\\layouts',
+                srcDirs 'src\\main\\res', 'src\\main\\res\\layouts', 'src\\main\\res\\drawables',
+
+                //Layout folders
                 'src\\main\\res\\layouts\\Recyclers',
                 'src\\main\\res\\layouts\\Main',
                 'src\\main\\res\\layouts\\Dialogs',
                 'src\\main\\res\\layouts\\PDF',
                 'src\\main\\res\\layouts\\Systems',
-                'src\\main\\res\\layouts\\Other'
+                'src\\main\\res\\layouts\\Other',
+
+                //Drawable folders
+                'src\\main\\res\\drawables\\backgrounds',
+                'src\\main\\res\\drawables\\icons',
+                'src\\main\\res\\drawables\\interactables'
 
             }
 

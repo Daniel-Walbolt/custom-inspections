@@ -1,6 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/main_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/themed_background"
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/inspector_title"
+            android:layout_width="225dp"
+            style="@style/HeaderText"
+            android:layout_height="wrap_content"
+            android:text="Walbolt Residential"
+            android:textAlignment="center"
+            android:textSize="26sp" />
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="90dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="Scheduled Inspections"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/inspector_home_schedule_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="#00FFFFFF"
+                    android:text="+ New" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/inspector_information_text"
+                android:text="Start an inspection by pressing 'inspect' on a schedule" />
+
+            <View style="@style/Divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/inspector_home_empty_schedules"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sorry, there are no inspections scheduled!"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:paddingTop="115dp"
+                    android:paddingBottom="115dp"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/inspector_home_scheduled_inspections_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:overScrollMode="never"
+                    android:padding="5dp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <View style="@style/Divider"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Past Inspections"
+                android:textSize="20dp"
+                android:layout_marginTop="50dp"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/inspector_information_text"
+                android:text="View and edit past inspections."/>
+
+            <View style="@style/Divider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <EditText
+                    android:id="@+id/inspector_home_past_input_year"
+                    style="@style/inspector_editText"
+                    android:background="@drawable/info_text_field_background"
+                    android:hint="Year"
+                    android:layout_width="100dp"
+                    android:inputType="number"
+                    android:drawableStart="@drawable/field_date"/>
+
+                <EditText
+                    android:id="@+id/inspector_home_past_input_month"
+                    style="@style/inspector_editText"
+                    android:background="@drawable/info_text_field_background"
+                    android:hint="Month"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="100dp"
+                    android:inputType="number"
+                    android:drawableStart="@drawable/field_date"/>
+
+                <EditText
+                    android:id="@+id/inspector_home_past_input_day"
+                    style="@style/inspector_editText"
+                    android:background="@drawable/info_text_field_background"
+                    android:hint="Day"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="80dp"
+                    android:inputType="number"
+                    android:drawableStart="@drawable/field_date"/>
+
+                <Button
+                    android:id="@+id/inspector_home_past_search"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableStart="@drawable/search_icon"
+                    android:background="@color/transparent"/>
+
+            </LinearLayout>
+
+
+
+            <TextView style="@style/inspector_system_media_recycler_emptyView"
+                android:text="There are no past inspections on this date.\n Try a different date"
+                android:id="@+id/inspector_home_past_recycler_emptyView"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/inspector_home_past_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:overScrollMode="never"
+                android:padding="5dp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>
