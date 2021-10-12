@@ -10,6 +10,16 @@ import java.util.Locale;
 public class Schedule
 {
 
+    /*
+
+    Schedules are an object used by both the database and inspection class to display information about:
+    General Residence Info
+    Client Contact info
+    Service Type and Times
+
+
+     */
+
     public String address;
     public Calendar date;
     public boolean isSigned = false;

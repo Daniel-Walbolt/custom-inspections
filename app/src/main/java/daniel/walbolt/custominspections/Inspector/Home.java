@@ -1,8 +1,11 @@
 package daniel.walbolt.custominspections.Inspector;
 
+import android.app.Activity;
+
 import java.util.ArrayList;
 
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
+import daniel.walbolt.custominspections.R;
 
 public class Home
 {
@@ -23,6 +26,20 @@ public class Home
 
      */
 
+    //Schedules are obtained from the database every time this page is loaded.
     private ArrayList<Schedule> schedules;
+    //Past inspections are NOT obtained upon loading, but ONLY upon searching a date.
+    private ArrayList<Schedule> pastInspections;
+
+    public Home(Activity activity)
+    {
+
+        //Set content view
+
+        //Retrieve database object
+
+        //Initialize the page
+
+    }
 
 }
