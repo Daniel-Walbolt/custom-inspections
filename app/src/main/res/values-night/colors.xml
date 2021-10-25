@@ -12,21 +12,21 @@
 
     <!-- Themed Colors -->
 
-    <!-- Color of CONTRASTING background-->
-    <color name="contrastColor">@color/black</color>
+    <!--Color of CONTRASTING background -->
+    <color name="contrastColor">@color/white</color>
 
     <!-- Color of hint text -->
-    <color name="hintColor">#555555</color>
+    <color name="hintColor">#B3B3B3</color>
     <!-- Color of information text -->
-    <color name="gray_unfocused">#333333</color>
+    <color name="gray_unfocused">#CCCCCC</color>
     <!-- Color of text -->
-    <color name="textColor">#121212</color>
+    <color name="textColor">#F1F1F1</color>
     <!-- Color of header text -->
-    <color name="headerColor">#000000</color>
+    <color name="headerColor">#FFFFFF</color>
     <!-- Color of button text -->
-    <color name="buttonTextColor">#000000</color>
+    <color name="buttonTextColor">#FFFFFF</color>
 
     <!-- Color of CONTRAST icons -->
-    <color name="iconColor">#222222</color>
+    <color name="iconColor">#DADADA</color>
 
 </resources>

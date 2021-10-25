@@ -46,7 +46,13 @@ android {
                 //Drawable folders
                 'src\\main\\res\\drawables\\backgrounds',
                 'src\\main\\res\\drawables\\icons',
-                'src\\main\\res\\drawables\\interactables'
+                        'src\\main\\res\\drawables\\icons\\date_icon',
+                'src\\main\\res\\drawables\\interactables',
+
+                //Dialog folders
+                'src\\main\\res\\layouts\\Dialogs\\Errors',
+                'src\\main\\res\\layouts\\Dialogs\\Main',
+                'src\\main\\res\\layouts\\Dialogs\\Creators'
 
             }
 

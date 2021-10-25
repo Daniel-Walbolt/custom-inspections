@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight"/>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <item name="buttonStyle">@style/BasicButton</item>
+        <item name="android:textColorPrimary">@color/black</item>
 
+        <item name="colorPrimary">@color/WR_orange</item>
+        <item name="colorSecondary">@color/WR_orange_light</item>
+        <item name="colorAccent">@color/WR_orange_dark</item>
+    </style>
+
+    <!-- Divider -->
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/contrastColor</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="BasicButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textStyle">italic</item>
+    </style>
 
     <!-- Text -->
     <style name="HeaderText" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">#171717</item>
+        <item name="android:textColor">@color/headerColor</item>
     </style>
     <style name="Subheading" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">#171717</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
+    <style name="InformationText" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/gray_unfocused</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <!-- Edit Text Field -->
+    <style name="inspector_editText">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="background">@drawable/text_field_background</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:hint">Replace Hint</item>
+        <item name="android:inputType">text</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+
+    <!-- Image Recycler -->
+    <style name="inspector_system_media_recycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:overScrollMode">never</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
+    <style name="inspector_system_media_recycler_emptyView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">There is no media! \nPress the image icon to add some.</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/gray_unfocused</item>
+        <item name="android:padding">10dp</item>
+    </style>
+    <!-- /////////////////// -->
 
 </resources>

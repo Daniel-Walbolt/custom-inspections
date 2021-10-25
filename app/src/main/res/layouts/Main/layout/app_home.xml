@@ -17,7 +17,9 @@
             android:layout_width="225dp"
             style="@style/HeaderText"
             android:layout_height="wrap_content"
-            android:text="Walbolt Residential"
+            android:textColor="@color/white"
+            android:text="Home"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textSize="26sp" />
 
@@ -25,15 +27,24 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:paddingTop="90dp"
             android:paddingRight="10dp">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/home_theme_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
+                android:padding="8dp"
+                android:layout_marginBottom="80dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
+                    style="@style/HeaderText"
                     android:text="Scheduled Inspections"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -53,12 +65,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:background="#00FFFFFF"
                     android:text="+ New" />
+
             </LinearLayout>
 
             <TextView
-                style="@style/inspector_information_text"
+                style="@style/InformationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Start an inspection by pressing 'inspect' on a schedule" />
 
             <View style="@style/Divider"/>
@@ -101,11 +115,14 @@
                 android:fontFamily="sans-serif"
                 android:text="Past Inspections"
                 android:textSize="20dp"
+                style="@style/HeaderText"
                 android:layout_marginTop="50dp"
                 android:textStyle="bold" />
 
             <TextView
-                style="@style/inspector_information_text"
+                style="@style/InformationText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="View and edit past inspections."/>
 
             <View style="@style/Divider"/>
@@ -119,35 +136,35 @@
                 <EditText
                     android:id="@+id/inspector_home_past_input_year"
                     style="@style/inspector_editText"
-                    android:background="@drawable/info_text_field_background"
+                    android:background="@drawable/text_field_background"
                     android:hint="Year"
                     android:layout_width="100dp"
                     android:inputType="number"
-                    android:drawableStart="@drawable/field_date"/>
+                    android:drawableStart="@drawable/date_icon"/>
 
                 <EditText
                     android:id="@+id/inspector_home_past_input_month"
                     style="@style/inspector_editText"
-                    android:background="@drawable/info_text_field_background"
+                    android:background="@drawable/text_field_background"
                     android:hint="Month"
                     android:layout_marginStart="10dp"
                     android:layout_width="100dp"
                     android:inputType="number"
-                    android:drawableStart="@drawable/field_date"/>
+                    android:drawableStart="@drawable/date_icon"/>
 
                 <EditText
                     android:id="@+id/inspector_home_past_input_day"
                     style="@style/inspector_editText"
-                    android:background="@drawable/info_text_field_background"
+                    android:background="@drawable/text_field_background"
                     android:hint="Day"
                     android:layout_marginStart="10dp"
                     android:layout_width="80dp"
                     android:inputType="number"
-                    android:drawableStart="@drawable/field_date"/>
+                    android:drawableStart="@drawable/date_icon"/>
 
                 <Button
                     android:id="@+id/inspector_home_past_search"
-                    android:layout_width="50dp"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:drawableStart="@drawable/search_icon"
