@@ -8,6 +8,9 @@
         <item name="colorPrimary">@color/WR_orange</item>
         <item name="colorSecondary">@color/WR_orange_light</item>
         <item name="colorAccent">@color/WR_orange_dark</item>
+
+        <item name="android:windowBackground">@color/windowBackground</item>
+
     </style>
 
     <!-- Divider -->

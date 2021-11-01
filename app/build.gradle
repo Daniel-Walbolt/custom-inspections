@@ -48,6 +48,7 @@ android {
                 'src\\main\\res\\drawables\\icons',
                         'src\\main\\res\\drawables\\icons\\date_icon',
                 'src\\main\\res\\drawables\\interactables',
+                        'src\\main\\res\\drawables\\interactables\\switch',
 
                 //Dialog folders
                 'src\\main\\res\\layouts\\Dialogs\\Errors',

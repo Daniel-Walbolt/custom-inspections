@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
 
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 

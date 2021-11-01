@@ -12,8 +12,11 @@
 
     <!-- Themed Colors -->
 
-    <!-- Color of CONTRASTING background-->
+    <!-- Color that CONTRASTS background-->
     <color name="contrastColor">@color/black</color>
+
+    <!-- Color of background in LIGHT mode -->
+    <color name="windowBackground">#F4F4F4</color>
 
     <!-- Color of hint text -->
     <color name="hintColor">#555555</color>

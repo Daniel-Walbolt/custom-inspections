@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Absolutes -->
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="transparent">#00FFFFFF</color>
-
-    <color name="WR_orange">#ff6d00</color>=
-    <color name="WR_orange_light">#ff9e40</color>
-    <color name="WR_orange_dark">#c43c00</color>
-
     <!-- Themed Colors -->
 
     <!--Color of CONTRASTING background -->
-    <color name="contrastColor">@color/white</color>
+    <color name="contrastColor">#EFEFEF</color>
+
+    <!-- Color of background in NIGHT mode -->
+    <color name="windowBackground">#1b1b1b</color>
 
     <!-- Color of hint text -->
     <color name="hintColor">#B3B3B3</color>

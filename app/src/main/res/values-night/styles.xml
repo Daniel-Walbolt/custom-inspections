@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Edit Text Field -->
-    <style name="inspector_editText">
-        <item name="android:layout_width">150dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="background">@drawable/text_field_background</item>
-        <item name="android:drawablePadding">10dp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:hint">Replace Hint</item>
-        <item name="android:inputType">text</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:textColorHint">@color/hintColor</item>
-        <item name="android:textSize">13sp</item>
-    </style>
 
 </resources>
