@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/drawables/backgrounds/drawable/themed_background.xml" value="0.2703125" />
+        <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/drawables/backgrounds/drawable/view_colored_edge_background_rounded.xml" value="0.2703125" />
         <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/layout/activity_main.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/layouts/Dialogs/layout/calendar.xml" value="0.17300724637681159" />
       </map>
     </option>
   </component>
