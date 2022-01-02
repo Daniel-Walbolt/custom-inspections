@@ -1,13 +1,18 @@
 package daniel.walbolt.custominspections.Inspector.Objects;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Schedule
+import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
+
+public class Schedule implements Serializable
 {
 
     /*
@@ -47,6 +52,8 @@ public class Schedule
     public boolean outbuilding;
     public boolean occupancy;
     public boolean detachedGarage;
+    public String entryMethod;
+    public String entryNotes;
     public int age;
 
     /*
@@ -54,6 +61,8 @@ public class Schedule
      */
     public long cost;
     public ArrayList<String> inspectedSystems;
+
+    public Inspection inspection;
 
     public Schedule(String address, Calendar date)
     {
@@ -63,19 +72,19 @@ public class Schedule
 
     }
 
-//    public void save()
-//    {
-//
-//        FirebaseBusiness.getInstance().saveSchedule(this);
-//
-//    }
+    public void upload(Activity activity)
+    {
 
-//    public void unschedule(Context context)
-//    {
-//
-//        FirebaseBusiness.getInstance().removeSchedule(this, context);
-//
-//    }
+        FirebaseBusiness.getInstance().saveSchedule(this, activity);
+
+    }
+
+    public void unschedule(Context context)
+    {
+
+        FirebaseBusiness.getInstance().removeSchedule(this, context);
+
+    }
 
     public String formatDate()
     {

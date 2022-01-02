@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Custom Inspections</string>
+    <string name="Error_Empty_Comment">You can\'t add an empty comment!</string>
+
+    <string-array name="category_items"> <!-- Don't change these values! They are used in the CategoryItemDialog very sensitively. -->
+        <item>Check Box</item>
+        <item>Slider</item>
+        <item>Numeric Entry</item>
+        <item>Group</item>
+    </string-array>
+
 </resources>

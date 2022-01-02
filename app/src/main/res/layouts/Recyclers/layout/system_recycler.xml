@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/windowBackground"
+    android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/recycler_system_title"
+                style="@style/HeaderText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="System Name"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="20sp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/recycler_system_media"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:drawableStart="@drawable/image_icon"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"/>
+
+            <TextView
+                android:id="@+id/recycler_system_comments"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:drawableStart="@drawable/comment_icon"
+                android:drawablePadding="5dp"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"/>
+
+        </LinearLayout>
+
+
+        <View style="@style/Divider"
+            android:background="@color/WR_orange_dark"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycler_system_tags"
+            android:padding="10dp"/>
+
+</LinearLayout>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/dialog_orange_border"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        style="@style/Subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comments"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+    <View style="@style/Divider" android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/dialog_comment_edit_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipe right on the comment you wish to edit."
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/WR_orange_dark"
+        android:visibility="gone"
+        android:layout_margin="5dp"/>
+
+    <!-- Everything but the title and navigation buttons scroll -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Layout for the comment list -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/text_field_background"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:minHeight="80dp"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/dialog_comment_list_emptyView"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="There are no comments! \n Create one by tapping the + icon,\nor double tap a saved comment to add it."
+                    android:textAlignment="center"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dialog_comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:overScrollMode="never"
+                    android:visibility="gone"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                style="@style/Subheading"
+                android:id="@+id/dialog_comment_saved_comments_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved Comments"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"/>
+
+            <View style="@style/Divider"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Double tap on a saved comment to add it"
+                android:textAlignment="center"
+                style="@style/InformationText"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:background="@drawable/text_field_background"
+                android:layout_marginTop="10dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView style="@style/InformationText"
+                        android:id="@+id/dialog_comment_global_scope"
+                        android:text="Global"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"/>
+
+                    <TextView style="@style/InformationText"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/dialog_comment_system_scope"
+                        android:text="System"
+                        android:layout_weight="1"
+                        android:textAlignment="center"/>
+
+                    <TextView style="@style/InformationText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dialog_comment_section_scope"
+                        android:text="Section"
+                        android:layout_weight="1"
+                        android:textColor="@color/WR_orange_dark"
+                        android:textAlignment="center"/>
+
+                </LinearLayout>
+
+                <View style="@style/Divider" android:background="@color/gray_unfocused" android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/dialog_comment_saved_comments_emptyView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="No saved comments here!"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="sans-serif"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dialog_saved_comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:overScrollMode="never"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/comment_dialog_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:text="Add"
+            android:drawableStart="@drawable/add_icon"/>
+
+        <Button
+            android:id="@+id/comment_dialog_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:text="Edit"
+            android:drawableStart="@drawable/edit_icon_gray"/>
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

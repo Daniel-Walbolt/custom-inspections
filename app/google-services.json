@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "630701039583",
+    "firebase_url": "https://inspections-41c65.firebaseio.com",
+    "project_id": "inspections-41c65",
+    "storage_bucket": "inspections-41c65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630701039583:android:39a9e49847eddb04472e6a",
+        "android_client_info": {
+          "package_name": "daniel.walbolt.custominspections"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630701039583-rmb5kk3r42k7is3fk5nefgm82mp4vkfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH-4ISM-t8o3jtj84USbbdGFfdCA-Ryn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630701039583-rmb5kk3r42k7is3fk5nefgm82mp4vkfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630701039583:android:9621d5e9e635f12b472e6a",
+        "android_client_info": {
+          "package_name": "roofandskillet.inspections"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630701039583-rmb5kk3r42k7is3fk5nefgm82mp4vkfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH-4ISM-t8o3jtj84USbbdGFfdCA-Ryn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630701039583-rmb5kk3r42k7is3fk5nefgm82mp4vkfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

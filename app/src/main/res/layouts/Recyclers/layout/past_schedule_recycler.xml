@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/inspection_schedule_background"
+        android:padding="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/recycler_schedule_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:text="September"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/WR_orange_dark"/>
+        <TextView
+            android:id="@+id/recycler_schedule_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10th,"
+            android:textStyle="bold"
+            style="@style/InformationText"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/WR_orange_dark"/>
+        <TextView
+            android:id="@+id/recycler_schedule_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:text="2020"
+            android:layout_marginEnd="15dp"
+            android:textColor="@color/gray_unfocused"/>
+
+        <TextView
+            android:id="@+id/recycler_schedule_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:textColor="@color/gray_unfocused"
+            android:layout_weight="1"
+            android:text="8:30 AM"/>
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/arrow_up"
+            android:id="@+id/recycler_schedule_open_close"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_schedule_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:background="@drawable/inspection_schedule_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/recycler_schedule_address"
+                android:layout_width="264dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="865 Village Pkwy"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_schedule_info"
+                android:textColor="@color/gray_unfocused"
+                android:text="Click for more info"/>
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/recycler_schedule_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/gray_unfocused"
+            android:text="John Doe" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/recycler_schedule_signed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Unsigned"
+                android:paddingRight="7dp"
+                android:layout_weight="1"
+                android:textColor="@color/WR_orange_dark"/>
+
+            <Button
+                android:text="Start Inspection"
+                android:id="@+id/recycler_schedule_begin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

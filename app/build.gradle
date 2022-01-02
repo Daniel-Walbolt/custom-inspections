@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -16,12 +17,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    allprojects {
+        repositories {
+            google()
+            jcenter()
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -37,6 +46,7 @@ android {
 
                 //Layout folders
                 'src\\main\\res\\layouts\\Recyclers',
+                        'src\\main\\res\\layouts\\Recyclers\\CategoryItemTypes',
                 'src\\main\\res\\layouts\\Main',
                 'src\\main\\res\\layouts\\Dialogs',
                 'src\\main\\res\\layouts\\PDF',
@@ -44,16 +54,27 @@ android {
                 'src\\main\\res\\layouts\\Other',
 
                 //Drawable folders
+                'src\\main\\res\\drawables\\animations',
                 'src\\main\\res\\drawables\\backgrounds',
+                        'src\\main\\res\\drawables\\backgrounds\\categories',
+                        'src\\main\\res\\drawables\\backgrounds\\buttons',
                 'src\\main\\res\\drawables\\icons',
                         'src\\main\\res\\drawables\\icons\\date_icon',
+                        'src\\main\\res\\drawables\\icons\\person_icon',
+                        'src\\main\\res\\drawables\\icons\\home_icon',
+                        'src\\main\\res\\drawables\\icons\\phone_icon',
+                        'src\\main\\res\\drawables\\icons\\info_icon',
+                        'src\\main\\res\\drawables\\icons\\add_icon',
+                        'src\\main\\res\\drawables\\icons\\edit_icon',
+                        'src\\main\\res\\drawables\\icons\\arrow_icon',
                 'src\\main\\res\\drawables\\interactables',
                         'src\\main\\res\\drawables\\interactables\\switch',
 
                 //Dialog folders
-                'src\\main\\res\\layouts\\Dialogs\\Errors',
                 'src\\main\\res\\layouts\\Dialogs\\Main',
-                'src\\main\\res\\layouts\\Dialogs\\Creators'
+                'src\\main\\res\\layouts\\Dialogs\\Creators',
+                'src\\main\\res\\layouts\\Dialogs\\Alerts',
+                'src\\main\\res\\layouts\\Dialogs\\Informative'
 
             }
 
@@ -65,10 +86,31 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+
+    //Jetpack Libraries
     testImplementation 'junit:junit:4.+'
+
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    //CameraX Libraries
+    def camerax_version = "1.0.1"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha27"
+
+    //Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-firestore:24.0.0'
+    implementation platform('com.google.firebase:firebase-bom:29.0.3') // Check if ALL of these are up to date
+    implementation 'com.google.firebase:firebase-storage'
+
+    //3rd party dependencies
+    implementation 'com.xw.repo:bubbleseekbar:3.20'
+
+    implementation 'com.google.android.material:material:1.4.0'
+
 }

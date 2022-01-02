@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+    <style name="AppThemeLight" parent="Theme.AppCompat.DayNight">
         <item name="buttonStyle">@style/BasicButton</item>
-        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimary">@color/contrastColor</item>
 
         <item name="colorPrimary">@color/WR_orange</item>
-        <item name="colorSecondary">@color/WR_orange_light</item>
-        <item name="colorAccent">@color/WR_orange_dark</item>
+        <item name="colorSecondary">@color/WR_orange_dark</item>
+        <item name="colorAccent">@color/WR_orange</item>
 
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
 
+    </style>
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <!-- Divider -->
@@ -20,6 +26,11 @@
         <item name="android:background">@color/contrastColor</item>
     </style>
 
+    <style name="VertDivider" parent="Divider">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
     <!-- Buttons -->
     <style name="BasicButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/textColor</item>
@@ -27,12 +38,24 @@
     </style>
 
     <!-- Text -->
-    <style name="HeaderText" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">@color/headerColor</item>
+    <!-- Headers should be sans-serif bold, while subheadings and informative text should be sans-serif. INPUT text should be sans-serif medium -->
+    <style name="HeaderText" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textColor">@color/contrastColor</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
+
     <style name="Subheading" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">@color/textColor</item>
     </style>
+
+    <style name="CategoryTitle" parent="Subheading"> <!-- Every category will use this style -->
+        <item name="android:textSize">19sp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:textColor">@color/contrastColor</item>
+        <item name="android:titleMarginBottom">7dp</item>
+    </style>
+
     <style name="InformationText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/gray_unfocused</item>
         <item name="android:textSize">13sp</item>
@@ -42,7 +65,7 @@
     <style name="inspector_editText">
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="background">@drawable/text_field_background</item>
+        <item name="android:background">@drawable/text_field_background</item>
         <item name="android:drawablePadding">10dp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:hint">Replace Hint</item>
@@ -63,7 +86,7 @@
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="inspector_system_media_recycler_emptyView">
+    <style name="media_recycler_emptyView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">There is no media! \nPress the image icon to add some.</item>
@@ -73,5 +96,31 @@
         <item name="android:padding">10dp</item>
     </style>
     <!-- /////////////////// -->
+
+    <!-- Title Bar -->
+    <style name="title_notch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">220dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/themed_background</item>
+    </style>
+    <style name="title_notch_text" parent="HeaderText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <!-- Scheduler Styles -->
+    <style name="MyTimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:headerBackground">@color/WR_orange</item>
+    </style>
 
 </resources>

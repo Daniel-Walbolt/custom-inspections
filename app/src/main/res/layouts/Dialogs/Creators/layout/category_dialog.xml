@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxHeight="500dp"
+    android:background="@drawable/dialog_orange_border"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/category_dialog_name"
+        android:textAlignment="center"
+        style="@style/HeaderText"
+        android:text="Category Name"
+        android:padding="10dp"
+        android:textSize="20sp"/>
+
+    <View style="@style/Divider"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/InformationText"
+        android:text="Edit the Category's items or delete the Category entirely"
+        android:textAlignment="center"
+        android:padding="5dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_field_background"
+        android:padding="4dp"
+        android:minHeight="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/category_dialog_items_recycler"
+        android:overScrollMode="never"
+        android:orientation="vertical">
+
+        <!-- Add Category items here programmatically -->
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_dialog_add_item"
+            android:background="@drawable/green_button"
+            android:text="Add Item"
+            style="@style/Subheading"
+            android:textStyle="bold"
+            android:textColor="@color/system_complete"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_dialog_delete"
+            android:background="@drawable/red_button"
+            android:textColor="@color/system_incomplete"
+            android:text="Delete Category"
+            style="@style/Subheading"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

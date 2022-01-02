@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="daniel.walbolt.custominspections">
+
+    <!-- Permissions and features here -->
+    <uses-feature android:name="android.hardware.camera.any"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Walbolt Residential"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeLight">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,10 +21,16 @@
             </intent-filter>
         </activity>
 
+
         <!-- Custom Activity Objects should be stated here -->
+        <activity android:name=".Activities.SystemActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activities.InspectionActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activities.ScheduleActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activities.PDFActivity" android:windowSoftInputMode="adjustPan"/>
 
         <!-- File provider object should be stated here -->
 
     </application>
+
 
 </manifest>

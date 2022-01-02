@@ -10,6 +10,19 @@
     <color name="WR_orange_light">#ff9e40</color>
     <color name="WR_orange_dark">#c43c00</color>
 
+    <color name="system_complete">#00B400</color>
+    <color name="system_incomplete">#B40000</color>
+    <color name="system_excluded">@color/gray_unfocused</color>
+    <color name="system_quality">#00B8D4</color>
+    <color name="system_partial">#FFAB00</color>
+
+    <color name="system_section_information">#2962FF</color>
+    <color name="system_section_restrictions">#4A148C</color>
+    <color name="system_section_observations">#C51162</color>
+    <color name="system_section_defects">#D50000</color>
+    <color name="system_section_settings">#FFAB00</color>
+    <color name="system_section_subsystems">#000</color>
+
     <!-- Themed Colors -->
 
     <!-- Color that CONTRASTS background-->
@@ -31,5 +44,8 @@
 
     <!-- Color of CONTRAST icons -->
     <color name="iconColor">#222222</color>
+
+    <!-- Slightly different background color (used by media recycler) -->
+    <color name="dimBackground">#E6E6E6</color>
 
 </resources>

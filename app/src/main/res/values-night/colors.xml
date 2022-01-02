@@ -23,4 +23,7 @@
     <!-- Color of CONTRAST icons -->
     <color name="iconColor">#DADADA</color>
 
+    <!-- Slightly different background color (used by media recycler) -->
+    <color name="dimBackground">#303030</color>
+
 </resources>

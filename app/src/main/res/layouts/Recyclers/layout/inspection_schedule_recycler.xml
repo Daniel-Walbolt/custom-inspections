@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_schedule_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:visibility="visible"
+        android:background="@drawable/inspection_schedule_dropdown_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/recycler_schedule_address"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                style="@style/InformationText"
+                android:text="865 Village Pkwy"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_unfocused"
+                android:id="@+id/recycler_schedule_info"
+                android:textStyle="italic"
+                android:paddingRight="5dp"
+                style="@style/Subheading"
+                android:text="Additional Info"/>
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/recycler_schedule_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/InformationText"
+            android:textColor="@color/gray_unfocused"
+            android:text="John Doe" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/recycler_schedule_signed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Unsigned"
+                android:paddingRight="7dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:textColor="@color/system_incomplete"/>
+
+            <Button
+                android:text="Begin"
+                style="@style/InformationText"
+                android:id="@+id/recycler_schedule_begin"
+                android:background="@drawable/orange_button"
+                android:textColor="@color/WR_orange"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/inspection_schedule_background"
+        android:padding="10dp"
+        android:id="@+id/inspection_schedule_header"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/recycler_schedule_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Subheading"
+            android:textStyle="bold"
+            android:text="September"
+            android:textSize="18sp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/WR_orange_dark"/>
+        <TextView
+            android:id="@+id/recycler_schedule_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10th,"
+            style="@style/Subheading"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/WR_orange_dark"
+            android:layout_marginEnd="8dp"/>
+        <TextView
+            android:id="@+id/recycler_schedule_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2020"
+            style="@style/Subheading"
+            android:layout_marginEnd="15dp"
+            android:textColor="@color/gray_unfocused"/>
+
+        <TextView
+            android:id="@+id/recycler_schedule_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Subheading"
+            android:textColor="@color/gray_unfocused"
+            android:layout_weight="1"
+            android:text="8:30 AM"/>
+
+        <TextView
+            android:drawableEnd="@drawable/arrow_up"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycler_schedule_open_close"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

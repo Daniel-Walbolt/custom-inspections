@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxHeight="100dp"
+    android:background="@drawable/dialog_orange_border"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/error_icon"
+        android:layout_gravity="center_horizontal"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/alert_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="300dp"
+        android:textColor="@color/contrastColor"
+        android:text="This is a test error. Please confirm your choice."
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:inputType="textMultiLine"/>
+
+    <Button
+        android:id="@+id/alert_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ok"
+        android:textColor="@color/contrastColor"
+        android:layout_gravity="end"
+        android:layout_marginRight="10dp"
+        android:background="@color/transparent"/>
+
+
+</LinearLayout>

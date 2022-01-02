@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="standard_price">350</integer> // Cost of a standard base inspection.
+    <integer name="standard_time">120</integer> // Time in minutes that a standard inspection takes.
+
+    <integer name="age_limit">100</integer> // After this many years, increase price and duration.
+    <integer name="age_cost_increment">35</integer> // Increase in price for every age limit.
+    <integer name="age_time_increment">30</integer> // Increase in estimated time for every age limit.
+
+    <integer name="footage_limit">2000</integer> // The first limit that increases inspection cost and time.
+    <integer name="footage_increment">500</integer> // An amount of extra footage past the limit that increases time and price again.
+    <integer name="footage_cost_increment">30</integer> //Every footage increment raises the price by this amount.
+    <integer name="footage_time_increment">15</integer> // Every footage increment raises the estimated time (in minutes) by this amount.
+
+    <integer name="outbuilding_cost">70</integer> // The base extra cost for inspecting an outbuilding.
+    <integer name="outbuilding_time">25</integer> // The extra time needed to inspect an outbuilding.
+    <integer name="detached_garage_cost">50</integer> // The base extra cost for inspecting a detached garage.
+    <integer name="detached_garage_time">20</integer> // The extra time needed to inspect a detached garage.
+
+    <integer name="sub_section_spacing">20</integer>
+
+</resources>

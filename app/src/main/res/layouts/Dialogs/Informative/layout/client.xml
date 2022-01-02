@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="420dp"
+    android:layout_width="260dp"
+    android:orientation="vertical"
+    android:padding="2dp"
+    android:background="@drawable/dialog_orange_border">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="18dp">
+
+            <TextView
+                android:id="@+id/inspection_schedule_address"
+                style="@style/HeaderText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:padding="5dp"
+                android:text="139 Sconticutneck Road"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/inspection_schedule_date"
+                style="@style/Subheading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="0"
+                android:text="12/12/2020"
+                android:textAlignment="center"
+                android:textColor="@color/gray_unfocused"
+                android:textSize="15sp" />
+
+            <TextView
+                style="@style/HeaderText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:text="Inspection Info"
+                android:textColor="@color/contrastColor"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_start"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_duration"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cost: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_cost"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/HeaderText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:text="Property Info"
+                android:textColor="@color/contrastColor"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Age:"
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_age"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Square Feet: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_footage"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vacant: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_vacancy"
+                    style="@style/InformationText"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Occupied: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_occupied"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Utilities: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_utilities"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Outbuilding: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_outbuilding"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Detached Garage: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_detached"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Means of Entry: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_entry_method"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/InformationText"
+                android:id="@+id/inspection_schedule_entry_notes"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="Other / Notes"
+                android:textColor="@color/gray_unfocused" />
+
+            <TextView
+                style="@style/HeaderText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:text="Client Info"
+                android:textColor="@color/contrastColor"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_client_name"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_client_email"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    style="@style/Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone: "
+                    android:textColor="@color/contrastColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/inspection_schedule_client_phone"
+                    style="@style/InformationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

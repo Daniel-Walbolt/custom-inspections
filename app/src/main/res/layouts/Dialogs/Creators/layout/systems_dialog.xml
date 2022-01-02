@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_orange_border"
+    android:paddingBottom="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            style="@style/HeaderText"
+            android:padding="8dp"
+            android:textSize="22sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/contrastColor"
+            android:text="Enter a Name"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/create_system_name"
+            android:layout_width="200dp"
+            android:layout_margin="10dp"
+            android:hint="System name"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            style="@style/inspector_editText"/>
+
+        <Button
+            android:id="@+id/create_system_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            style="@style/Subheading"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

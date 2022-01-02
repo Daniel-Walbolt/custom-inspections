@@ -1,6 +1,414 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/inspection_scheduler_page_holder"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        style="@style/title_notch"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/title_notch_text"
+            android:layout_height="wrap_content"
+            android:text="Scheduler" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:id="@+id/scheduler_scroll_view"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="50dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:padding="10dp"
+                android:text="Make your next appointment here."
+                android:textColor="@color/gray_unfocused"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First, pick a date"
+                android:textColor="@color/contrastColor"
+                style="@style/HeaderText" />
+
+            <CalendarView
+                android:id="@+id/inspection_scheduler_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusedByDefault="true"
+                android:weekDayTextAppearance="@style/InformationText"
+                android:dateTextAppearance="@style/InformationText"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="And a time."
+                android:textColor="@color/contrastColor"
+                style="@style/HeaderText"/>
+            <TimePicker
+                android:id="@+id/inspection_scheduler_time"
+                style="@style/MyTimePicker"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Next, the client"
+                android:textColor="@color/contrastColor"
+                style="@style/HeaderText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_client_first"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/text_field_background"
+                    android:drawableStart="@drawable/person_custom_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_client_last"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/text_field_background"
+                    android:drawableStart="@drawable/person_custom_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_client_email"
+                    android:layout_width="189dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:autoLink="email"
+                    android:background="@drawable/text_field_background"
+                    android:drawableStart="@drawable/person_custom_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:padding="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_client_phone"
+                    android:layout_width="126dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:autoLink="phone"
+                    android:background="@drawable/text_field_background"
+                    android:drawableStart="@drawable/phone_custom_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Phone"
+                    android:inputType="number"
+                    android:padding="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finally, the property"
+                android:textColor="@color/contrastColor"
+                style="@style/HeaderText"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp">
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_address"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/text_field_background"
+                    android:drawableStart="@drawable/home_custom_icon"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Address"
+                    android:padding="5dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/inspection_scheduler_yearbuilt"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/text_field_background"
+                    android:digits="0123456789"
+                    android:maxLength="4"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Year Built"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:text="Method of Entry"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/gray_unfocused"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inspection_scheduler_entry_client"
+                    android:text="Client present"
+                    android:textColor="@color/contrastColor"
+                    android:textSize="13sp"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inspection_scheduler_entry_unlocked"
+                    android:text="Unlocked entryway"
+                    android:textColor="@color/contrastColor"
+                    android:textSize="13sp"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hidden Key"
+                    android:id="@+id/inspection_scheduler_entry_hidden"
+                    android:textSize="13sp"
+                    android:textColor="@color/contrastColor"/>
+
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/inspection_scheduler_entry_method"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/text_field_background"
+                android:drawableStart="@drawable/info_custom_icon"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Other / Notes"
+                android:inputType="text"
+                android:padding="5dp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="Fill out the following information as accurately as possible\nThis information may be used for price estimates."
+                android:textColor="@color/gray_unfocused"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/inspection_scheduler_footage"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/text_field_background"
+                android:drawableStart="@drawable/info_custom_icon"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Square Feet"
+                android:inputType="number"
+                android:padding="5dp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/inspection_scheduler_vacant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:text="Vacant"
+                    android:textSize="14sp" />
+
+                <CheckBox
+                    android:id="@+id/inspection_scheduler_occupied"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:text="Occupied"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/inspection_scheduler_utilities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:text="Utilities Active"
+                    android:textSize="14sp" />
+
+                <CheckBox
+                    android:id="@+id/inspection_scheduler_outbuilding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
+                    android:padding="10dp"
+                    android:text="Inspect Outbuilding"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/inspection_scheduler_detached"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:padding="10dp"
+                android:text="Detached Garage"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/inspection_scheduler_price"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="N/A"
+                    android:drawableStart="@drawable/dollar_icon"
+                    android:drawablePadding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#808080"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/inspection_scheduler_duration"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="N/A"
+                    android:drawableStart="@drawable/time_icon"
+                    android:drawablePadding="5dp"
+                    android:layout_marginStart="10dp"
+                    android:textColor="#808080"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/inspection_scheduler_finish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/WR_orange_dark"
+                style="@style/HeaderText"
+                android:textSize="18sp"
+                android:layout_gravity="right"
+                android:layout_margin="20dp"
+                android:text="Finish"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_orange_border"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/HeaderText"
+        android:id="@+id/category_item_dialog_title"
+        android:text="Create New Section"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/InformationText"
+        android:padding="3dp"
+        android:textAlignment="center"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_marginBottom="10dp"
+        android:text="Sections are what hold information during an inspection. Name them wisely, and group them in a way that will help you organize!\n\nNote: Groups can not be in another group.\nYou can not change the type (Check Box, etc.) by editing!"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/category_item_name"
+        android:background="@drawable/text_field_background"
+        android:hint="Name"
+        android:ellipsize="end"
+        android:textAlignment="center"
+        android:padding="3dp"
+        style="@style/InformationText"/>
+
+    <Spinner
+        android:id="@+id/category_item_type"
+        android:layout_width="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/text_field_background"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textAlignment="center"
+        style="@style/InformationText"
+        android:entries="@array/category_items"/>
+
+
+    <Spinner
+        android:id="@+id/category_item_group"
+        android:layout_width="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/text_field_background"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:padding="3dp"
+        android:textAlignment="center"
+        style="@style/InformationText"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/category_item_finish"
+        android:background="@drawable/green_button"
+        android:text="Finish"
+        style="@style/Subheading"
+        android:textStyle="bold"
+        android:layout_margin="10dp"
+        android:textColor="@color/system_complete"/>
+
+</LinearLayout>

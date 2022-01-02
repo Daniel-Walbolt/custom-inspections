@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxHeight="100dp"
+    android:background="@drawable/dialog_orange_border"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/error_icon"
+        android:layout_gravity="center_horizontal"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="300dp"
+        android:maxHeight="40dp"
+        android:text="Are you sure?"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textColor="@color/contrastColor"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/confirm_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="300dp"
+        android:maxHeight="40dp"
+        android:text="This is a test alert. Please confirm your choice."
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/gray_unfocused"
+        android:textAlignment="center"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/confirm_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            style="@style/Subheading"
+            android:background="@color/transparent"
+            android:textColor="@color/contrastColor"
+            android:text="Confirm" />
+
+        <Button
+            android:id="@+id/confirm_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            style="@style/Subheading"
+            android:textColor="@color/contrastColor"
+            android:background="@color/transparent"
+            android:text="Cancel" />
+    </LinearLayout>
+
+
+</LinearLayout>

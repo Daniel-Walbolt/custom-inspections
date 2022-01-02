@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="3dp"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/category_item_recycler_checkbox"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        style="@style/InformationText"
+        android:ellipsize="end"
+        android:id="@+id/category_item_recycler_name"
+        android:text="Category Item Name"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:layout_gravity="center_vertical"
+        android:padding="3dp"
+        android:id="@+id/category_item_recycler_comment"
+        android:tooltipText="Add comment(s)"
+        android:src="@drawable/comment_icon"/>
+
+</LinearLayout>
