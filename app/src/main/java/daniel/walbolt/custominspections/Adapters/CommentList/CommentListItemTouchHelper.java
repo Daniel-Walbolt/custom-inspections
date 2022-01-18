@@ -32,19 +32,11 @@ public class CommentListItemTouchHelper extends ItemTouchHelper.Callback
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 
-        ((CommentListRecyclerAdapter.CommentHolder)viewHolder).foreground.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.white));
-
     }
 
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
-        if(actionState == ItemTouchHelper.ACTION_STATE_DRAG)
-        {
-
-            ((CommentListRecyclerAdapter.CommentHolder)viewHolder).foreground.setBackground(ContextCompat.getDrawable(viewHolder.itemView.getContext(), R.drawable.dialog_orange_border));
-
-        }
     }
 
     @Override

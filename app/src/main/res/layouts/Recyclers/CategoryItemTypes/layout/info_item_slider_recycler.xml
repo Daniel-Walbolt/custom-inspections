@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="3dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_item_checkbox"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:ellipsize="end"
+            android:id="@+id/info_item_title"
+            android:text="Category Item Name"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="3dp"
+            android:id="@+id/info_item_description"
+            android:visibility="gone"
+            android:tooltipText="Show this item's description"
+            android:src="@drawable/info_icon_unfocused"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_gravity="center_vertical"
+            android:padding="3dp"
+            android:id="@+id/info_item_comment"
+            android:tooltipText="Add comment(s)"
+            android:visibility="gone"
+            android:src="@drawable/comment_icon"/>
+
+    </LinearLayout>
+
+
+    <!-- Customize the last attributes of this slider programmatically -->
+    <com.xw.repo.BubbleSeekBar
+        android:id="@+id/info_item_slider_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        app:bsb_hide_bubble="true"
+        app:bsb_section_text_position="below_section_mark"
+        app:bsb_show_section_mark="false"
+        app:bsb_show_section_text="true"
+        app:bsb_touch_to_seek="true"
+        app:bsb_seek_step_section="true"
+
+
+        app:bsb_track_color="@color/gray_unfocused"
+        app:bsb_second_track_color="@color/WR_orange"
+
+        android:visibility="gone"
+        app:bsb_max="8"
+        app:bsb_min="0"
+        app:bsb_section_count="8"
+        app:bsb_progress="0"/>
+
+</LinearLayout>

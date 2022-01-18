@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "daniel.walbolt.custominspections"
-        minSdkVersion 28
+        minSdkVersion 30
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -67,6 +67,7 @@ android {
                         'src\\main\\res\\drawables\\icons\\add_icon',
                         'src\\main\\res\\drawables\\icons\\edit_icon',
                         'src\\main\\res\\drawables\\icons\\arrow_icon',
+                        'src\\main\\res\\drawables\\icons\\camera_icons',
                 'src\\main\\res\\drawables\\interactables',
                         'src\\main\\res\\drawables\\interactables\\switch',
 

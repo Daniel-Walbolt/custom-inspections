@@ -29,7 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/textColor"
                 style="@style/InformationText"
                 android:text="865 Village Pkwy"
                 android:textSize="15sp" />
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray_unfocused"
+                android:textColor="@color/textColor"
                 android:id="@+id/recycler_schedule_info"
                 android:textStyle="italic"
                 android:paddingRight="5dp"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/InformationText"
-            android:textColor="@color/gray_unfocused"
+            android:textColor="@color/textColor"
             android:text="John Doe" />
 
         <LinearLayout

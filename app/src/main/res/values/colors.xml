@@ -17,11 +17,11 @@
     <color name="system_partial">#FFAB00</color>
 
     <color name="system_section_information">#2962FF</color>
-    <color name="system_section_restrictions">#4A148C</color>
+    <color name="system_section_restrictions">#9101B1</color>
     <color name="system_section_observations">#C51162</color>
     <color name="system_section_defects">#D50000</color>
     <color name="system_section_settings">#FFAB00</color>
-    <color name="system_section_subsystems">#000</color>
+    <color name="system_section_subsystems">#01983F</color>
 
     <!-- Themed Colors -->
 

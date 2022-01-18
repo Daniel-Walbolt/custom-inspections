@@ -62,10 +62,11 @@ public class Main {
         //Initialize the recycler view for the MainSystem list.
         initRecyclerView(activity, schedule.inspection);
 
-        initTheme(activity);
-
         //Initialize the page's buttons.
         initButtons(activity, schedule);
+
+        //Initialize the page
+        initTheme(activity);
 
         if(inspectionSchedule.isPastInspection)
         {

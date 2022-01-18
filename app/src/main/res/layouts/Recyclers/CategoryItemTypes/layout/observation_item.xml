@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="3dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_item_checkbox"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:ellipsize="end"
+            android:id="@+id/info_item_title"
+            android:text="Category Item Name"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="3dp"
+            android:id="@+id/info_item_description"
+            android:visibility="gone"
+            android:tooltipText="Show this item's description"
+            android:src="@drawable/info_icon_unfocused"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_gravity="center_vertical"
+            android:padding="3dp"
+            android:id="@+id/info_item_comment"
+            android:tooltipText="Add comment(s)"
+            android:visibility="gone"
+            android:src="@drawable/comment_icon"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_gravity="center_vertical"
+            android:padding="3dp"
+            android:id="@+id/info_item_picture"
+            android:tooltipText="Add comment(s)"
+            android:visibility="gone"
+            android:src="@drawable/image_icon"/>
+
+    </LinearLayout>
+
+    <!-- This is the content that displays after the CheckBox is checked -->
+    <LinearLayout
+        android:background="@drawable/observation_category_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="13dp"
+        android:paddingLeft="6dp"
+        android:id="@+id/observation_item_content"
+        android:visibility="gone">
+
+        <TextView style="@style/InformationText"
+            android:layout_width="wrap_content"
+            android:padding="3dp"
+            android:layout_height="wrap_content"
+            android:text="Media"/>
+
+        <View style="@style/Divider"/>
+
+        <TextView style="@style/media_recycler_emptyView"
+            android:id="@+id/observation_item_media_emptyView"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            style="@style/inspector_system_media_recycler"
+            android:id="@+id/observation_item_media_recycler"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</LinearLayout>

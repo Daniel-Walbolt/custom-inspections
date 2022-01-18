@@ -53,7 +53,12 @@ public class Media extends Category
 
     }
 
-    public void load(LinearLayout parent) //Load the media category, inflating views and adding itself to the parent view
+    @Override
+    public void initRecycler() {
+
+    }
+
+    public void loadToPage(LinearLayout parent) //Load the media category, inflating views and adding itself to the parent view
     {
 
         /*View media_category  = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_category, parent, false);

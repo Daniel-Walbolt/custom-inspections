@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_height="wrap_content"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/dialog_orange_border"
     android:orientation="vertical"
@@ -47,7 +47,7 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:minHeight="80dp"
-                android:padding="8dp">
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/dialog_comment_list_emptyView"
@@ -63,9 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:overScrollMode="never"
-                    android:visibility="gone"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp"/>
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -92,7 +90,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:orientation="vertical"
                 android:padding="8dp"
                 android:background="@drawable/text_field_background"

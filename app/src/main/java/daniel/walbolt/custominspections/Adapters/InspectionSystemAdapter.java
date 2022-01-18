@@ -205,7 +205,7 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
 
             //When the system is clicked on, open a new activity. (Visual effect which also gives back button functionality on android).
             Intent openSystem = new Intent(itemView.getContext(), SystemActivity.class);
-            openSystem.putExtra("System", systems.get(getAdapterPosition()));
+            openSystem.putExtra("SystemName", systems.get(getAdapterPosition()).getDisplayName());
             itemView.getContext().startActivity(openSystem);
 
         }

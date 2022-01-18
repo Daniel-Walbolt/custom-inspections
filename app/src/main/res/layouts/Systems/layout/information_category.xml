@@ -11,20 +11,14 @@
         android:background="@color/system_section_information">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/HeaderText"
-            android:textColor="@color/windowBackground"
-            android:text="Information"
-            android:layout_centerHorizontal="true"
-            android:padding="10dp"
-            android:textSize="24sp"/>
+            style="@style/CategoryTitle"
+            android:text="Information"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/information_category_edit"
-            android:src="@drawable/edit_icon_gray"
+            android:src="@drawable/edit_icon_white"
             android:background="@color/transparent"
             android:layout_centerVertical="true"
             android:padding="10dp"
@@ -32,14 +26,13 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="7dp"
+    <androidx.recyclerview.widget.RecyclerView
+        style="@style/CategoryRecycler"
         android:id="@+id/information_category_items"
-        android:orientation="vertical"
         android:background="@drawable/information_category_background">
-    </LinearLayout>>
+
+        <!-- Insert content programmatically here -->
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

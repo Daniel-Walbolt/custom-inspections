@@ -23,7 +23,7 @@ public class ImageDialog extends Dialog
         show();
 
         ImageView image = findViewById(R.id.dialog_image_picture);
-        image.setImageURI(media.getURI());
+        image.setImageURI(media.getURI(context));
 
         TextView resolution = findViewById(R.id.image_dialog_resolution);
         resolution.setText(image.getDrawable().getIntrinsicWidth() + "x" + image.getDrawable().getIntrinsicHeight());

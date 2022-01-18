@@ -1,10 +1,13 @@
 package daniel.walbolt.custominspections.Adapters;
 
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -127,7 +130,10 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
     public void onBindViewHolder(@NonNull MediaHolder holder, int position)
     {
 
-        holder.mImageView.setImageURI(media.get(position).getURI());
+        System.out.println(media.get(position).getFileName());
+
+        if(media.get(position).getFile() != null)
+            holder.mImageView.setImageURI(media.get(position).getURI(holder.itemView.getContext()));
 
     }
 
@@ -152,9 +158,6 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
     public void onItemSwiped(int position)
     {
 
-        media.remove(position);
-        notifyItemRemoved(position);
-
     }
 
     class MediaHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -176,8 +179,8 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
             mImageView = view.findViewById(R.id.recycler_image);
             background = view.findViewById(R.id.recycler_image_background);
 
-            ImageButton close = view.findViewById(R.id.recycler_image_remove);
-            close.setOnClickListener(new View.OnClickListener() {
+            ImageButton remove = view.findViewById(R.id.recycler_image_remove);
+            remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     media.remove(getAdapterPosition());

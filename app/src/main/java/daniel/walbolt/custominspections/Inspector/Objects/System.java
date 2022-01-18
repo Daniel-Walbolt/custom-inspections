@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xw.repo.BubbleSeekBar;
@@ -25,11 +26,13 @@ import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defect;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Media;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Observation;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Restriction;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Observations;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Restrictions;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Settings;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Sub_System;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
+import daniel.walbolt.custominspections.MainActivity;
 import daniel.walbolt.custominspections.R;
 
 public class System implements Serializable
@@ -42,11 +45,25 @@ public class System implements Serializable
 
      */
 
+    //Information Category
+    private Information information;
+
+    //Observation Category
+    private Observations observations;
+
+    //Restrictions Category
+    private Restrictions restrictions;
+
+    //Defect Category
+    private Defect defects;
+
+    //Subsystem Category
+    private Sub_System subSystems;
+
     //Settings object
     private Settings settings;
-
     //Context Media
-    private Media contextMedia;
+    private Media systemMedia;
 
     //Temporary variables for taking pictures.
    /*
@@ -77,11 +94,18 @@ public class System implements Serializable
     private void createDefaultCategories()
     {
 
-        categories.add(new Information(this));
-        categories.add(new Observation(this));
-        categories.add(new Restriction(this));
-        categories.add(new Defect(this));
-        categories.add(new Settings(this));
+        if(categories.isEmpty())
+        {
+
+            categories.clear();
+            categories.add(new Information(this));
+            categories.add(new Observations(this));
+            categories.add(new Restrictions(this));
+            categories.add(new Defect(this));
+            categories.add(new Sub_System(this));
+            categories.add(new Settings(this));
+
+        }
 
     }
 
@@ -89,7 +113,6 @@ public class System implements Serializable
     {
 
         ArrayList<SystemTags> systemTags = new ArrayList<>();
-
 
 
 
@@ -151,9 +174,46 @@ public class System implements Serializable
 
         createDefaultCategories();
 
+        //Initialize the page
+        initTheme(mActivity);
+
         //Load the categories on to the page
         for(Category category : categories)
-            category.load(page);
+            category.loadToPage(page);
+
+    }
+
+    //Boiler plate method to get the current theme of the app
+    private void initTheme(Activity activity) {
+
+        //Find the theme switch object and set it according to shared preference
+        TextView themeView = activity.findViewById(R.id.theme_switch);
+        themeView.setText(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES ? "Night Theme" : "Light Theme"); // Set the text of the theme button to display the current theme
+
+        //Create a listener to change the theme if switched.
+        themeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (((TextView) v).getText() == "Light Theme") {
+                    //If the theme is alright LIGHT, switch it to NIGHT
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    ((TextView) v).setText("Night Theme");
+                    activity.getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit().putBoolean(MainActivity.NIGHT_MODE, true).apply();
+
+                } else {
+
+                    //If the theme is already NIGHT, switch it to LIGHT
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    ((TextView) v).setText("Light Theme");
+                    activity.getSharedPreferences(MainActivity.SHARED_PREFERENCES, Context.MODE_PRIVATE).edit().putBoolean(MainActivity.NIGHT_MODE, false).apply();
+
+
+                }
+
+            }
+
+        });
 
     }
 
@@ -332,55 +392,6 @@ public class System implements Serializable
 
     }*/
 
-    //Method to initialize a Bubble Seek Bar
-    public BubbleSeekBar initBubbleSeekBarWithValues(Activity mActivity, int id, String... values)
-    {
-
-        BubbleSeekBar genericBar = mActivity.findViewById(id);
-        final SparseArray<String> tickLabels = new SparseArray<>();
-        for(int i = 0; i < values.length; i++)
-            tickLabels.put(i, values[i]);
-
-        genericBar.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
-            @NonNull
-            @Override
-            public SparseArray<String> onCustomize(int sectionCount, @NonNull SparseArray<String> array) {
-                return tickLabels;
-            }
-        });
-
-        return genericBar;
-
-    }
-
-    //Method to initialize Bubble Seek Bar with many numeric values with steady increments.
-    public BubbleSeekBar initBubbleSeekBarWithValues(Activity mActivity, int id, int bottomValue, int topValue, int increment)
-    {
-
-        BubbleSeekBar genericBar = mActivity.findViewById(id);
-        final SparseArray<String> tickLabels = new SparseArray<>();
-        int index = 0;
-        for(int i = bottomValue; i < topValue; i+=increment)
-        {
-
-            tickLabels.put(index, String.valueOf(i));
-            index++;
-
-        }
-
-        genericBar.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
-
-            @NonNull
-            @Override
-            public SparseArray<String> onCustomize(int sectionCount, @NonNull SparseArray<String> array) {
-                return tickLabels;
-            }
-        });
-
-        return genericBar;
-
-    }
-
     /*
     Recycler Views
      */
@@ -431,88 +442,6 @@ public class System implements Serializable
         return new Observation("Near/Past Service Expectancy", section).setHasComments(true, false);
 
     }*/
-
-    /*
-    Add Images to InspectorCheckable Object recycler views
-     */
-
-    //Take a picture
-    void openCameraForMedia(Activity mActivity, SystemSection mediaSection, String uniqueFileName)
-    {
-
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(camera.resolveActivity(mActivity.getPackageManager()) != null)
-        {
-
-            InspectionMedia media = new InspectionMedia(mediaSection).createImageFile(mActivity, uniqueFileName);
-            if(media.getFile() != null)
-            {
-
-                ((SystemActivity)mActivity).setRecentPhotoName(media.getFileName());
-                ((SystemActivity)mActivity).setCurrentSection(mediaSection);
-                camera.putExtra(MediaStore.EXTRA_OUTPUT, media.getURI());
-                mActivity.startActivityForResult(camera, 111222);
-
-            }
-
-        }
-
-    }
-
-    public void takeMediaListImage(Activity mActivity, SystemSection section, RecyclerView recyclerView, ArrayList<InspectionMedia> media)
-    {
-
-        //TODO: Make this work
-
-        String uniqueFileName = section.getSystem().getDisplayName() + "_" + section.toString() + (media.size() + 1);
-        if(mActivity instanceof SystemActivity)
-            ((SystemActivity)mActivity).setIsMediaList(true);
-        openCameraForMedia(mActivity, section, uniqueFileName);
-
-
-    }
-
-    public void takeCheckableImage(Activity mActivity, SystemSection section, RecyclerView recyclerView, ArrayList<? extends CategoryItem> itemList, CategoryItem item)
-    {
-
-        //TODO: Make this work
-
-        String uniqueFileName = section.getSystem().getDisplayName() + "_" + section.toString() + (item.getMediaCount() + 1);
-        if(mActivity instanceof SystemActivity)
-            ((SystemActivity)mActivity).setIsMediaList(false);
-        openCameraForMedia(mActivity, section, uniqueFileName);
-
-    }
-
-    // Method called after the picture is taken
-    public void addCheckableImage(Context context, SystemSection section, String uniqueFileName)
-    {
-
-        InspectionMedia picture = new InspectionMedia(section).createImageFile(context, uniqueFileName);
-        //TODO: Finish
-
-    }
-
-    public void addMediaListImage(Context context, SystemSection section, String uniqueFileName)
-    {
-
-        //TODO: Finish
-
-        InspectionMedia picture = new InspectionMedia(section).createImageFile(context, uniqueFileName);
-       /* if(currentMediaRecycler != null && currentCheckableList == null)
-        {
-
-            if(currentMediaList != null)
-            {
-
-                currentMediaList.add(picture);
-                currentMediaRecycler.getAdapter().notifyDataSetChanged();
-
-            }
-
-        }*/
-
-    }
 
     /*
     Save and Load Custom Comment Media (used for situational objects. i.e. Roof Age)

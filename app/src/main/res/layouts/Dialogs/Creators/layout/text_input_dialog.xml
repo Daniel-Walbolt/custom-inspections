@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_orange_border"
+    android:paddingBottom="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            style="@style/HeaderText"
+            android:padding="8dp"
+            android:textSize="22sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/contrastColor"
+            android:text="Enter Text"
+            android:id="@+id/text_input_dialog_title"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:id="@+id/text_input_dialog_description"
+            android:text="This is a description of what the content does"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:inputType="textMultiLine"
+            android:id="@+id/text_input_dialog_text"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:hint="Start here"
+            android:textAlignment="center"
+            android:textColor="@color/textColor"
+            style="@style/inspector_editText"/>
+
+        <Button
+            android:id="@+id/text_input_dialog_confirm"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orange_button"
+            android:text="Confirm"
+            style="@style/Subheading"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

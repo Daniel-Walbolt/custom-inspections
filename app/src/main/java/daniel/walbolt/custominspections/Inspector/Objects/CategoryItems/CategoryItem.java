@@ -1,17 +1,20 @@
 package daniel.walbolt.custominspections.Inspector.Objects.CategoryItems;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.LinearLayout;
 
+import androidx.annotation.RequiresApi;
+import androidx.camera.core.ImageCapture;
+
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CommentDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
-import daniel.walbolt.custominspections.Inspector.Objects.SystemSection;
 
 public abstract class CategoryItem
 {
@@ -29,23 +32,27 @@ public abstract class CategoryItem
     Sections should be almost entirely customizable within working parameters of the app.
         - Pictures are an optional setting
         - Comments are an optional setting
+        - Comment Hints
+        - PDF Description
+        - User Description
 
      */
 
     private Category category;
     private String name;
-    private SystemSection section;
     private CategoryGroup group;
 
     //Variables to store pictures & or comments
     private InspectionMedia commentMedia; // The comment media stores only a comment (in the case where no pictures are necessary)
     private ArrayList<InspectionMedia> pictures; // The picture media list stores pictures that can each have their own comments.
 
-    // Is Applicable is a condition that determines if the VIEW for this item should be displayed. I.e. True, this residence has a water heater and the age should be determined, false it does not.
-    private boolean isApplicable;
+    // A condition that determines if the content for this item should be displayed.
+    boolean isApplicable;
 
-    private boolean hasComments = false;
-    private boolean autoOpenComments = false; // Auto open comments is an optional feature for every category item that automatically opens the comments when the item is marked as APPLICABLE.
+    //Variables to store customizable attributes
+    private String commentHint;
+    private String pdfDescription;
+    private String description;
 
     //To initialize a category item, you must have a category to put it in
     public CategoryItem(String name, Category category)
@@ -53,16 +60,44 @@ public abstract class CategoryItem
 
         this.category = category;
         this.name = name;
-
-        section = new SystemSection(this);
+        commentMedia = new InspectionMedia(this);
 
     }
 
+    /*
+
+    Getters and Setters
+
+     */
     public String getName()
     {
 
         return name;
 
+    }
+
+    public String getCommentHint() {
+        return commentHint;
+    }
+
+    public void setCommentHint(String commentHint) {
+        this.commentHint = commentHint;
+    }
+
+    public String getPdfDescription() {
+        return pdfDescription;
+    }
+
+    public void setPdfDescription(String pdfDescription) {
+        this.pdfDescription = pdfDescription;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     //This method is ONLY called by the CategoryItemDialog in EDIT mode.
@@ -94,16 +129,22 @@ public abstract class CategoryItem
 
     }
 
-    public abstract void onChecked(); // What to do when this item is checked TRUE
-
-
     public InspectionMedia getCommentMedia() // Get the comments for this item
     {
 
         if(commentMedia == null)
-            commentMedia = new InspectionMedia(section);
+            commentMedia = new InspectionMedia(this);
 
         return commentMedia;
+
+    }
+
+    public int getMediaCount() // Return the number of pictures on this item (used by system media count)
+    {
+
+        if(pictures != null)
+            return pictures.size();
+        return 0;
 
     }
 
@@ -125,43 +166,10 @@ public abstract class CategoryItem
 
     }
 
-    public abstract void load(LinearLayout categoryLayout); // Method used to load this category item into the Category layout
-
-    public int getMediaCount() // Return the number of pictures on this item (used by system media count)
-    {
-
-        if(pictures != null)
-            return pictures.size();
-        return 0;
-
-    }
-
-    public void removeCommentMedia() // Remove the comments on this item
-    {
-
-        commentMedia = null;
-
-    }
-
-    public void setHasComments(boolean hasComments, boolean autoOpenComments)
-    {
-
-        this.hasComments = hasComments;
-        this.autoOpenComments = autoOpenComments;
-
-    }
-
-    public boolean hasAutoOpenComments()
-    {
-
-        return autoOpenComments;
-
-    }
-
     public boolean hasComments()
     {
 
-        return hasComments;
+        return !commentMedia.getComments().isEmpty();
 
     }
 
@@ -179,6 +187,26 @@ public abstract class CategoryItem
 
     }
 
+    public int getCommentCount() // Return the number of comments (in the comment media, NOT picture media comments)
+    {
+
+        return getCommentMedia().getComments().size();
+
+    }
+
+    /*
+
+    Utility Methods
+
+     */
+
+    public void removeCommentMedia() // Remove the comments on this item
+    {
+
+        commentMedia = null;
+
+    }
+
     public void openCommentDialog(Context context) // Open the dialog to edit the comments on this item
     {
 
@@ -186,7 +214,7 @@ public abstract class CategoryItem
 
     }
 
-    public void addPicture(InspectionMedia picture)
+    public void addMedia(InspectionMedia picture)
     {
 
         if(pictures == null)
@@ -202,12 +230,12 @@ public abstract class CategoryItem
 
     }
 
-    public int getCommentCount() // Return the number of comments (in the comment media, NOT picture media comments)
-    {
+    /*
 
-        return getCommentMedia().getComments().size();
+    Save and Load methods for database integration
+    TODO
 
-    }
+     */
 
     /*public Map<String, Object> save(InspectionData savingTo) // Put information into an object that is easily saved to the database
     {
@@ -238,7 +266,7 @@ public abstract class CategoryItem
             for(Map<String, Object> image : (ArrayList<Map<String, Object>>) inspectorCheckableData.get("Pictures"))
             {
 
-                InspectionMedia loadedPicture = new InspectionMedia(this.section).createImageFileFromDatabase(context, (String) image.get("Name"));
+                InspectionMedia loadedPicture = new InspectionMedia(this).createImageFileFromDatabase(context, (String) image.get("Name"));
                 if(image.containsKey("Comments"))
                     loadedPicture.addComments((ArrayList<String>) image.get("Comments"));
                 getPictures().add(loadedPicture);

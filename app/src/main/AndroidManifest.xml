@@ -5,6 +5,7 @@
     <!-- Permissions and features here -->
     <uses-feature android:name="android.hardware.camera.any"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -27,6 +28,7 @@
         <activity android:name=".Activities.InspectionActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Activities.ScheduleActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Activities.PDFActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".Activities.CameraActivity" android:windowSoftInputMode="adjustPan"/>
 
         <!-- File provider object should be stated here -->
 

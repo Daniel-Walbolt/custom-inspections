@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:maxHeight="100dp"
     android:background="@drawable/dialog_orange_border"
     android:orientation="vertical"
     android:padding="10dp">
@@ -16,13 +15,12 @@
         android:layout_marginBottom="10dp"
         android:textColor="@color/contrastColor"
         android:layout_gravity="center_horizontal"
-        android:text="Remember:"/>
+        android:text="Description"/>
 
     <TextView
         android:id="@+id/dialog_description_description"
-        android:layout_width="wrap_content"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:maxWidth="350dp"
         android:text="This is a test decription"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/textColor"
@@ -36,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:background="@color/transparent"
+        android:background="@drawable/orange_button"
         android:textSize="14sp"
         style="@style/InformationText"
         android:text="Okay" />

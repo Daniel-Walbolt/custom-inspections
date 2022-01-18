@@ -20,7 +20,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -316,7 +315,7 @@ public class FirebaseBusiness
 
     }
 
-    public void uploadImage(ArrayList<InspectionMedia> media)
+    public void uploadImage(Context context, ArrayList<InspectionMedia> media)
     {
 
         for(InspectionMedia aMedia : media)
@@ -326,20 +325,20 @@ public class FirebaseBusiness
 
             StorageReference storageReference = imageDB.getReference();
             StorageReference folderReference = storageReference.child(inspectionSchedule.getYear() + File.separator + inspectionSchedule.getMonth() + File.separator + inspectionSchedule.getDay() + File.separator + inspectionSchedule.getHour() + File.separator + aMedia.getFileName());
-            folderReference.putFile(aMedia.getURI());
+            folderReference.putFile(aMedia.getURI(context));
 
         }
 
     }
 
     //Retrieve an image from the database
-    public void retrieveImage(InspectionMedia targetMedia)
+    public void retrieveImage(Context context, InspectionMedia targetMedia)
     {
 
         Schedule schedule = Main.inspectionSchedule;
         StorageReference storageReference = imageDB.getReference();
         StorageReference folderReference = storageReference.child(schedule.getYear() + File.separator + schedule.getMonth() + File.separator + schedule.getDay() + File.separator + schedule.getHour() + File.separator + targetMedia.getFileName());
-        folderReference.getFile(targetMedia.getURI());
+        folderReference.getFile(targetMedia.getURI(context));
 
     }
 

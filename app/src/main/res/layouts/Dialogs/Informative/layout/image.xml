@@ -23,26 +23,14 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/dialog_image_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="1dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:background="@drawable/text_field_background">
-
-        <ImageView
-            android:id="@+id/dialog_image_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            android:src="@drawable/image_icon"
-            android:adjustViewBounds="true"/>
-
-
-    </LinearLayout>
+        android:minWidth="100dp"
+        android:minHeight="100dp"
+        android:src="@drawable/image_icon"
+        android:adjustViewBounds="true"/>
 
 
 

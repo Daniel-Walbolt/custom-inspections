@@ -1,10 +1,6 @@
 package daniel.walbolt.custominspections.Inspector.Objects.CategoryItems;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +11,6 @@ import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItem
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CategoryDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
-import daniel.walbolt.custominspections.R;
 
 public class CategoryGroup extends CategoryItem
 {
@@ -46,14 +41,8 @@ public class CategoryGroup extends CategoryItem
         this.items.add(item);
         item.setGroup(this);
 
-    }
-
-    //Convenient method to move a category item from another place to this group
-    public void moveItem(ArrayList<CategoryItem> from, CategoryItem item)
-    {
-
-        from.remove(item);
-        items.add(item);
+        //Sort the newly added item
+        sortItems();
 
     }
 
@@ -98,14 +87,38 @@ public class CategoryGroup extends CategoryItem
 
     }
 
-    @Override
-    public CategoryGroup getGroup() {
-        return null;
+    public ArrayList<CategoryItem> getItems()
+    {
+
+        return items;
+
+    }
+
+    private void sortItems()
+    {
+
+        for (int j = items.size() - 1; j > 0; j--)
+        {
+
+            //If the item that comes next (down the list) is alphabetically LATER
+            //then switch the items. This for loop will move the most recently added item up the list as far as it should go.
+            if(j-1 >= 0)
+                if(items.get(j).getName().compareTo(items.get(j-1).getName()) < 0)
+                {
+
+                    CategoryItem temp = items.get(j);
+                    items.set(j, items.get(j-1));
+                    items.set(j-1, temp);
+
+                }
+
+        }
+
     }
 
     @Override
-    public void onChecked() {
-        //This category item is never "checked" so do nothing.
+    public CategoryGroup getGroup() {
+        return null;
     }
 
     @Override
@@ -132,18 +145,13 @@ public class CategoryGroup extends CategoryItem
     }
 
     @Override
-    public boolean hasAutoOpenComments() {
-        return super.hasAutoOpenComments();
-    }
-
-    @Override
     public boolean hasComments() {
         return super.hasComments();
     }
 
     @Override
-    public void addPicture(InspectionMedia picture) {
-        super.addPicture(picture);
+    public void addMedia(InspectionMedia picture) {
+        super.addMedia(picture);
     }
 
     @Override
@@ -163,10 +171,6 @@ public class CategoryGroup extends CategoryItem
     }
 
     @Override
-    public void setHasComments(boolean hasComments, boolean autoOpenComments) {
-    }
-
-    @Override
     public boolean isApplicable() {
         return false;
     }
@@ -180,26 +184,6 @@ public class CategoryGroup extends CategoryItem
     @Override
     public boolean hasPictures() {
         return false;
-    }
-
-    @Override
-    public void load(LinearLayout categoryLayout)
-    {
-
-        View categoryGroupLayout = LayoutInflater.from(categoryLayout.getContext()).inflate(R.layout.category_group, categoryLayout, false);
-
-        //Initialize category group views
-        TextView title = categoryGroupLayout.findViewById(R.id.category_group_title);
-        title.setText(getName());
-        LinearLayout container = categoryGroupLayout.findViewById(R.id.category_group_container);
-
-        //Load category items contained within this group
-        for(CategoryItem item : items)
-            item.load(container);
-
-        //Add this category group to the category
-        categoryLayout.addView(categoryGroupLayout);
-
     }
 
 }

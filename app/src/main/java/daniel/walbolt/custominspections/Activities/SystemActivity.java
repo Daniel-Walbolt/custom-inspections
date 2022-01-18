@@ -1,13 +1,14 @@
 package daniel.walbolt.custominspections.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
+import daniel.walbolt.custominspections.Inspector.Objects.Inspection;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
-import daniel.walbolt.custominspections.Inspector.Objects.SystemSection;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.MainActivity;
 
@@ -26,7 +27,7 @@ public class SystemActivity extends MainActivity
     public System currentlyOpenSystem;
     private System parentSystem;
 
-    private SystemSection currentSection;
+    private CategoryItem currentSection;
     private boolean isMediaList;
 
     @Override
@@ -34,11 +35,24 @@ public class SystemActivity extends MainActivity
     {
 
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        System system = (System) intent.getSerializableExtra("System"); // Get the system from the intent
 
-        currentlyOpenSystem = system;
-        system.open(this);
+        Intent intent = getIntent();
+        String systemName = intent.getStringExtra("SystemName");
+
+        if(!systemName.isEmpty())
+        {
+
+            java.lang.System.out.println(systemName);
+            System system = Main.inspectionSchedule.inspection.getSystemByName(intent.getStringExtra("SystemName"));// Get the system from the intent
+            if(system != null)
+            {
+
+                currentlyOpenSystem = system;
+                system.open(this);
+
+            }
+
+        }
 
     }
 
@@ -52,20 +66,6 @@ public class SystemActivity extends MainActivity
             currentlyOpenSystem.open(this);
 
         }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK)
-            if(currentSection != null)
-                if(isMediaList)
-                    currentSection.getSystem().addMediaListImage(this, currentSection, recentPhotoName);
-                else
-                    currentSection.getSystem().addCheckableImage(this, currentSection, recentPhotoName);
 
     }
 
@@ -83,7 +83,7 @@ public class SystemActivity extends MainActivity
 
     }
 
-    public void setCurrentSection(SystemSection section)
+    public void setCurrentSection(CategoryItem section)
     {
 
         currentSection = section;

@@ -179,13 +179,13 @@ public class CommentListRecyclerAdapter extends RecyclerView.Adapter<CommentList
         {
 
             mCommentDialog.removeSavedComment(comments.get(position));
-            Toast.makeText(mContext, "Removed Saved Comment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mCommentDialog.getContext(), "Removed Saved Comment", Toast.LENGTH_SHORT).show();
 
         }
         else
         {
 
-            Toast.makeText(mContext, "Removed Comment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mCommentDialog.getContext(), "Removed Comment", Toast.LENGTH_SHORT).show();
             comments.remove(position);
 
         }

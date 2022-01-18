@@ -50,9 +50,14 @@
     </style>
 
     <style name="CategoryTitle" parent="Subheading"> <!-- Every category will use this style -->
-        <item name="android:textSize">19sp</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:textColor">@color/contrastColor</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/windowBackground</item>
         <item name="android:titleMarginBottom">7dp</item>
     </style>
 
@@ -62,12 +67,11 @@
     </style>
 
     <!-- Edit Text Field -->
-    <style name="inspector_editText">
+    <style name="inspector_editText" parent="InformationText">
         <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/text_field_background</item>
         <item name="android:drawablePadding">10dp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:hint">Replace Hint</item>
         <item name="android:inputType">text</item>
         <item name="android:padding">5dp</item>
@@ -106,7 +110,7 @@
         <item name="android:elevation">10dp</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:background">@drawable/themed_background</item>
+        <item name="android:background">@drawable/header_background</item>
     </style>
     <style name="title_notch_text" parent="HeaderText">
         <item name="android:layout_height">wrap_content</item>
@@ -121,6 +125,16 @@
         <item name="android:timePickerMode">spinner</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:headerBackground">@color/WR_orange</item>
+    </style>
+
+    <!-- Category Recycler Style -->
+    <!-- This is just to remove some boiler plate code and enable easy customization across all categories-->
+    <style name="CategoryRecycler">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:overScrollMode">never</item>
+        <item name="android:paddingLeft">7dp</item>
     </style>
 
 </resources>

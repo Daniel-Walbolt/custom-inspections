@@ -1,66 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/dialog_orange_border"
     android:padding="5dp">
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/HeaderText"
+            android:id="@+id/category_item_dialog_title"
+            android:text="Create New Section"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:textSize="18sp"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_item_dialog_info"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/info_icon_unfocused"
+            android:background="@color/transparent"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           style="@style/Subheading"
+           android:text="Name:"
+           android:textStyle="bold"
+           android:layout_alignParentStart="true"
+           android:layout_marginLeft="10dp"
+           android:layout_centerVertical="true"/>
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_item_name"
+            android:background="@drawable/text_field_background"
+            android:hint="Name"
+            android:ellipsize="end"
+            android:layout_centerInParent="true"
+            android:padding="5dp"
+            style="@style/InformationText"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/HeaderText"
-        android:id="@+id/category_item_dialog_title"
-        android:text="Create New Section"
-        android:textAlignment="center"
-        android:padding="5dp"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/InformationText"
-        android:padding="3dp"
-        android:textAlignment="center"
-        android:lineSpacingMultiplier="1.2"
-        android:layout_marginBottom="10dp"
-        android:text="Sections are what hold information during an inspection. Name them wisely, and group them in a way that will help you organize!\n\nNote: Groups can not be in another group.\nYou can not change the type (Check Box, etc.) by editing!"/>
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/category_item_name"
-        android:background="@drawable/text_field_background"
-        android:hint="Name"
-        android:ellipsize="end"
-        android:textAlignment="center"
-        android:padding="3dp"
-        style="@style/InformationText"/>
-
-    <Spinner
-        android:id="@+id/category_item_type"
-        android:layout_width="200dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/text_field_background"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:textAlignment="center"
-        style="@style/InformationText"
-        android:entries="@array/category_items"/>
+        android:id="@+id/categoy_item_dialog_type_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Subheading"
+            android:text="Type:"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"/>
 
 
-    <Spinner
-        android:id="@+id/category_item_group"
-        android:layout_width="200dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/text_field_background"
+        <Spinner
+            android:id="@+id/category_item_dialog_type"
+            android:layout_width="200dp"
+            android:background="@drawable/text_field_background"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_centerInParent="true"
+            style="@style/InformationText"
+            android:entries="@array/category_items"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="20dp"
-        android:padding="3dp"
-        android:textAlignment="center"
-        style="@style/InformationText"/>
+        android:id="@+id/category_item_dialog_group_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Subheading"
+            android:text="Group:"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"/>
+
+        <Spinner
+            android:id="@+id/category_item_dialog_group"
+            android:layout_width="200dp"
+            android:background="@drawable/text_field_background"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:padding="4dp"
+            android:layout_centerInParent="true"
+            style="@style/InformationText"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/category_item_dialog_settings"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Type Settings"
+            style="@style/Subheading"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"/>
+
+        <View style="@style/Divider"
+            android:layout_width="200dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_item_dialog_comment_settings2"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/category_item_dialog_set_description"
+                android:text="Set Description"
+                style="@style/InformationText"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:padding="4dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Set Hint"
+                android:id="@+id/category_item_dialog_set_comment_hint"
+                style="@style/InformationText"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:padding="4dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Set PDF Desc."
+                android:id="@+id/category_item_dialog_set_pdf_description"
+                style="@style/InformationText"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:padding="4dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/category_item_dialog_restriction_settings"
+            android:layout_marginTop="10dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/category_item_dialog_restriction_global"
+                style="@style/InformationText"
+                android:text="Global Restriction"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Slider Text"
+            android:id="@+id/category_item_dialog_edit_slider"
+            style="@style/InformationText"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:padding="4dp"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package daniel.walbolt.custominspections.Inspector.Dialogs.Editors;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -28,12 +27,14 @@ import daniel.walbolt.custominspections.Adapters.CommentList.CommentListItemTouc
 import daniel.walbolt.custominspections.Adapters.CommentList.CommentListRecyclerAdapter;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ErrorAlert;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.DescriptionDialog;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
-import daniel.walbolt.custominspections.Inspector.Objects.SystemSection;
 import daniel.walbolt.custominspections.R;
 
 public class CommentDialog extends Dialog
 {
+
+    private CategoryItem section;
 
     /*
     View Variables
@@ -65,18 +66,17 @@ public class CommentDialog extends Dialog
     private RecyclerView savedCommentsList; // This item displays the currently loaded saved comments.
 
     /*
-    Dialog Status Variables
+    Dialog State Variables
      */
-
     private String editedComment;
     private ArrayList<String> targetSavedComments;
     private File targetCommentsFile;
 
-    private SystemSection section;
 
+    //State booleans
     boolean isSectionScope;
-
     public boolean isEditing = false;
+    public boolean isAdding = false;
     private boolean isEditingSavedComment = false;
 
     File commentDirectory = new File(getContext().getFilesDir() + File.separator + "Comments");
@@ -91,15 +91,16 @@ public class CommentDialog extends Dialog
         setCanceledOnTouchOutside(false);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        this.media = media;
         this.section = media.getSystemSection();
+        this.media = media;
         systemCommentDirectory.mkdirs();
         sectionCommentDirectory.mkdirs();
 
-        setSectionScope();
-        openCommentEditorHome();
-        show();
+        setSectionScope(); // The section scope is the default place to look for comments.
+        openCommentEditorHome(); // Initialize the home page views
+        show(); // Show the dialog to the user
 
+        //If the section has a hint (what they should say in their comments) for the user, show it.
         if(section.getCommentHint() != null)
         {
 
@@ -112,24 +113,35 @@ public class CommentDialog extends Dialog
     /*
     Navigation Methods
      */
-    private void openCommentEditorHome()
+    private void openCommentEditorHome() // Show and initialize the "home" views
     {
 
         setContentView(R.layout.comment_dialog);
         isEditing = false;
-        initMainNavButtons();
-        initMediaCommentsRecycler();
+        isAdding = false;
+        initMainNavButtons(); // The add and edit buttons
+        initMediaCommentsRecycler(); // This recycler shows the comments currently in the media object
 
-        setVisibilities(View.GONE);
+        //Set the saved comments variables
+        setSectionScope();
+        currentSavedComments = getSavedCommentsList();
+
+        //Initialize saved comments functionality
+        initSavedCommentsRecycler();
+        initScopeButtons();
+
+        setVisibilities(View.GONE); // Hide the views associated with the EDIT state.
 
     }
 
+    //This method is called by the ADD button in the "home" page
     private void openCommentEditorAdd()
     {
 
-        //Set the ADD view.
+        //Set the ADD comment dialog view.
         setContentView(R.layout.comment_add);
         isEditing = false;
+        isAdding = true;
 
         //Load the saved comments
         setSectionScope();
@@ -150,6 +162,7 @@ public class CommentDialog extends Dialog
         // Set the view and status of the dialog
         setContentView(R.layout.comment_dialog);
         isEditing = true;
+        isAdding = false;
 
         // Load the saved comments (they're editable)
         setSectionScope();
@@ -158,6 +171,8 @@ public class CommentDialog extends Dialog
         // Initialize views
         initMainNavButtons();
         initMediaCommentsRecycler();
+
+        //Initialize Saved Comments functionality
         initSavedCommentsRecycler();
         initScopeButtons();
 
@@ -238,6 +253,8 @@ public class CommentDialog extends Dialog
             }
         });
         edit.setSelected(isEditing);
+
+
         add = findViewById(R.id.comment_dialog_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -402,7 +419,7 @@ public class CommentDialog extends Dialog
     {
 
         savedCommentsList = findViewById(R.id.dialog_saved_comment_list);
-        CommentListRecyclerAdapter adapter = new CommentListRecyclerAdapter(getContext(), currentSavedComments, this, true, savedCommentsList, (TextView) findViewById(R.id.dialog_comment_saved_comments_emptyView));
+        CommentListRecyclerAdapter adapter = new CommentListRecyclerAdapter(getContext(), currentSavedComments, this, true, savedCommentsList,findViewById(R.id.dialog_comment_saved_comments_emptyView));
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
 
         ItemTouchHelper.Callback callback = new CommentListItemTouchHelper(adapter);
@@ -456,12 +473,23 @@ public class CommentDialog extends Dialog
     public void appendComment(String comment)
     {
 
-        if(!isEditing)
+        if(isAdding) // If we are creating a new comment
         {
 
+            // Add the saved comment (comment) onto the new comment EditText field.
             String newText = newComment.getText() + comment;
             newComment.setText(newText);
             Toast.makeText(getContext(), "Added Saved Comment", Toast.LENGTH_SHORT).show();
+
+        }
+        else if(!isEditing) // If we are not adding a new comment, but also not in edit mode
+        {
+
+            //Add the saved comment directly to the comments on the report.
+            media.getComments().add(comment);
+            reportCommentsList.getAdapter().notifyDataSetChanged(); // Update the recycler showing the media comments
+            Toast.makeText(getContext(), "Added Saved Comment", Toast.LENGTH_SHORT).show();
+
 
         }
 
@@ -500,7 +528,6 @@ public class CommentDialog extends Dialog
         if(savedCommentsFile != null)
         {
 
-            System.out.println("Finding file : " + savedCommentsFile.getName());
             try
             {
 
@@ -570,7 +597,7 @@ public class CommentDialog extends Dialog
     {
 
         //Include the simple name in order to avoid accessing the same file with similar named sections. "Context_Media" appears in all systems, but "RoofSections_CONTEXT_MEDIA" appears once.
-        savedCommentsFile = new File(sectionCommentDirectory, section.getClass().getSimpleName() + "_" + section.toString() + ".txt");
+        savedCommentsFile = new File(sectionCommentDirectory, section.getSystem().getDisplayName() + "_" + section.getName() + ".txt");
 
     }
 

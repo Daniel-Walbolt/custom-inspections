@@ -2,11 +2,16 @@ package daniel.walbolt.custominspections.Inspector.Objects.Categories;
 
 import android.widget.LinearLayout;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItemRecycler;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CommentDialog;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryGroup;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
@@ -33,6 +38,8 @@ public abstract class Category
 
     public ArrayList<CategoryItem> categoryItems;
 
+    RecyclerView categoryRecycler;
+
     public Category(Category.TYPE type, System parent)
     {
 
@@ -43,12 +50,94 @@ public abstract class Category
 
     }
 
-    public Category thisClass() // Necessary? for the edit button click listener when it opens the Category Dialog
+    Category thisClass() // Necessary? for the edit button click listener when it opens the Category Dialog
     {
 
         return this;
 
     }
+
+    public void initRecycler()
+    {
+
+        //The information category loads basic CategoryItems (Check Boxes, Sliders, Numerics, Groups)
+        //The CategoryItemRecycler handles groups as well as other items
+        CategoryItemRecycler adapter = new CategoryItemRecycler(categoryItems);
+        LinearLayoutManager manager = new LinearLayoutManager(categoryRecycler.getContext(), RecyclerView.VERTICAL, false);
+        categoryRecycler.setAdapter(adapter);
+        categoryRecycler.setLayoutManager(manager);
+        categoryRecycler.setNestedScrollingEnabled(false);
+
+    }
+
+    private void sortItems()
+    {
+
+        //Sort the items so that all items without groups come before the groups.
+        // Groups should be sorted alphabetically by name
+        // Items will be sorted alphabetically as well.
+
+        ArrayList<CategoryItem> items = new ArrayList<>();
+        ArrayList<CategoryGroup> groups = new ArrayList<>();
+
+        //Separate groups and items
+        for(CategoryItem item : categoryItems)
+            if(item instanceof CategoryGroup)
+                groups.add((CategoryGroup)item);
+            else
+                items.add(item);
+
+
+        for (int j = items.size() - 1; j > 0; j--)
+        {
+
+            //If the item that comes next (down the list) is alphabetically LATER
+            //then switch the items. This for loop will move every element from the end towards the front as far as it should go
+            if(j-1 >= 0)
+                if(items.get(j).getName().compareTo(items.get(j-1).getName()) < 0)
+                {
+
+                    CategoryItem temp = items.get(j);
+                    items.set(j, items.get(j-1));
+                    items.set(j-1, temp);
+
+                }
+
+        }
+
+
+        for (int j = groups.size() - 1; j > 0; j--) {
+
+            //If the item that comes next (down the list) is alphabetically LATER
+            //then switch the items. This for loop will move every element from the end towards the front as far as it should go
+            if (j - 1 >= 0)
+                if (groups.get(j).getName().compareTo(groups.get(j - 1).getName()) < 0) {
+
+                    CategoryGroup temp = groups.get(j);
+                    groups.set(j, groups.get(j - 1));
+                    groups.set(j - 1, temp);
+
+                }
+
+        }
+
+        categoryItems.clear();
+        categoryItems.addAll(items);
+        categoryItems.addAll(groups);
+
+    }
+
+    //Update the content in this Category's Recycler
+    public void updateRecycler()
+    {
+
+        if(categoryRecycler != null)
+            if(categoryRecycler.getAdapter() != null)
+                categoryRecycler.getAdapter().notifyDataSetChanged();
+
+    }
+
+
 
     public System getSystem()
     {
@@ -68,6 +157,7 @@ public abstract class Category
     {
 
         categoryItems.add(item);
+        sortItems();
 
     }
 
@@ -109,7 +199,7 @@ public abstract class Category
 
     }
 
-    public abstract void load(LinearLayout pageLayout); // Method used to load the category, and its items on to the page layout.
+    public abstract void loadToPage(LinearLayout pageLayout); // Method used to load the category, and its items on to the page layout.
 
    /* public Map<String, Object> save(InspectionData savingTo) // To Database
     {

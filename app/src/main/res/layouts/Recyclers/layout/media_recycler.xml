@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:id="@+id/recycler_image_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingTop="5dp"
-    android:orientation="vertical"
+    android:padding="1dp"
     android:background="@drawable/recycler_media_background"
-    android:padding="2dp">
+    android:layout_marginRight="10dp">
 
     <ImageView
         android:id="@+id/recycler_image"
@@ -20,31 +20,28 @@
 
     <View style="@style/Divider"/>
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/recycler_image_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/comment_icon"
+        android:background="@color/transparent"/>
 
 
-        <Button
-            android:id="@+id/recycler_image_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/InformationText"
-            android:text="Comment"/>
+    <View style="@style/VertDivider"/>
 
-        <View style="@style/VertDivider"/>
-
-        <Button
-            android:id="@+id/recycler_image_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remove"
-            style="@style/InformationText"/>
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/recycler_image_remove"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:background="@color/transparent"
+        android:src="@drawable/remove_icon"
+        style="@style/InformationText"/>
 
 
-
-</LinearLayout>
+</RelativeLayout>

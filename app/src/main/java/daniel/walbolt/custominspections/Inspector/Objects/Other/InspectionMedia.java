@@ -1,19 +1,20 @@
 package daniel.walbolt.custominspections.Inspector.Objects.Other;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
-
-import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import daniel.walbolt.custominspections.Inspector.Objects.SystemSection;
+import daniel.walbolt.custominspections.Activities.CameraActivity;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
+import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
 
 public class InspectionMedia
@@ -21,36 +22,50 @@ public class InspectionMedia
 
     private File file;
     private ArrayList<String> comments;
-    private Context mContext;
     private String fileName;
-    private SystemSection mSystemSection;
-    private boolean isCommentMedia = true;
+    private CategoryItem section;
+    private boolean isCommentMedia = true; // By default, all InspectionMedia objects are for comments only. until an image is added to them.
 
-    public InspectionMedia(SystemSection systemSection)
+    /*
+
+    The InspectionMedia object handles everything related to pictures.
+
+    While various things may trigger the taking of a picture, this is the class that handles the action.
+
+    This class also loads and saves pictures to the device and database.
+
+     */
+    public InspectionMedia(CategoryItem section)
     {
 
-        this.mSystemSection = systemSection;
+        this.section = section;
         this.comments = new ArrayList<>();
 
     }
 
 
-    public InspectionMedia createImageFile(Context context, String uniqueFileName)
+    //This method creates the file where the image will be stored
+    public void createImageFile(Context context)
     {
 
-        this.mContext = context;
-        File externalDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        this.fileName = uniqueFileName;
-        this.file = new File(getDirs(externalDir), fileName.toUpperCase() + ".jpg");
+        //Create the placeholder for the image that will be created by the camera activity.
+        // OR the file location for the image being loaded from the database.
+        this.file = new File(getDirectories(context), fileName + ".jpg");
+
+        //Create the directories that don't exist
+        this.file.mkdirs();
+
+        //This media is no longer a comment media only.
         isCommentMedia = false;
-        return this;
 
     }
 
     public InspectionMedia createImageFileFromDatabase(Context context, String uniqueFileName)
     {
 
-        createImageFile(context, uniqueFileName);
+        //Designate a file location for the image being loaded from the database
+        this.fileName = uniqueFileName;
+        createImageFile(context);
 
         boolean createdImageFile = false;
         try
@@ -70,7 +85,7 @@ public class InspectionMedia
         {
 
             FirebaseBusiness db = FirebaseBusiness.getInstance();
-            db.retrieveImage(this);
+            db.retrieveImage(context, this );
 
         }
 
@@ -79,19 +94,42 @@ public class InspectionMedia
 
     }
 
-    private File getDirs(File externalDir)
+    //This method is called when the picture icon is clicked on.
+    public void takePicture(Context context)
     {
 
-        File mainDir = new File(externalDir, "RSInspections" + File.separator + "Images");
-        mainDir.mkdirs();
+        //Create the file the directories that will store the image.
+        // The image can be cancelled, but the use of storage here is minimal.
+        this.fileName = section.getSystem().getDisplayName() + File.separator + section.getName() + "_" + System.currentTimeMillis();
+        createImageFile(context);
+
+        //Create an activity intent to open the custom camera
+        Intent cameraIntent = new Intent(context, CameraActivity.class);
+
+        // Pass the file created by the media object to the camera
+        cameraIntent.putExtra("File", this.file);
+        context.startActivity(cameraIntent);
+
+    }
+
+    //Return the directory where all images should be saved
+    private File getDirectories(Context context)
+    {
+
+        //Get the App's personal file directory
+        File externalDir = context.getFilesDir();
+
+        //Create / get this Inspection's directory based on its ID.
+        File mainDir = new File(externalDir,Main.inspectionSchedule.getScheduleID());
+
         return mainDir;
 
     }
 
-    public SystemSection getSystemSection()
+    public CategoryItem getSystemSection()
     {
 
-        return mSystemSection;
+        return section;
 
     }
 
@@ -137,10 +175,13 @@ public class InspectionMedia
 
     }
 
-    public Uri getURI()
+    public Uri getURI(Context context)
     {
 
-        return FileProvider.getUriForFile(mContext, "roofandskillet.fileprovider", file);
+        if(file == null)
+            return null;
+        else
+            return Uri.fromFile(file);
 
     }
 

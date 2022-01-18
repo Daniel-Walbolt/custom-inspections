@@ -4,8 +4,6 @@
     <stroke
         android:color="@color/contrastColor"
         android:width="1dp"/>
-    <corners
-        android:radius="10dp"/>
     <solid
         android:color="@color/dimBackground"/>
 

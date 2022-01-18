@@ -50,6 +50,26 @@ public class Inspection
 
     }
 
+    //This method is called by the SystemActivity class when finding the system that it is intended to display
+    public System getSystemByName(String systemName)
+    {
+
+        for(System system : systemList)
+        {
+
+            if(system.getDisplayName().equals(systemName))
+            {
+
+                return system;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
     /*//Upload the information of this inspection into the database
     public void upload(UploadDialog dialog)
     {
