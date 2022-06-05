@@ -553,13 +553,17 @@ public class System implements Serializable
     {
 
         //Remove the system from the inspection
-        Main.inspectionSchedule.inspection.getSystemList().remove(this);
+        if (!isSubSystem())
+            Main.inspectionSchedule.inspection.getSystemList().remove(this); // Remove a MainSystem from the inspection
+        else
+            getParentSystem().getSubSystems().remove(this); // Remove a Sub-System from a Main-System
 
-        activity.onBackPressed();
+        activity.onBackPressed(); //Leave the System activity
 
         //Delete all the saved configurations of the items inside this system.
         //While the system will no longer be saved, the items that belong to it will still persist in the preferences if we don't clear them.
         Configuration.deleteSystemConfiguration(activity, this);
+
 
     }
 
