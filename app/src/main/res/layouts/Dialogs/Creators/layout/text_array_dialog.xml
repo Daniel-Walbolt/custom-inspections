@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:minHeight="200dp"
+    android:maxHeight="500dp"
     android:padding="5dp"
     android:orientation="vertical"
     android:background="@drawable/dialog_orange_border">
@@ -24,9 +26,20 @@
         android:text="Count: 8"
         android:textAlignment="center"/>
 
+    <View style="@style/Divider"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_array_dialog_list"/>
+        android:id="@+id/text_array_dialog_list"
+        android:padding="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_array_dialog_add"
+        android:text="Add Text"
+        style="@style/Subheading"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -3,27 +3,28 @@ package daniel.walbolt.custominspections.Inspector.Objects.Other;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Activities.CameraActivity;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Media;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
-import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
 
 public class InspectionMedia
 {
 
-    private File file;
+    private File imageFile;
     private ArrayList<String> comments;
     private String fileName;
     private CategoryItem section;
+    private Media category;
     private boolean isCommentMedia = true; // By default, all InspectionMedia objects are for comments only. until an image is added to them.
 
     /*
@@ -39,7 +40,19 @@ public class InspectionMedia
     {
 
         this.section = section;
+        this.category = null;
         this.comments = new ArrayList<>();
+
+    }
+
+    //Media category can also store pictures directly.
+    public InspectionMedia(Media category)
+    {
+
+        //Media Category pictures do not have comments.
+        this.section = null;
+        this.comments = null;
+        this.category = category;
 
     }
 
@@ -50,10 +63,10 @@ public class InspectionMedia
 
         //Create the placeholder for the image that will be created by the camera activity.
         // OR the file location for the image being loaded from the database.
-        this.file = new File(getDirectories(context), fileName + ".jpg");
+        this.imageFile = new File(getDirectories(context), fileName + ".jpg");
 
         //Create the directories that don't exist
-        this.file.mkdirs();
+        this.imageFile.mkdirs();
 
         //This media is no longer a comment media only.
         isCommentMedia = false;
@@ -71,20 +84,20 @@ public class InspectionMedia
         try
         {
 
-            createdImageFile = file.createNewFile();
+            createdImageFile = imageFile.createNewFile();
 
         }
         catch (IOException e)
         {
 
-            e.printStackTrace();
+            Toast.makeText(context, "Error creating image file", Toast.LENGTH_SHORT);
 
         }
 
         if(createdImageFile)
         {
 
-            FirebaseBusiness db = FirebaseBusiness.getInstance();
+            FirebaseBusiness db = new FirebaseBusiness();
             db.retrieveImage(context, this );
 
         }
@@ -100,29 +113,47 @@ public class InspectionMedia
 
         //Create the file the directories that will store the image.
         // The image can be cancelled, but the use of storage here is minimal.
-        this.fileName = section.getSystem().getDisplayName() + File.separator + section.getName() + "_" + System.currentTimeMillis();
+        if(section != null)
+            this.fileName = getSectionMediaFileName(section);
+        else
+            this.fileName = getContextMediaFileName(category);
+
+        //Create the directories and the file that will store the image
         createImageFile(context);
 
         //Create an activity intent to open the custom camera
         Intent cameraIntent = new Intent(context, CameraActivity.class);
 
         // Pass the file created by the media object to the camera
-        cameraIntent.putExtra("File", this.file);
+        cameraIntent.putExtra("File", this.imageFile);
         context.startActivity(cameraIntent);
 
     }
 
     //Return the directory where all images should be saved
-    private File getDirectories(Context context)
+    private static File getDirectories(Context context)
     {
 
         //Get the App's personal file directory
         File externalDir = context.getFilesDir();
 
         //Create / get this Inspection's directory based on its ID.
-        File mainDir = new File(externalDir,Main.inspectionSchedule.getScheduleID());
+        File mainDir = new File(externalDir,"Inspection Pictures");
+        mainDir.mkdirs();
 
         return mainDir;
+
+    }
+
+    public static void deleteDirectories(Context context)
+    {
+
+        //Delete the saved pictures from the inspection.
+        //This operation should only be done at the beginning of each inspection.
+
+        File pictureDirectory = getDirectories(context);
+
+        pictureDirectory.delete();
 
     }
 
@@ -140,10 +171,10 @@ public class InspectionMedia
 
     }
 
-    public File getFile()
+    public File getImageFile()
     {
 
-        return file;
+        return imageFile;
 
     }
 
@@ -178,10 +209,10 @@ public class InspectionMedia
     public Uri getURI(Context context)
     {
 
-        if(file == null)
+        if(imageFile == null)
             return null;
         else
-            return Uri.fromFile(file);
+            return Uri.fromFile(imageFile);
 
     }
 
@@ -194,11 +225,29 @@ public class InspectionMedia
 
     }
 
+    public static String getContextMediaFileName(Media mediaCategory)
+    {
+
+        //Electrical\CONTEXT_MEDIA\IMAGE_4028194201894
+        return mediaCategory.getSystem().getDisplayName() + File.separator + "CONTEXT_MEDIA" + File.separator + "IMAGE_" + System.currentTimeMillis();
+
+    }
+
+    public static String getSectionMediaFileName(CategoryItem section)
+    {
+
+        //Electrical\Information\Looped_Wire\Image_4271948271947281
+
+        return section.getSystem().getDisplayName() + File.separator  + section.getCategory().getName()
+                + File.separator + section.getName() + File.separator  + "IMAGE_" + System.currentTimeMillis();
+
+    }
+
     public Map<String, Object> save()
     {
 
         Map<String, Object> data = new HashMap<>();
-        if(file != null) {
+        if(imageFile != null) {
             data.put("Name", fileName);
         }
         if(comments != null && !comments.isEmpty())

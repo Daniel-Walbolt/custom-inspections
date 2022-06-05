@@ -3,11 +3,10 @@ package daniel.walbolt.custominspections.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
-import daniel.walbolt.custominspections.Inspector.Objects.Inspection;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.MainActivity;
@@ -37,20 +36,40 @@ public class SystemActivity extends MainActivity
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        boolean isSubSystem = intent.getBooleanExtra("isSubSystem", false);
         String systemName = intent.getStringExtra("SystemName");
 
-        if(!systemName.isEmpty())
+        //The system that will be opened is contained in the Intent
+        System system;
+
+        //If we're expecting the system to be a Sub System,
+        if(isSubSystem)
         {
 
-            java.lang.System.out.println(systemName);
-            System system = Main.inspectionSchedule.inspection.getSystemByName(intent.getStringExtra("SystemName"));// Get the system from the intent
-            if(system != null)
-            {
+            //Find the name of the parent system
+            String parentSystem = intent.getStringExtra("ParentSystem");
 
-                currentlyOpenSystem = system;
-                system.open(this);
+            //Get the parent system from the main system list and find its sub system with the name that matches what was passed in the Intent
+            system = Main.inspectionSchedule.inspection.getSystemByName(parentSystem)
+                .getSubSystemByName(systemName);
 
-            }
+        }
+        else
+        {
+
+            //The system we are opening has the system name provided in the intent
+            //Find the main-system in the main-system list
+            system = Main.inspectionSchedule.inspection.getSystemByName(systemName);// Get the system from the intent
+
+
+        }
+
+        if(system != null)
+        {
+
+            //Open the system and define the currentlyOpenSystem as the system being opened.
+            currentlyOpenSystem = system;
+            system.open(this);
 
         }
 
@@ -60,12 +79,7 @@ public class SystemActivity extends MainActivity
     protected void onRestart() {
         super.onRestart();
 
-        if(!currentlyOpenSystem.isSubSystem())
-        {
-
-            currentlyOpenSystem.open(this);
-
-        }
+        currentlyOpenSystem.open(this);
 
     }
 

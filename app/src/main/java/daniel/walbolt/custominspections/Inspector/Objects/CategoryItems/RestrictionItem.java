@@ -17,6 +17,10 @@ public class RestrictionItem extends CategoryItem
 
     }
 
+    public RestrictionItem(String name, Category category, long ID) {
+        super(name, category, ID);
+    }
+
     //This method is only called by the CategoryItem Dialog
     public void setGlobal(boolean isGlobal)
     {

@@ -1,12 +1,18 @@
-package daniel.walbolt.custominspections.Adapters.CategoryItemDialog;
+package daniel.walbolt.custominspections.Adapters;
 
-import android.nfc.tech.NdefFormatable;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.LayoutTransition;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionManager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -31,6 +37,7 @@ import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.DefectIt
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Numeric;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.ObservationItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.RestrictionItem;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.SettingItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Slider;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.R;
@@ -46,17 +53,108 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
     private boolean isInDialog; // If this is true, the items are being displayed in an editor dialog, and should not have normal functionality
     private CategoryDialog categoryDialog; // Dialog reference for creation of new dialogs (otherwise they're small if we use context of a recycler item)
 
-    public CategoryItemRecycler(ArrayList<CategoryItem> items)
+    private RecyclerView recyclerView;
+
+    public CategoryItemRecycler(ArrayList<CategoryItem> items, TextView emptyView, RecyclerView categoryRecycler)
     {
 
         this.items = items;
+        this.recyclerView = categoryRecycler;
+
+        if(emptyView != null)
+        {
+
+            //If the CategoryItems provided are empty, then display the empty view.
+            // The empty view informs the user there is nothing to display here.
+            if(items.isEmpty())
+            {
+
+                categoryRecycler.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+
+            }
+            else
+            {
+
+                categoryRecycler.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
+
+            }
+
+
+            //Create a data observer to update the visibility of the empty view if the data becomes empty, or not empty.
+            registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged()
+                {
+
+                    if(getItemCount() == 0)
+                    {
+
+                        categoryRecycler.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+
+                    }
+                    else
+                    {
+
+                        categoryRecycler.setVisibility(View.VISIBLE);
+                        emptyView.setVisibility(View.GONE);
+
+                    }
+
+                }
+
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount)
+                {
+
+                    if(getItemCount() == 0)
+                    {
+
+                        categoryRecycler.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+
+                    }
+                    else
+                    {
+
+                        categoryRecycler.setVisibility(View.VISIBLE);
+                        emptyView.setVisibility(View.GONE);
+
+                    }
+
+                }
+
+                @Override
+                public void onItemRangeRemoved(int positionStart, int itemCount)
+                {
+
+                    if(getItemCount() == 0)
+                    {
+
+                        categoryRecycler.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+
+                    }
+                    else
+                    {
+
+                        categoryRecycler.setVisibility(View.VISIBLE);
+                        emptyView.setVisibility(View.GONE);
+
+                    }
+                }
+            });
+
+        }
 
     }
 
-    public CategoryItemRecycler(ArrayList<CategoryItem> items, CategoryDialog categoryDialog)
+    public CategoryItemRecycler(ArrayList<CategoryItem> items, CategoryDialog categoryDialog, TextView emptyView, RecyclerView categoryRecycler)
     {
 
-        this.items = items;
+        this(items, emptyView, categoryRecycler);
         this.isInDialog = true;
         this.categoryDialog = categoryDialog;
 
@@ -85,6 +183,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             return 6;
         else if(item instanceof DefectItem)
             return 7;
+        else if(item instanceof SettingItem)
+            return 8;
         else
             return 0;
 
@@ -102,7 +202,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
         if (viewType == 1)
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_group, parent, false);
-        else if(viewType == 2)
+        else if(viewType == 2 || viewType == 8)
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.info_item_checkbox_recycler, parent, false);
         else if(viewType == 3)
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.info_item_slider_recycler, parent, false);
@@ -125,7 +225,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
     {
 
         //Get the item associated with the view
-        CategoryItem item = items.get(position);
+        CategoryItem item = items.get(holder.getAdapterPosition());
 
         //Items in the dialog are not completely initialized.
         //The ItemHolder is turned into a click listener.
@@ -164,10 +264,83 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 initRestrictionItem(holder, (RestrictionItem) item);
             else if(item instanceof DefectItem)
                 initDefectItem(holder, (DefectItem) item);
+            else if(item instanceof SettingItem)
+                initSettingItem(holder, (SettingItem) item);
 
         }
 
 
+
+    }
+
+    //Add an animation to a view when its visibility changes
+    private void animateViewOnVisibilityChange(View animatedView, boolean visible)
+    {
+
+        final int actualHeight = animatedView.getMeasuredHeight();
+
+        Animation animation;
+
+        if(visible)
+            animation = AnimationUtils.loadAnimation(animatedView.getContext(), R.anim.expand_down);
+        else
+            animation = AnimationUtils.loadAnimation(animatedView.getContext(), R.anim.expand_up);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if(visible)
+                    animatedView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(!visible)
+                    animatedView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+        animatedView.startAnimation(animation);
+
+    }
+
+    //Add an animation to buttons when its visibility changes
+    private void animateButtonVisibilityChange(View animatedView, boolean visible)
+    {
+
+        Animation animation;
+        if(visible)
+            animation = AnimationUtils.loadAnimation(animatedView.getContext(), R.anim.scale_up);
+        else
+            animation = AnimationUtils.loadAnimation(animatedView.getContext(), R.anim.scale_down);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if(visible)
+                    animatedView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(!visible)
+                    animatedView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animatedView.startAnimation(animation);
 
     }
 
@@ -184,7 +357,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     item.setApplicability(isChecked);
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
 
                 }
                 else
@@ -205,9 +378,9 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
         //Initialize the groups recyclerview, and populate it
         if(isInDialog)
-            item.initDialogRecycler(holder.itemRecycler, categoryDialog);
+            item.initDialogRecycler(holder.itemRecycler, categoryDialog, holder.recyclerEmptyView);
         else
-            item.initRecycler(holder.itemRecycler); // Initialize the recycler to display the group's contents
+            item.initRecycler(holder.itemRecycler, holder.recyclerEmptyView); // Initialize the recycler to display the group's contents
 
     }
 
@@ -254,8 +427,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     item.setApplicability(isChecked);
-                    holder.slider.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateViewOnVisibilityChange(holder.slider, isChecked);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
 
                 }
 
@@ -264,7 +437,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         holder.checkBox.setChecked(item.isApplicable()); // Set the current state of the item. Doing this after the listener is set means the function is performed
 
         //Customize the slider view
-        holder.slider.getConfigBuilder().sectionCount(item.getMax()-1).animDuration(500).build();
+        holder.slider.getConfigBuilder().sectionCount(item.getMax()-1).animDuration(500)
+                .max(item.getMax()).min(item.getMin()).build();
         holder.slider.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
             @NonNull
             @Override
@@ -285,6 +459,24 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             }
         }); // Custom slider bar requires an interesting way of populating it.
 
+        holder.slider.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+                item.setProgress(progress);
+            }
+
+            @Override
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+            }
+        });
+
+        holder.slider.setProgress(item.getProgress());
+
     }
 
     private void initNumericItem(ItemHolder holder, Numeric item)
@@ -303,8 +495,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     item.setApplicability(isChecked);
-                    holder.content.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateViewOnVisibilityChange(holder.content, isChecked);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
 
                 }
             }
@@ -346,11 +538,12 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     observation.setApplicability(isChecked);
-                    holder.content.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateViewOnVisibilityChange(holder.content, isChecked);
 
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                    holder.pictures.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
+                    animateButtonVisibilityChange(holder.pictures, isChecked);
                     enablePictures(holder, observation);
+
 
                 }
             }
@@ -375,10 +568,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     restriction.setApplicability(isChecked);
-                    holder.content.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateViewOnVisibilityChange(holder.content, isChecked);
 
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                    holder.pictures.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
+                    animateButtonVisibilityChange(holder.pictures, isChecked);
                     enablePictures(holder, restriction);
 
                 }
@@ -405,10 +598,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     defect.setApplicability(isChecked);
-                    holder.content.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateViewOnVisibilityChange(holder.content, isChecked);
 
-                    holder.comments.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                    holder.pictures.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    animateButtonVisibilityChange(holder.comments, isChecked);
+                    animateButtonVisibilityChange(holder.pictures, isChecked);
                     enablePictures(holder, defect);
 
                 }
@@ -434,7 +627,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 defect.setMonitorAndMaintain(!isChecked);
-                holder.severityContent.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                animateViewOnVisibilityChange(holder.severity, isChecked);
             }
         });
         holder.repair.setChecked(!defect.isMonitorAndMaintain());
@@ -478,7 +671,26 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         holder.severity.setProgress(defect.getSeverity().getProgress());
 
     }
-    
+
+    private void initSettingItem(ItemHolder holder, SettingItem settingItem)
+    {
+
+        initBasicInfoItem(holder, settingItem);
+        holder.comments.setVisibility(View.GONE);
+
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Trigger the setting's purpose
+                settingItem.setApplicability(isChecked);
+                settingItem.getCheckEvent().onCheckedChanged(buttonView, isChecked);
+
+            }
+        });
+        holder.checkBox.setChecked(settingItem.isApplicable());
+
+    }
+
     private void enablePictures(ItemHolder holder, CategoryItem item)
     {
 
@@ -495,6 +707,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 item.addMedia(imageController);
 
                 imageController.takePicture(holder.itemView.getContext());
+
+                //Once the user accesses the camera, they can NOT go back until after confirming a picture.
 
             }
         });
@@ -552,14 +766,14 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
                 //Find CategoryGroup views
                 name = itemView.findViewById(R.id.category_group_title);
+                recyclerEmptyView = itemView.findViewById(R.id.category_group_emptyView);
                 itemRecycler = itemView.findViewById(R.id.category_group_container);
 
             }
-            else if(viewType == 2) // The item is a CheckBox
+            else if(viewType == 2 || viewType == 8) // The item is a CheckBox
             {
 
                 //Initialize the views for CheckBoxes
-                checkBox = itemView.findViewById(R.id.info_item_checkbox);
                 initCheckableItemCommonViews();
 
 
@@ -585,6 +799,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             {
 
                 content = itemView.findViewById(R.id.observation_item_content);
+
+                //Add layout change animation
+                content.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+
                 pictures = itemView.findViewById(R.id.info_item_picture);
                 mediaRecycler = itemView.findViewById(R.id.observation_item_media_recycler);
                 recyclerEmptyView = itemView.findViewById(R.id.observation_item_media_emptyView);
@@ -605,6 +823,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             {
 
                 content = itemView.findViewById(R.id.defect_item_content);
+
                 pictures = itemView.findViewById(R.id.info_item_picture);
                 mediaRecycler = itemView.findViewById(R.id.defect_item_media_recycler);
                 recyclerEmptyView = itemView.findViewById(R.id.defect_item_media_emptyView);

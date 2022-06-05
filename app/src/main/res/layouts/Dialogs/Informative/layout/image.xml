@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:minWidth="100dp"
         android:minHeight="100dp"
-        android:src="@drawable/image_icon"
+        android:src="@drawable/image_icon_contrast"
         android:adjustViewBounds="true"/>
 
 

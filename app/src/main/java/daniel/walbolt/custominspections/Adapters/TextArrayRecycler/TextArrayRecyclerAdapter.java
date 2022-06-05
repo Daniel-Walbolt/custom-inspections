@@ -19,14 +19,13 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
 {
 
     private ArrayList<String> list;
-    private TextView listSize; // This view displays the total number of items in the list
 
     public TextArrayRecyclerAdapter(ArrayList<String> list, TextView listSize)
     {
 
         this.list = list; // Store the reference to the list that is beign edited and displayed
-        this.listSize = listSize;
 
+        //Set the display of the list's size immediately
         listSize.setText("Count: " + list.size());
 
         registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -34,6 +33,7 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
             public void onChanged()
             {
 
+                //Set the display of the list's size any time data is changed
                 listSize.setText("Count: " + list.size());
 
             }
@@ -42,14 +42,14 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
             public void onItemRangeInserted(int positionStart, int itemCount)
             {
 
-
-
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount)
             {
 
+                //Set the display of the list's size any time data is changed
+                listSize.setText("Count: " + list.size());
 
             }
         });
@@ -68,11 +68,11 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
 
-        String text = "Add Text";
+        String text = "";
 
         //Display the content of the list when the content exists
         if(position < list.size())
-            text = list.get(position);
+            text = list.get(holder.getAdapterPosition());
 
         holder.title.setText(text);
 
@@ -83,29 +83,11 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
             }
         });
 
-        if(position == list.size()) // If the item being displayed is meant to be the "Add Item" button
-        {
-            holder.delete.setVisibility(View.GONE);
-            //Get text input from the user using custom dialog and nested listeners
-            holder.title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextInputDialog textInput = new TextInputDialog(holder.itemView.getContext(), "Input Text", "", "");
-                    textInput.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            list.add(textInput.getText());
-                            notifyDataSetChanged();
-                        }
-                    });
-                }
-            });
-        }
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                list.remove(position);
-                notifyItemRemoved(position);
+                list.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
             }
         });
 
@@ -113,7 +95,7 @@ public class TextArrayRecyclerAdapter extends RecyclerView.Adapter<TextArrayRecy
 
     @Override
     public int getItemCount() {
-        return list.size() + 1;
+        return list.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder

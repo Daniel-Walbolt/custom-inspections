@@ -2,23 +2,30 @@ package daniel.walbolt.custominspections.Inspector.Pages;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import daniel.walbolt.custominspections.Activities.PDFActivity;
 import daniel.walbolt.custominspections.Adapters.InspectionSystemAdapter;
-import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.SystemsDialog;
+import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ErrorAlert;
+import daniel.walbolt.custominspections.Inspector.Dialogs.Creators.SystemsDialog;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.ClientDialog;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.UploadDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Inspection;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.MajorComponent;
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
+import daniel.walbolt.custominspections.Inspector.Objects.System;
 import daniel.walbolt.custominspections.MainActivity;
 import daniel.walbolt.custominspections.R;
 
@@ -34,11 +41,11 @@ public class Main {
     Upload data to database option
     View client information option
     Add system option
-    Delete system option
+
 
      */
 
-    private InspectionSystemAdapter systemListAdapter;
+    private RecyclerView systemList;
 
     public static Schedule inspectionSchedule;
 
@@ -53,14 +60,14 @@ public class Main {
         if(schedule.inspection == null)
         {
 
-            schedule.inspection = new Inspection();
+            schedule.inspection = new Inspection(activity);
             schedule.inspection.loadDefaultSystems(activity);
 
         }
 
 
         //Initialize the recycler view for the MainSystem list.
-        initRecyclerView(activity, schedule.inspection);
+        initRecyclerView(activity);
 
         //Initialize the page's buttons.
         initButtons(activity, schedule);
@@ -68,12 +75,14 @@ public class Main {
         //Initialize the page
         initTheme(activity);
 
+        //If this inspection has already been completed in the past
         if(inspectionSchedule.isPastInspection)
         {
 
+            //Every time the Main page is accessed, this code will run. So the schedule
             if(!schedule.inspection.hasLoaded) {
                 schedule.inspection.hasLoaded = true;
-                schedule.inspection.loadPastInspection(activity, this);
+                schedule.inspection.loadPastInspection(activity);
             }
 
         }
@@ -113,14 +122,21 @@ public class Main {
 
     }
 
-    private void initButtons(final Activity activity, final Schedule inspectionSchedule)
-    {
+    private void initButtons(final Activity activity, final Schedule inspectionSchedule) {
 
-        Button lostSystems = activity.findViewById(R.id.main_create_system);
-        lostSystems.setOnClickListener(new View.OnClickListener() {
+        Button createSystem = activity.findViewById(R.id.main_create_system);
+        createSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SystemsDialog(activity, systemListAdapter, inspectionSchedule.inspection.getSystemList(), false,null);
+                new SystemsDialog(activity, inspectionSchedule.inspection.getSystemList(), null).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        systemList.getAdapter().notifyDataSetChanged();
+
+                        //Save the configuration of the inspection when a system is created
+                        Configuration.saveInspectionConfiguration(activity);
+                    }
+                });
             }
         });
 
@@ -128,8 +144,40 @@ public class Main {
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pdfPreview = new Intent(activity, PDFActivity.class);
-                activity.startActivity(pdfPreview);
+
+                //Before the PDF can be accessed, check if all the Major Components of the Inspection are fulfilled.
+                ArrayList<String> unsatisfiedComponents = new ArrayList<>();
+                for(MajorComponent component : inspectionSchedule.inspection.getMajorComponents())
+                {
+
+                    if (!component.getCompletionStatus())
+                        unsatisfiedComponents.add(component.getComponentDescription());
+
+                }
+
+                //Check if there were any incomplete MajorComponents.
+                if (!unsatisfiedComponents.isEmpty())
+                {
+
+                    //Build a list showing the incomplete MajorComponents.
+                    StringBuilder errorMessage = new StringBuilder();
+                    for (String component : unsatisfiedComponents)
+                        errorMessage.append(component + ", ");
+
+                    new ErrorAlert(v.getContext(), errorMessage.toString()); // Display an Error Dialog that shows what MajorComponents aren't completed
+
+
+                }
+                else // There are no incomplete MajorComponents
+                {
+
+                    //Render the PDF preview.
+                    Intent pdfPreview = new Intent(activity, PDFActivity.class);
+                    activity.startActivity(pdfPreview);
+
+                }
+
+
             }
         });
 
@@ -137,7 +185,7 @@ public class Main {
         client.setText(inspectionSchedule.address);
         //Client information is NOT saved in an inspection file. This is for privacy reasons,
         // but a future feature might allow for frequent clients to save their information with us.
-        if(!inspectionSchedule.isPastInspection)
+        if (!inspectionSchedule.isPastInspection)
             client.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,27 +203,40 @@ public class Main {
             }
         });
 
+        ProgressBar progressBar = activity.findViewById(R.id.main_inspection_progress);
+        TextView progressText = activity.findViewById(R.id.inspection_progress);
+
+        int systemsComplete = 0;
+        for (System system : inspectionSchedule.inspection.getSystemList())
+            if (system.isComplete() || system.isExcluded())
+                systemsComplete++;
+
+        if(inspectionSchedule.inspection.getSystemList().size() > 0)
+        {
+
+            int progress = (int) (100 * ((double) systemsComplete / (double) inspectionSchedule.inspection.getSystemList().size()));
+            String textProgress = "Progress (" + progress + "%):";
+            progressText.setText(textProgress);
+
+            progressBar.setProgress(progress);
+        }
+        else
+            progressBar.setProgress(0);
+
     }
 
-    private void initRecyclerView(Activity mActivity, Inspection inspection)
+    private void initRecyclerView(Activity mActivity)
     {
 
-        RecyclerView systemList = mActivity.findViewById(R.id.inspection_main_systems);
+        systemList = mActivity.findViewById(R.id.inspection_main_systems);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
 
         TextView emptyView = mActivity.findViewById(R.id.inspection_main_systems_emptyView);
 
-        systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, inspection.getSystemList());
+        InspectionSystemAdapter systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, inspectionSchedule.inspection.getSystemList(), false );
 
         systemList.setAdapter(systemListAdapter);
         systemList.setLayoutManager(linearLayoutManager);
-
-    }
-
-    public void updateSystemList()
-    {
-
-        systemListAdapter.notifyDataSetChanged();
 
     }
 

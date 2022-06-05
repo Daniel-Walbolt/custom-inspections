@@ -1,24 +1,15 @@
 package daniel.walbolt.custominspections.Activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Picture;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.PictureDrawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.SystemClock;
-import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -39,7 +30,6 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MotionEventCompat;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -47,7 +37,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.R;
@@ -148,7 +137,7 @@ public class CameraActivity extends AppCompatActivity
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
         //Bind the camera instance to the lifecycle of this activity.
-        Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, imageCapture, preview);
+        Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
 
     }
 
@@ -258,7 +247,13 @@ public class CameraActivity extends AppCompatActivity
     private void showEditViews(boolean show)
     {
 
-        //TODO Animation to show the edit buttons
+        Animation animation;
+        if(show)
+            animation= AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        else
+            animation = AnimationUtils.loadAnimation(this, R.anim.scale_down);
+        addSquare.setAnimation(animation);
+        addCircle.setAnimation(animation);
 
         addSquare.setVisibility(show ? View.VISIBLE : View.GONE);
         addCircle.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -272,7 +267,7 @@ public class CameraActivity extends AppCompatActivity
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions
                 .Builder(imageLocation).build();
 
-        imageCapture.takePicture(outputFileOptions, Executors.newSingleThreadExecutor(), new ImageCapture.OnImageSavedCallback() {
+        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback() {
 
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
@@ -291,12 +286,10 @@ public class CameraActivity extends AppCompatActivity
             @Override
             public void onError(@NonNull ImageCaptureException exception)
             {
-                Looper.prepare();
-                Toast.makeText(previewView.getContext(), "Error taking picture", Toast.LENGTH_SHORT).show();
                 System.out.println(exception.toString());
+                System.out.println("ERROR!");
             }
         });
-
 
     }
 

@@ -57,7 +57,7 @@
             android:id="@+id/info_item_picture"
             android:tooltipText="Add comment(s)"
             android:visibility="gone"
-            android:src="@drawable/image_icon"/>
+            android:src="@drawable/image_icon_contrast"/>
 
     </LinearLayout>
 

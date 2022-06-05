@@ -49,6 +49,11 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
+    <style name="PDF_Subheading" parent="Subheading">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="CategoryTitle" parent="Subheading"> <!-- Every category will use this style -->
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -64,6 +69,10 @@
     <style name="InformationText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/gray_unfocused</item>
         <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="PDF_InformationText" parent="InformationText">
+        <item name="android:textSize">7sp</item>
     </style>
 
     <!-- Edit Text Field -->

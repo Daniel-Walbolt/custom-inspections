@@ -592,16 +592,16 @@ public class CommentDialog extends Dialog
 
     }
 
-    //Look for saved coments only within the section being edited. Sections are specific to each "checkbox","slider","defect",etc.
+    //Look for saved comments only within the section being edited. Sections are specific to each "checkbox","slider","defect",etc.
     private void setSectionScope()
     {
 
         //Include the simple name in order to avoid accessing the same file with similar named sections. "Context_Media" appears in all systems, but "RoofSections_CONTEXT_MEDIA" appears once.
-        savedCommentsFile = new File(sectionCommentDirectory, section.getSystem().getDisplayName() + "_" + section.getName() + ".txt");
+        savedCommentsFile = new File(sectionCommentDirectory, section.getSystem().getDisplayName() + "_" + section.getID() + ".txt");
 
     }
 
-    //This method opens after the comment the user wants to edit has been selected.
+    //This method is called after the comment the user wants to edit has been selected.
     public void editComment(String comment)
     {
 

@@ -1,5 +1,6 @@
 package daniel.walbolt.custominspections.Adapters;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ public class SystemTagRecyclerAdapter extends RecyclerView.Adapter<SystemTagRecy
     {
 
         return new SystemTagHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_system_tag, parent, false));
-            //return new SystemTagHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_module_system_tag, parent, false));
+
     }
 
     @Override
@@ -52,7 +53,6 @@ public class SystemTagRecyclerAdapter extends RecyclerView.Adapter<SystemTagRecy
 
         Drawable tagColor = ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.system_tag_background); //Get the layout for a tag
         tagColor.setTint(tag.getTagColor(holder.itemView.getContext())); // Set the custom color
-        tagColor.setAlpha(127);
 
         holder.background.setBackground(tagColor); // Set the layout to the recycler item
         if(!forPDF)

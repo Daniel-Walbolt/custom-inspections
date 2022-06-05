@@ -1,15 +1,16 @@
 package daniel.walbolt.custominspections.Inspector.Objects.Categories;
 
+import android.animation.LayoutTransition;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItemRecycler;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CategoryDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
@@ -29,10 +30,14 @@ public class Information extends Category
     {
 
         //Get the layout of an information category
-        View categoryLayout = LayoutInflater.from(pageLayout.getContext()).inflate(R.layout.information_category, pageLayout, false);
+        LinearLayout categoryLayout = (LinearLayout) LayoutInflater.from(pageLayout.getContext()).inflate(R.layout.information_category, pageLayout, false);
+
+        //Add layout change animation
+        categoryLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
         //Initialize the necessary views inside the category, including the Category Items
         categoryRecycler = categoryLayout.findViewById(R.id.information_category_items);
+        emptyView = categoryLayout.findViewById(R.id.information_category_emptyView);
         initRecycler();
 
         //Edit button which opens the editor of the information category

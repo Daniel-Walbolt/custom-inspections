@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.MainActivity;
@@ -39,6 +40,8 @@ public class InspectionActivity extends MainActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(!inspectionSchedule.isPastInspection)
+            Configuration.saveInspectionConfiguration(this);
         inspectionSchedule = null;
     }
 

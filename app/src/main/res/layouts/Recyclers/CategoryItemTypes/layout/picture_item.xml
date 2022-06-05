@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/InformationText"
+        android:text="Image Title"
+        android:padding="2dp"
+        android:textStyle="bold"
+        android:id="@+id/picture_item_title"
+        android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:background="@drawable/image_placeholder_background"
+        android:layout_gravity="center_horizontal">
+
+        <!-- The behavior of the relative layout and image view allows for compatibility with vertical or horizontal images without black bars. -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to change"
+            style="@style/InformationText"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="200dp"
+            android:maxHeight="200dp"
+            android:id="@+id/picture_item_picture"
+            android:adjustViewBounds="true"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

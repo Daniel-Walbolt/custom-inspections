@@ -96,8 +96,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/inspection_progress"
                 style="@style/InformationText"
-                android:text="Complete (0%):"
+                android:text="Progress (0%):"
                 android:textSize="14sp"
                 android:layout_marginEnd="5dp"
                 android:textColor="@color/textColor"/>
@@ -123,7 +124,6 @@
             android:textSize="14sp"
             android:textColor="@color/textColor"
             android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif"
             android:visibility="gone"
             android:layout_weight="1"
             android:text="You have no systems! \n Press 'Create New' to get started."/>

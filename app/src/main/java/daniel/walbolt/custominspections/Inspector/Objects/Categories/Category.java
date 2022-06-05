@@ -1,6 +1,8 @@
 package daniel.walbolt.custominspections.Inspector.Objects.Categories;
 
+import android.content.Context;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,12 +11,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItemRecycler;
-import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CommentDialog;
+import daniel.walbolt.custominspections.Adapters.CategoryItemRecycler;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryGroup;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
-import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
+import daniel.walbolt.custominspections.Inspector.Pages.Main;
 
 public abstract class Category
 {
@@ -34,23 +37,33 @@ public abstract class Category
      */
 
     private String name;
+    private TYPE type;
     private System parentSystem;
 
     public ArrayList<CategoryItem> categoryItems;
 
     RecyclerView categoryRecycler;
+    TextView emptyView;
 
     public Category(Category.TYPE type, System parent)
     {
 
         this.name = type.getDisplayName();
+        this.type = type;
         this.parentSystem = parent;
 
         categoryItems = new ArrayList<>();
 
     }
 
-    Category thisClass() // Necessary? for the edit button click listener when it opens the Category Dialog
+    public TYPE getType()
+    {
+
+        return type;
+
+    }
+
+    protected Category thisClass() // Necessary? for the edit button click listener when it opens the Category Dialog
     {
 
         return this;
@@ -62,7 +75,7 @@ public abstract class Category
 
         //The information category loads basic CategoryItems (Check Boxes, Sliders, Numerics, Groups)
         //The CategoryItemRecycler handles groups as well as other items
-        CategoryItemRecycler adapter = new CategoryItemRecycler(categoryItems);
+        CategoryItemRecycler adapter = new CategoryItemRecycler(categoryItems, emptyView, categoryRecycler);
         LinearLayoutManager manager = new LinearLayoutManager(categoryRecycler.getContext(), RecyclerView.VERTICAL, false);
         categoryRecycler.setAdapter(adapter);
         categoryRecycler.setLayoutManager(manager);
@@ -161,18 +174,22 @@ public abstract class Category
 
     }
 
+    //Remove an item from this category, and update the configuration accordingly
+    public boolean removeItem(Context context, CategoryItem item)
+    {
+
+        boolean removed = categoryItems.remove(item);
+        if(removed && !Main.inspectionSchedule.isPastInspection)
+            Configuration.deleteItemConfiguration(context, item);
+
+        return removed;
+
+    }
+
     public ArrayList<CategoryItem> getCategoryItems()
     {
 
         return categoryItems;
-
-    }
-
-    //Delete this category from the system, this should remove it from the system's category list AND reload the page.
-    public void delete()
-    {
-
-        parentSystem.removeCategory(this);
 
     }
 
@@ -201,19 +218,75 @@ public abstract class Category
 
     public abstract void loadToPage(LinearLayout pageLayout); // Method used to load the category, and its items on to the page layout.
 
-   /* public Map<String, Object> save(InspectionData savingTo) // To Database
+    public Map<String, Object> save(InspectionData saveTo)
     {
 
-        // TODO: Save to the database
+        //All categories will save the same way, but not all CategoryItems save the same data.
+
+        //Database data is stored in HashMaps. A category is a way of organizing a bunch of data,
+        // so create a list to store data of all objects.
+        Map<String, Object> categoryData = new HashMap<>();
+
+        //Category information is to be saved in : "Category Info"
+        Map<String, Object> categoryInformation = new HashMap<>();
+        categoryInformation.put("Type", getType().toString());
+        categoryInformation.put("Name", getName());
+        categoryData.put("Category Info", categoryInformation);
+
+        ArrayList<Map<String, Object>> itemData = new ArrayList<>();
+
+        //Save the item data to this list
+        for(CategoryItem item : categoryItems)
+        {
+
+            //Add the item data to the array list
+            itemData.add(item.save(saveTo));
+
+        }
+
+        categoryData.put("Items", itemData);
+
+        return categoryData;
 
     }
 
-    public void loadFrom(Context context, Map<String, Object> inspectorCheckableData)
+    public void loadFrom(Context context, Map<String, Object> categoryData)
     {
 
-        // TODO: Load from the database
+        //The data is already verified to belong to this category
 
-    }*/
+        java.lang.System .out.println("Loading category data : " + getName());
+
+        ArrayList<Map<String, Object>> allItemData = new ArrayList<>();
+
+        if (categoryData.containsKey("Items"))
+            allItemData = (ArrayList<Map<String, Object>>) categoryData.get("Items");
+
+        for (Map<String, Object> itemData : allItemData)
+        {
+
+            //Get the ID from the item data
+            if (itemData.containsKey("ID"))
+            {
+
+                long ID =  (long) itemData.get("ID");
+                java.lang.System.out.println("Item ID: " + ID);
+
+                //Loop through every item in the category and find the item with the same ID
+                for (CategoryItem item : categoryItems)
+                {
+
+                    java.lang.System.out.println("Real item ID:  " + item.getID() + " :  " + item.getName());
+                    if (item.getID() == ID)
+                        item.loadFrom(context, itemData);
+
+                }
+
+            }
+
+        }
+
+    }
 
     public enum TYPE {
         INFORMATION {

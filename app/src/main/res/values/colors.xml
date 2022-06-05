@@ -5,13 +5,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="tintBackground">#858585</color>
 
     <color name="WR_orange">#ff6d00</color>=
     <color name="WR_orange_light">#ff9e40</color>
     <color name="WR_orange_dark">#c43c00</color>
 
     <color name="system_complete">#00B400</color>
-    <color name="system_incomplete">#B40000</color>
+    <color name="system_incomplete">#D50000</color>
     <color name="system_excluded">@color/gray_unfocused</color>
     <color name="system_quality">#00B8D4</color>
     <color name="system_partial">#FFAB00</color>
@@ -22,6 +23,7 @@
     <color name="system_section_defects">#D50000</color>
     <color name="system_section_settings">#FFAB00</color>
     <color name="system_section_subsystems">#01983F</color>
+    <color name="system_section_media">#01C69F</color>
 
     <!-- Themed Colors -->
 

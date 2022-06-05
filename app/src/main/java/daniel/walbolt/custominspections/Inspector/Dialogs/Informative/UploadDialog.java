@@ -2,6 +2,7 @@ package daniel.walbolt.custominspections.Inspector.Dialogs.Informative;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
@@ -35,9 +36,6 @@ public class UploadDialog extends Dialog
     private void initContent()
     {
 
-        final LinearLayout content = findViewById(R.id.dialog_upload_confirmation_content);
-        final LinearLayout progressContent = findViewById(R.id.dialog_upload_progressContent);
-
         Button cancel = findViewById(R.id.dialog_upload_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,21 +48,32 @@ public class UploadDialog extends Dialog
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                content.setVisibility(View.GONE);
-                progressContent.setVisibility(View.VISIBLE);
                 beginUpload();
             }
         });
-
-        progressBar = findViewById(R.id.dialog_upload_progressBar);
-        progressText = findViewById(R.id.dialog_upload_progressText);
 
     }
 
     private void beginUpload()
     {
 
-        //Main.inspectionSchedule.inspection.upload(new UploadDialog(this.getContext()));
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setOnDismissListener(new OnDismissListener()
+        {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                dismissDialog();
+            }
+        });
+
+        Main.inspectionSchedule.inspection.upload(progressDialog);
+
+    }
+
+    private void dismissDialog()
+    {
+
+        dismiss();
 
     }
 

@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
 
@@ -75,14 +79,14 @@ public class Schedule implements Serializable
     public void upload(Activity activity)
     {
 
-        FirebaseBusiness.getInstance().saveSchedule(this, activity);
+        new FirebaseBusiness().saveSchedule(this, activity);
 
     }
 
     public void unschedule(Context context)
     {
 
-        FirebaseBusiness.getInstance().removeSchedule(this, context);
+        new FirebaseBusiness().removeSchedule(this, context);
 
     }
 
@@ -180,6 +184,55 @@ public class Schedule implements Serializable
         id.append(getHour());
 
         return id.toString();
+
+    }
+
+    public Map<String, Object> saveSchedule()
+    {
+
+        //Turn the Schedule object into a HashMap list of key value pairs.
+        Map<String, Object> scheduleMap = new HashMap<>();
+        scheduleMap.put("client_first", client_first);
+        scheduleMap.put("client_last", client_last);
+        scheduleMap.put("client_email", email);
+        scheduleMap.put("client_phone", phone);
+        scheduleMap.put("address", address);
+        scheduleMap.put("cost", cost);
+        scheduleMap.put("duration", duration);
+        scheduleMap.put("start", formatDate());
+        scheduleMap.put("age", age);
+        scheduleMap.put("utilities", utilities);
+        scheduleMap.put("vacant", vacancy);
+        scheduleMap.put("detached_garage", detachedGarage);
+        scheduleMap.put("entryMethod", entryMethod);
+        scheduleMap.put("entryNotes", entryNotes);
+        scheduleMap.put("occupied", occupancy);
+        scheduleMap.put("outbuilding", outbuilding);
+        scheduleMap.put("footage",footage);
+
+        return scheduleMap;
+
+    }
+
+    public void loadFrom(DocumentSnapshot document)
+    {
+
+        address = (String) document.get("address");
+        client_first = (String) document.get("client_first");
+        client_last = (String) document.get("client_last");
+        phone = (String) document.get("client_phone");
+        email = (String) document.get("client_email");
+        cost = (long) document.get("cost");
+        duration = (double) document.get("duration");
+        footage = (long) document.get("footage");
+        occupancy = (boolean) document.get("occupied");
+        outbuilding = (boolean) document.get("outbuilding");
+        utilities = (boolean) document.get("utilities");
+        vacancy = (boolean) document.get("vacant");
+        if(document.contains("detached_garage"))
+            detachedGarage = (boolean) document.get("detached_garage");
+        entryMethod = (String) document.get("entryMethod");
+        entryNotes = (String) document.get("entryNotes");
 
     }
 

@@ -30,7 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.ProgressDialog;
-import daniel.walbolt.custominspections.Inspector.Home;
+import daniel.walbolt.custominspections.Inspector.Pages.Home;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
@@ -38,59 +39,28 @@ import daniel.walbolt.custominspections.Inspector.Pages.Main;
 public class FirebaseBusiness
 {
 
-    private static FirebaseBusiness instance;
-
-    private Home mHomePage;
+    //FireBase is the database this app communicates with.
+    //The app stores inspection data to the database, including Strings, numbers, booleans, and images.
+    //THe app can also load from the database. Filling out the data of the inspection with the data loaded from the inspection.
 
     private FirebaseFirestore db;
     private FirebaseStorage imageDB;
-
-    private int queries = 0;
 
     public FirebaseBusiness()
     {
 
         db = FirebaseFirestore.getInstance();
+
         imageDB = FirebaseStorage.getInstance();
 
     }
 
-    public static FirebaseBusiness getInstance()
-    {
-
-        if(instance == null)
-            instance = new FirebaseBusiness();
-
-        return instance;
-
-    }
-
-    public void setHomePage(Home homePage)
-    {
-
-        mHomePage = homePage;
-
-    }
-
+    //Save an inspection schedule to the database
     public void saveSchedule(Schedule schedule, Activity context)
     {
 
         //Turn the Schedule object into a HashMap list of key value pairs.
-        Map<String, Object> scheduleMap = new HashMap<>();
-        scheduleMap.put("client_first", schedule.client_first);
-        scheduleMap.put("client_last", schedule.client_last);
-        scheduleMap.put("client_email", schedule.email);
-        scheduleMap.put("client_phone", schedule.phone);
-        scheduleMap.put("address", schedule.address);
-        scheduleMap.put("cost", schedule.cost);
-        scheduleMap.put("duration", schedule.duration);
-        scheduleMap.put("start", schedule.formatDate());
-        scheduleMap.put("age", schedule.age);
-        scheduleMap.put("utilities", schedule.utilities);
-        scheduleMap.put("vacant", schedule.vacancy);
-        scheduleMap.put("occupied", schedule.occupancy);
-        scheduleMap.put("outbuilding", schedule.outbuilding);
-        scheduleMap.put("footage", schedule.footage);
+        Map<String, Object> scheduleMap = schedule.saveSchedule();
 
         //Reference the database object, and store the schedule in the appropriate place.
         //Schedules are to be stored in the "Schedules" folder, using the schedule's generated ID (generated using year,month,day,hour).
@@ -112,17 +82,25 @@ public class FirebaseBusiness
 
     }
 
-    public ArrayList<Schedule> loadSchedules()
+    // Fetch the schedules from the database to be displayed on the home page.
+    public ArrayList<Schedule> loadSchedules(Home homePage)
     {
 
+        //Create a list to store the loaded schedules
         final ArrayList<Schedule> savedSchedules = new ArrayList<>();
 
+        System.out.println("Getting schedules");
+
+        //Get the collection of schedules in the database
         db.collection("schedules").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        //Loop through every schedule document in the collection
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
 
+                            //Create a date to store the start date of the schedule
                             Date date = new Date();
 
                             try {
@@ -130,25 +108,24 @@ public class FirebaseBusiness
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
+
+                            //Create a calendar object from the date time
                             Calendar calendar = Calendar.getInstance();
                             calendar.setTime(date);
+
+                            //Create a new schedule object with a dummy address and the time it was first inspected.
                             Schedule schedule = new Schedule("", calendar);
-                            schedule.address = (String) document.get("address");
-                            schedule.client_first = (String) document.get("client_first");
-                            schedule.client_last = (String) document.get("client_last");
-                            schedule.phone = (String) document.get("client_phone");
-                            schedule.email = (String) document.get("client_email");
-                            schedule.cost = (long) document.get("cost");
-                            schedule.duration = (double) document.get("duration");
-                            schedule.footage = (long) document.get("footage");
-                            schedule.occupancy = (boolean) document.get("occupied");
-                            schedule.outbuilding = (boolean) document.get("outbuilding");
-                            schedule.utilities = (boolean) document.get("utilities");
-                            schedule.vacancy = (boolean) document.get("vacant");
+
+                            //Load the schedule by passing the database document
+                            schedule.loadFrom(document);
+
+                            //Add the schedule to the list of loaded schedules
                             savedSchedules.add(schedule);
-                            mHomePage.updateScheduledRecycler();
 
                         }
+
+                        //Update the homepage after all schedules have been created.
+                        homePage.updateScheduledRecycler();
 
                     }
 
@@ -158,9 +135,11 @@ public class FirebaseBusiness
 
     }
 
+    // Remove a specific schedule from the database
     public void removeSchedule(Schedule schedule, final Context context)
     {
 
+        //Get the expected location of the  schedule.
         db.collection("schedules").document(schedule.getScheduleID())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -178,121 +157,152 @@ public class FirebaseBusiness
 
     }
 
-    /*public void startUpload(final ProgressDialog dialog, ArrayList<InspectionData> dataPoints)
+    public void startUpload(final ProgressDialog dialog, ArrayList<InspectionData> dataPoints)
     {
 
+        // Progress variable indicates the amount of HashMaps to upload.
+        // We start at 1, because every inspection has its generic information.
         int toProgress = 1;
         for(InspectionData data : dataPoints)
         {
 
+            //Get the amount of HashMaps that are going to be uploaded
             toProgress += data.getDataPoints();
 
         }
-        final double totalToProgress = toProgress;
 
-        System.out.println("Points to upload : " + totalToProgress);
-        System.out.println("Every Point progress : " + 100*(1/totalToProgress));
+        //The increment is the amount that each HashMap contributes to 100% upload
+        final double increment = Math.ceil(100 * (1.0 / toProgress));
 
-        *//*
+        System.out.println("Points to upload : " + toProgress);
+        System.out.println("Incrementing by : " + increment + " per HashMap");
 
-        First, save the client information
+        //First, we save the client information to the inspection document
+        //Create the HashMap that stores the inspection information
+        Map<String, Object> inspectionInformation = new HashMap<>();
 
-         *//*
-        Map<String, Object> toSaveToDatabase = new HashMap<>();
-        Map<String, Object> nestedMap = new HashMap<>();
+        //Get the inspection information
         Schedule schedule = Main.inspectionSchedule;
-        toSaveToDatabase.put("Address", schedule.address);
-        nestedMap.put("Client First", schedule.client_first);
-        nestedMap.put("Client Last", schedule.client_last);
-        toSaveToDatabase.put("Client Information", nestedMap);
-        toSaveToDatabase.put("Inspected Systems", schedule.inspection.getInspectedSystems());
+        inspectionInformation.put("Address", schedule.address);
+        inspectionInformation.put("Inspected Systems", schedule.inspection.getInspectedSystems());
 
+        //Create a HashMap that stores the client information
+        Map<String, Object> clientInformation = new HashMap<>();
+        clientInformation.put("Client First", schedule.client_first);
+        clientInformation.put("Client Last", schedule.client_last);
+        inspectionInformation.put("Client Information", clientInformation);
+
+        //Create a HashMap to store the date and time of inspection
         Map<String, Object> timeStamp = new HashMap<>();
         timeStamp.put("StartDate", schedule.getYear() + "/" + schedule.getMonth() + "/" + schedule.getDay());
         timeStamp.put("StartTime", schedule.getHour() + ":" + schedule.getMinutes());
+        inspectionInformation.put("Timestamp", timeStamp);
 
-        toSaveToDatabase.put("Timestamp", timeStamp);
-
-        getInspectionDocument(schedule).set(toSaveToDatabase)
+        //Next, get the inspection document from the database, and set its information to the inspection information HashMap.
+        getInspectionDocument(schedule).set(inspectionInformation)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        dialog.incrementProgress((int) (100*(1/totalToProgress)));
+                        //When the upload is successful, increment the progress dialog
+                        dialog.incrementProgress(increment);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        //If the upload fails, increment the progress dialog
                         dialog.setStatusText(e.getMessage());
+
                     }
                 });
 
-        *//*
 
-        Next, loop through the data points array list.
-        Each Map<String, Object> is the save() function output from each system accumulating it and its subsystems stored data.
 
-         *//*
+        /*
 
-        *//*
+        Next, loop through the data points array list again.
+        Each Map<String, Object> is the save() function output from each system accumulating its, and its subsystems, stored data.
 
-        The Data Point for the Roof System could be established like this:
-
-        InspectionData.getSystem() == SystemType.ROOF
-        InspectionData.getSystemData() returns Map<String, Object>
-        if(InspectionData.hasSubSystems()) (returns true in this case)
+        */
+        for(InspectionData systemData : dataPoints)
         {
 
-            for(InspectionData subsystem : InspectionData.getSubSystems()
+            //Get the system's document
+            DocumentReference systemDocument = getSystemDocument(schedule, systemData.getSystemName());
+
+            //Loop through all the SubSystem data and save each subsystem in its own document
+            for(final InspectionData subSystemData : systemData.getSubSystemData())
             {
 
-                //Do the same and save these files underneath the subsystems collection.
+                //Get the sub system's document
+                DocumentReference subSystemDocument = systemDocument.collection("Sub Systems").document(subSystemData.getSystemName());
+
+                //Save the Sub System's categories
+                uploadCategories(subSystemDocument, subSystemData, increment, dialog);
+
+                //Save the sub system's immediate  data
+                subSystemDocument.set(subSystemData.getSystemData())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                dialog.incrementProgress(increment);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                dialog.setStatusText(e.getMessage());
+                            }
+                        });
+
+                //Upload the images in the sub system
+                if(subSystemData.hasPictures())
+                    uploadImage(dialog.getContext(), subSystemData.getPictures());
 
             }
 
-        }
-         *//*
-
-        for(final InspectionData system : dataPoints)
-        {
-
-            DocumentReference systemDocument = getInspectionDocument(InspectionMainPage.inspectionSchedule).collection("Systems").document(system.getSystemName());
-
-            if(system.hasSubSystems())
-            {
-
-                for(final InspectionData subSystem : system.getSubSystemData())
-                {
-
-                    getInspectionDocument(Main.inspectionSchedule).collection("Systems").document(system.getSystemName()).collection("SubSystems").document(subSystem.getSystemName()).set(subSystem.getSystemData())
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    dialog.incrementProgressBar((int) (100*(subSystem.getDataPoints()/totalToProgress)));
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    dialog.failedToUpload(e.getMessage());
-                                }
-                            });
-
-                    if(subSystem.hasPictures())
-                        uploadImage(subSystem.getPictures());
-
-                }
-
-                system.addSubSystemList();
-
-            }
+            //Upload the category data
+            uploadCategories(systemDocument, systemData, increment, dialog);
 
             //Save the system data
-            systemDocument.set(system.getSystemData())
+            systemDocument.set(systemData.getSystemData())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            dialog.incrementProgress((int) (100*(system.getDataPoints()/totalToProgress)));
+                            dialog.incrementProgress(increment);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            dialog.setStatusText(e.getMessage());
+                        }
+                    });
+
+
+        }
+
+    }
+
+    //Upload category documents into either a subsystem or MainSystem document.
+    private void uploadCategories(DocumentReference systemDocument, InspectionData systemData, final double increment, ProgressDialog dialog)
+    {
+
+        //Loop through all Category Data and save each category in its own document
+        for(Map<String, Object> categoryData : systemData.getCategoryData())
+        {
+
+            //Get the name of  the category
+            Map<String, Object> categoryInfo = (HashMap<String, Object>) categoryData.get("Category Info");
+            String type = (String) categoryInfo.get("Type");
+            String name = (String) categoryInfo.get("Name");
+
+            //Find the document where we will save the category data
+            systemDocument.collection("Categories").document(name).set(categoryData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            dialog.incrementProgress(increment);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -304,8 +314,11 @@ public class FirebaseBusiness
 
         }
 
-    }*/
+    }
 
+    /*
+    Upload PDF of the final inspection report
+     */
     public void uploadPDF(Uri pdfURI, String name)
     {
 
@@ -342,93 +355,217 @@ public class FirebaseBusiness
 
     }
 
+    private static int queries = 0; // Compare received queries to the requested queries to know when to stop loading.
+    private Map<String, Object> allSystemData;
     //Retrieve the saved system data from the database
-    public void fetchInspectionSystems(final Context context, final ProgressDialog dialog, final Main systemPage)
+    public Map<String, Object> fetchInspectionSystems(final ProgressDialog dialog)
     {
 
-        //TODO: Fix this loading mechanism so that every saved system is loaded, instead of looking for the systems we expect to find. (create a saved system list?)
-        final Schedule schedule = Main.inspectionSchedule;
+        //Get the schedule object of the inspection we're trying to load systems from
+        Schedule schedule = Main.inspectionSchedule;
 
-        final Map<String, Object> allSystemData = new HashMap<>();
+        //Create a HashMap to store the future system data
+        allSystemData = new HashMap<>();
 
-        queries = 0;
-        for(final String system : schedule.inspectedSystems)
+        //Get the inspection document, this document holds the following info:
+        /*
+        Address
+        Client Information: First Name, Last Name
+        Inspected Systems: ArrayList of all system display names
+        Timestamp: StartDate, StartTime
+         */
+        //We're interested in the Inspected Systems here
+        DocumentReference inspectionDocument =  getInspectionDocument(schedule);
+
+        //Show the user we're accessing the inspection information
+        dialog.setStatusText("Loading inspection...");
+
+        /*
+        Every System is loaded into a HashMap including its internal Data structures
+
+        Map<String, Object> systemData;
+        key - "System" - will hold the data located in the System document itself
+        key - "Data" - will contain another HashMap
+            | key - "SubSystems" - will contain a HashMap of HashMaps for each SubSystem
+                  | key - %SubSystemName%
+                        | key - "System"  - contains the information of the SubSystem document itself
+                        | key - "Data" - contains another HashMap
+                              | key - "Categories" - contains a HashMap storing the data of each Category in the SubSystem
+                                    | key -  %CategoryName% - contains the category information of the category document itself
+                              | key - "SubSystems" - should be empty, because a SubSystem has no SubSystems.
+            | key - "Categories" - contains a HashMap storing the data of each Category in the System
+                  | key - %CategoryName% - contains the category information of the category document itself
+
+         */
+
+        queries++;
+
+        //Get the inspected systems from the "Systems" collection
+        inspectionDocument.collection("Systems").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+            {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task)
+                {
+
+                    queries--;
+
+                    if(task.isSuccessful())
+                    {
+
+                        dialog.incrementProgress(1);
+
+                        //Loop through every system and load its information
+                        for(QueryDocumentSnapshot systemDocument : task.getResult())
+                        {
+
+                            Map<String, Object> systemData = new HashMap<>();
+
+                            //Retrieve the data from the system document itself.
+                            systemData.put("System", systemDocument.getData());
+
+                            //Retrieve the internal system data.
+                            systemData.put("Data",getSystemInformation(getSystemDocument(schedule, systemDocument.getId()), systemDocument.getId(), dialog));
+
+                            allSystemData.put(systemDocument.getId(),systemData);
+
+                        }
+
+                        loadCheck( dialog);
+
+                    }
+                    else
+                    {
+
+                        //Cancel the loading process
+                        dialog.setStatusText("No systems found.");
+                        dialog.stopProgress();
+
+                    }
+
+                }
+            });
+
+        return allSystemData;
+
+    }
+
+    // Gets a Main System or Sub System information
+    private Map<String, Object> getSystemInformation(DocumentReference systemDocument, String systemName, ProgressDialog dialog)
+    {
+
+        Schedule schedule = Main.inspectionSchedule;
+
+        //HashMap stores all the data located in system file
+        Map<String, Object> systemData = new HashMap<>();
+
+        //Show the user we're now loading system information
+        dialog.setStatusText("Loading " + systemName + " data...");
+
+        //Now get the data in the system document
+        //Every system has two COLLECTIONS:
+        // Category collection
+        // SubSystem collection
+        // We need the various information from BOTH
+
+        queries++;
+
+        //Loop through all the subsystem documents in the system's subsystem collection
+        systemDocument.collection("Sub Systems").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        queries--;
+
+                        if(task.isSuccessful())
+                        {
+                            Map<String, Object> subSystems = new HashMap<>();
+
+                            //Loop through all the found sub systems, these documents are guaranteed to exist
+                            for(QueryDocumentSnapshot subSystemDocument : task.getResult())
+                            {
+
+                                Map<String, Object> subSystemData = new HashMap<>();
+
+                                //Store the data of the sub system document itself
+                                subSystemData.put("System", subSystemDocument.getData());
+
+                                //Get the document reference of the subsystem document
+                                DocumentReference document = getSystemDocument(schedule, systemName).collection("Sub Systems").document(subSystemDocument.getId());
+
+                                //Get the data of the subsystem.
+                                subSystemData.put("Data", getSystemInformation(document, subSystemDocument.getId(), dialog));
+
+                                subSystems.put(subSystemDocument.getId(), subSystemData);
+
+                            }
+
+                            systemData.put("Sub Systems", subSystems);
+                            loadCheck( dialog);
+
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Failure here is expected when we're loading subsystem data. The SubSystem collection is never created.
+                    }
+                });
+
+        queries++;
+
+        //Now get the category data in the desired system
+        systemDocument.collection("Categories").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task)
+                    {
+
+                        queries--;
+                        if (task.isSuccessful())
+                        {
+
+                            Map<String, Object> categories = new  HashMap<>();
+
+                            for(QueryDocumentSnapshot categoryDocument : task.getResult())
+                            {
+
+                                //Store every category into the categories HashMap using the name of the category.
+                                categories.put(categoryDocument.getId(), categoryDocument.getData());
+
+                            }
+
+                            //Store the category data into the system data
+                            systemData.put("Categories", categories);
+
+                            loadCheck( dialog);
+
+                        }
+
+                    }
+
+                });
+
+        return systemData;
+
+    }
+
+    private void loadCheck(ProgressDialog dialog)
+    {
+
+        if(queries == 0)
         {
 
-            queries += 2;
-            final Map<String, Object> systemData = new HashMap<>();
-            final Map<String, Object> subSystemList = new HashMap<>();
-
-            dialog.setStatusText("Loading..." + system);
-            getInspectionDocument(schedule).collection("Systems").document(system).get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if(task.isSuccessful())
-                            {
-
-                                systemData.put("System", task.getResult().getData());
-                                allSystemData.put(system, systemData);
-                                dialog.setStatusText("Loaded: " + system);
-
-                            }
-
-                            queries--;
-
-                            if(queries == 0) // If this is the last query
-                            {
-
-                                loadCheck(context, dialog, allSystemData, systemPage);
-
-                            }
-
-                        }
-                    });
-            getInspectionDocument(schedule).collection("Systems").document(system).collection("SubSystems").get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful())
-                            {
-
-                                for(QueryDocumentSnapshot subSystem : task.getResult())
-                                {
-
-                                    // <SUBSYSTEM_CONSTANT, DATA>
-                                    subSystemList.put(subSystem.getId(), subSystem.getData());
-                                    dialog.setStatusText("Loading..." + subSystem.getId());
-
-                                }
-
-                                systemData.put("SubSystems", subSystemList);
-
-                            }
-
-                            queries--;
-
-                            if(queries == 0) // If this is the last query
-                            {
-
-                                loadCheck(context, dialog, allSystemData, systemPage);
-
-                            }
-
-                        }
-                    });
+            dialog.dismiss();
+            Main.inspectionSchedule.inspection.finalizeLoadedInspection( dialog.getContext(), allSystemData);
 
         }
 
-    }
-
-    private void loadCheck(Context context, ProgressDialog dialog, Map<String, Object> allSystemData, Main systemPage)
-    {
-
-        dialog.dismiss();
-        Main.inspectionSchedule.inspection.finalizeLoadedInspection(context, allSystemData, systemPage);
 
     }
 
-    public void loadPastInspections(final Calendar date, boolean searchEntireMonth, final ArrayList<Schedule> pastInspections)
+    public void loadPastInspections(final Calendar date, boolean searchEntireMonth, final ArrayList<Schedule> pastInspections, Home homePage)
     {
 
         final String month = (date.get(Calendar.MONTH)+1) < 10 ? "0" + (date.get(Calendar.MONTH)+1) : String.valueOf((date.get(Calendar.MONTH)+1));
@@ -487,7 +624,7 @@ public class FirebaseBusiness
 
                                                     pastInspections.clear();
                                                     pastInspections.addAll(savedInspections);
-                                                    mHomePage.updatePastInspectionRecycler();
+                                                    homePage.updatePastInspectionRecycler();
 
                                                 }
                                             });
@@ -507,6 +644,15 @@ public class FirebaseBusiness
         db.collection("inspections").document(schedule.getYear()).collection("Months").document(schedule.getMonth()).collection("Days").document(schedule.getDay()).set(dayInfo);
 
         return db.collection("inspections").document(schedule.getYear()).collection("Months").document(schedule.getMonth()).collection("Days").document(schedule.getDay()).collection("Hour").document(schedule.getHour());
+
+    }
+
+    private DocumentReference getSystemDocument(Schedule schedule, String systemName)
+    {
+
+        DocumentReference systemDocument = getInspectionDocument(schedule).collection("Systems").document(systemName);
+
+        return systemDocument;
 
     }
 

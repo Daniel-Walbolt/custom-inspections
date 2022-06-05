@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ErrorAlert;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.TextArrayDialog;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.TextInputDialog;
@@ -68,16 +69,15 @@ public class CategoryItemDialog extends Dialog
     private TextView setHint;
     private TextView setPDFDesc;
 
-    //Restriction Settings
-    private LinearLayout restrictionSettings;
-    private CheckBox globalRestriction;
-
     //Group Settings
     private String groupTarget; // Temporary value holder for the desired group
     private ArrayList<String> groupArray; // List to store the groups in the category
 
     //Slider settings
     private TextView editSlider;
+
+    //Numeric Settings
+    private TextView editNumeric;
 
     //The category that is being changed, only needed when CREATING an item
     private Category category;
@@ -179,6 +179,21 @@ public class CategoryItemDialog extends Dialog
                     createCategoryItem();
                     dismiss();
                 }
+            }
+        });
+
+        Button delete = findViewById(R.id.category_item_delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ConfirmAlert(view.getContext(), "Deleting this section is irreversible.", new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        editItem.delete(view.getContext());
+                        dismiss();
+                    }
+                });
             }
         });
 
@@ -291,24 +306,9 @@ public class CategoryItemDialog extends Dialog
             }
         });
 
-        //Pictures work a bit differently than comments.
-        // Because pictures involve multiple media objects, keeping track of "hasPictures" boolean is troublesome.
-        // Alternatively, pictures can always be added when the VIEW supports adding a picture (Observations, Restrictions, Defects).
-        // Info-items do not have pictures because of the way we intend to display them on the final PDF.
-        // Pictures generally clutter a PDF, so keeping them separate from the simple information is practical.
-
-        restrictionSettings = findViewById(R.id.category_item_dialog_restriction_settings);
-
-        globalRestriction = findViewById(R.id.category_item_dialog_restriction_global);
-        globalRestriction.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(editItem instanceof RestrictionItem)
-                    ((RestrictionItem) editItem).setGlobal(isChecked);
-            }
-        });
-
         editSlider = findViewById(R.id.category_item_dialog_edit_slider);
+
+        editNumeric = findViewById(R.id.category_item_dialog_edit_numeric);
 
     }
 
@@ -339,19 +339,16 @@ public class CategoryItemDialog extends Dialog
 
         allSettings.setVisibility(View.VISIBLE);
 
-        /*
-        Set the values of the settings that are already enabled
-         */
-
-        if(editItem instanceof RestrictionItem) // If this item is a restriction show restriction specific setting(s)
-        {
-            restrictionSettings.setVisibility(View.VISIBLE);
-            globalRestriction.setChecked(((RestrictionItem)editItem).isGlobal());
-        }else
-            restrictionSettings.setVisibility(View.GONE);
-
         editSlider.setVisibility(editItem instanceof Slider ? View.VISIBLE : View.GONE); // Show slider settings if this section is a slider.
         editSlider.setOnClickListener(v -> new TextArrayDialog(getContext(),((Slider)editItem).getContent()));;
+
+        editNumeric.setVisibility(editItem instanceof Numeric ? View.VISIBLE : View.GONE);
+        editNumeric.setOnClickListener(v -> {
+            TextInputDialog input = new TextInputDialog(getContext(), "Numeric Unit", "The unit that describes the number being entered",  ((Numeric)editItem).getUnit());
+            input.setOnDismissListener(e -> {
+                ((Numeric)editItem).setUnit(input.getText());
+            });
+        });
 
     }
 
@@ -419,9 +416,9 @@ public class CategoryItemDialog extends Dialog
 
             //Remove the old item from the group/category it is in.
             if(item.getGroup() != null)
-                editItem.getGroup().removeItem(editItem);
+                editItem.getGroup().removeItem(getContext(), editItem);
             else
-                editItem.getCategory().getCategoryItems().remove(editItem);
+                editItem.getCategory().removeItem(getContext(), editItem);
 
         }
         else
@@ -470,7 +467,7 @@ public class CategoryItemDialog extends Dialog
                 for(CategoryItem groupItem : ((CategoryGroup)item).getItems())
                 {
 
-                    if(groupItem.getName().equals(inputName))
+                    if(groupItem.getName().equalsIgnoreCase(inputName))
                     {
 
                         if(groupItem != editItem)

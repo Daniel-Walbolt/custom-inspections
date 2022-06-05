@@ -3,7 +3,6 @@ package daniel.walbolt.custominspections.Adapters;
 import android.content.Intent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -31,14 +30,16 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
     private ArrayList<System> systems;
     private Inspection inspection;
     private ItemTouchHelper mTouchHelper;
+    private boolean isSubSystems = false;
 
     private int lastPosition = -1;
 
-    public InspectionSystemAdapter(final RecyclerView thisRecyclerView, final TextView thisEmptyView, ArrayList<System> systems)
+    public InspectionSystemAdapter(final RecyclerView thisRecyclerView, final TextView thisEmptyView, ArrayList<System> systems, boolean isSubSystems)
     {
 
         this.inspection = Main.inspectionSchedule.inspection;
         this.systems = systems;
+        this.isSubSystems = isSubSystems;
 
         //If the systems provided are empty, then display the empty view.
         // This view basically informs the user there is nothing to display here.
@@ -149,19 +150,12 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
         holder.commentCount.setText(String.valueOf(system.getCommentCount()));
         holder.tags.setAdapter(new SystemTagRecyclerAdapter(system));
         holder.tags.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        holder.tags.setNestedScrollingEnabled(false);
 
-        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.down_from_top);
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_up);
         holder.itemView.setAnimation(animation);
         lastPosition = position;
 
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(@NonNull SystemHolder holder)
-    {
-        super.onViewDetachedFromWindow(holder);
-        holder.itemView.clearAnimation();
-        holder.foreground.setX(0);
     }
 
     @Override
@@ -205,6 +199,15 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
 
             //When the system is clicked on, open a new activity. (Visual effect which also gives back button functionality on android).
             Intent openSystem = new Intent(itemView.getContext(), SystemActivity.class);
+
+            //Is the system being opened a subsytem?
+            openSystem.putExtra("isSubSystem", isSubSystems);
+
+            //If it is a subsystem, send the parent system
+            if(isSubSystems)
+                openSystem.putExtra("ParentSystem", systems.get(getAdapterPosition()).getParentSystem().getDisplayName());
+
+            //Send the name of the system itself whether it is a subsystem or not.
             openSystem.putExtra("SystemName", systems.get(getAdapterPosition()).getDisplayName());
             itemView.getContext().startActivity(openSystem);
 

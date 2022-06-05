@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="360dp"
     android:layout_height="wrap_content"
-    android:maxHeight="100dp"
     android:background="@drawable/dialog_orange_border"
     android:orientation="vertical"
     android:padding="10dp">
@@ -19,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="300dp"
-        android:maxHeight="40dp"
         android:text="Are you sure?"
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
@@ -31,7 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="300dp"
-        android:maxHeight="40dp"
         android:text="This is a test alert. Please confirm your choice."
         android:layout_gravity="center_horizontal"
         android:textColor="@color/gray_unfocused"

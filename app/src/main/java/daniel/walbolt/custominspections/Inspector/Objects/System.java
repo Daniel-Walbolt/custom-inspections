@@ -1,27 +1,31 @@
 package daniel.walbolt.custominspections.Inspector.Objects;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.xw.repo.BubbleSeekBar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Activities.SystemActivity;
+import daniel.walbolt.custominspections.Constants.SystemSetting;
 import daniel.walbolt.custominspections.Constants.SystemTags;
+import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defect;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
@@ -31,8 +35,13 @@ import daniel.walbolt.custominspections.Inspector.Objects.Categories.Restriction
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Settings;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Sub_System;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.SettingItem;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
+import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.MainActivity;
+import daniel.walbolt.custominspections.PDF.Module;
 import daniel.walbolt.custominspections.R;
 
 public class System implements Serializable
@@ -40,42 +49,27 @@ public class System implements Serializable
 
     /*
 
-    The System object holds all the information of an inspection!
-    They are modular, and very customizable. Automatically assembled at runtime.
+    The System object is the controller of an entire System page/activity.
+    These pages collectively gather and store all the information of an inspection.
+
+    They are modular, and very customizable. Automatically assembled in a blank layout at runtime.
 
      */
 
-    //Information Category
-    private Information information;
 
-    //Observation Category
-    private Observations observations;
-
-    //Restrictions Category
-    private Restrictions restrictions;
-
-    //Defect Category
-    private Defect defects;
-
-    //Subsystem Category
-    private Sub_System subSystems;
-
-    //Settings object
-    private Settings settings;
     //Context Media
     private Media systemMedia;
-
-    //Temporary variables for taking pictures.
-   /*
-    RecyclerView currentMediaRecycler;
-    private ArrayList<? extends InspectorCheckable> currentCheckableList;
-    private ArrayList<InspectionMedia> currentMediaList;
-    */
 
     private String displayName;
     private System parentSystem;
 
-    ArrayList<Category> categories;
+    protected ArrayList<Category> categories;
+    protected ArrayList<System> subSystems;
+
+    private boolean isQuality = false;
+    private boolean isComplete = false;
+    private boolean isPartial = false;
+    private boolean isExcluded = false;
 
     public System(String displayName, System parent)
     {
@@ -84,39 +78,138 @@ public class System implements Serializable
         this.parentSystem = parent; // This may be null if the parent is a Main System.
 
         categories = new ArrayList<>(); // Initialize category list
+        subSystems = new ArrayList<>(); // Initialize sub system list
 
-        /*settings.add(new CheckListItem("System is Complete", SystemSettingsConstants.COMPLETE));
-        settings.add(new CheckListItem("Partially Complete", SystemSettingsConstants.PARTIAL));
-        settings.add(new CheckListItem("Quality of Residence", SystemSettingsConstants.QUALITY).setHasComments(true, false));
-*/
+        createDefaultCategories();
+
     }
 
-    private void createDefaultCategories()
+    protected void createDefaultCategories()
     {
 
+        // If this system is brand new, every category should appear.
+        // If this system was loaded from Configuration, categories should already exist in the system
+
+        //If there are no categories, create them
         if(categories.isEmpty())
         {
 
-            categories.clear();
+            categories.add(new Media(this));
             categories.add(new Information(this));
             categories.add(new Observations(this));
             categories.add(new Restrictions(this));
             categories.add(new Defect(this));
-            categories.add(new Sub_System(this));
+            if(!isSubSystem())
+                categories.add(new Sub_System(this));
             categories.add(new Settings(this));
 
         }
 
     }
 
+    //Method to organize all the categories currently in the system.
+    // When loaded from configuration, the categories aren't in the desired order.
+    private void organizeCategories()
+    {
+
+        //Rearrange the categories to the correct order
+        Category[] organizedCategories = new Category[7];
+
+        for(Category category : categories)
+        {
+
+            if(category instanceof Media)
+                organizedCategories[0] = category;
+            if(category instanceof Information)
+                organizedCategories[1] = category;
+            else if(category instanceof Observations)
+                organizedCategories[2] = category;
+            else if(category instanceof Restrictions)
+                organizedCategories[3] = category;
+            else if(category instanceof Defect)
+                organizedCategories[4] = category;
+            else if(category instanceof Sub_System)
+                organizedCategories[5] = category;
+            else if(category instanceof Settings)
+                organizedCategories[6] = category;
+
+        }
+
+        categories.clear();
+
+        for(Category category : organizedCategories)
+        {
+
+            if(category != null)
+                categories.add(category);
+
+        }
+
+    }
+
+    //Reload a category currently displayed on the screen.
+    // Every category has an internal recycler that can be updated.
+    public void reloadCategory(Category.TYPE type)
+    {
+
+        for(Category category : categories)
+        {
+
+            if(category.getType() == type)
+                category.updateRecycler();
+
+        }
+
+    }
+
+    //Change a setting of this system object
+    public void setSetting(SystemSetting setting, boolean status)
+    {
+
+        if(setting == SystemSetting.COMPLETE)
+            isComplete = status;
+        if(setting == SystemSetting.PARTIAL)
+            isPartial = status;
+        if(setting == SystemSetting.EXCLUDED)
+            isExcluded = status;
+        if(setting == SystemSetting.QUALITY)
+            isQuality = status;
+
+    }
+
+    //Get the statuses of this system based off its settings.
     public ArrayList<SystemTags> getStatus()
     {
 
         ArrayList<SystemTags> systemTags = new ArrayList<>();
 
+        if(isExcluded)
+        {
 
+            systemTags.add(SystemTags.EXCLUDED);
+            return systemTags;
+
+        }
+
+        if(isComplete)
+            systemTags.add(SystemTags.COMPLETE);
+        else if(isPartial)
+            systemTags.add(SystemTags.PARTIAL);
+        else
+            systemTags.add(SystemTags.INCOMPLETE);
+
+        if(isQuality)
+            systemTags.add(SystemTags.QUALITY);
 
         return systemTags;
+
+    }
+
+    //This method is mainly used to check if this system is a sub-system.
+    public System getParentSystem()
+    {
+
+        return parentSystem;
 
     }
 
@@ -128,7 +221,62 @@ public class System implements Serializable
 
     }
 
+    /*
+
+    Getter methods
+
+    */
+    public boolean isQuality()
+    {
+
+        return isQuality;
+
+    }
+
+    public boolean isExcluded()
+    {
+
+        return isExcluded;
+
+    }
+
+    public boolean isComplete()
+    {
+
+        return isComplete;
+
+    }
+
+    public boolean isPartial()
+    {
+
+        return isPartial;
+
+    }
+
     public String getDisplayName() { return displayName; }
+
+    public ArrayList<Category> getCategories()
+    {
+
+        return categories;
+
+    }
+
+    public Category getCategory(Category.TYPE type)
+    {
+
+        for(Category category : categories)
+        {
+
+            if (category.getType() == type)
+                return category;
+
+        }
+
+        return null;
+
+    }
 
     public int getMediaCount()
     {
@@ -157,9 +305,54 @@ public class System implements Serializable
     public ArrayList<System> getSubSystems()
     {
 
-        return null;
+        return subSystems;
 
     }
+
+    public System getSubSystemByName(String subSystemName)
+    {
+
+        if(subSystems != null)
+        {
+
+            for(System subSystem : subSystems)
+            {
+
+                if(subSystem != null)
+                    if(subSystem.getDisplayName().equals(subSystemName))
+                    {
+
+                        return subSystem;
+
+                    }
+
+            }
+
+        }
+        return null; // The subsystem was not found in this system.
+
+    }
+
+    /*
+    Mutator methods
+     */
+
+    //Method that is ONLY called by the CONFIGURATOR when loading
+    public void addCategory(Category category)
+    {
+
+        categories.add(category);
+
+    }
+
+    //Method that is ONLY called by the CONFIGURATOR when loading
+    public void addSubSystem(System subSystem)
+    {
+
+        subSystems.add(subSystem);
+
+    }
+
 
     //public ArrayList<Module> getPDFModules();
 
@@ -168,19 +361,37 @@ public class System implements Serializable
 
         mActivity.setContentView(R.layout.system_page);
 
+        //Add animation to layout changes
         LinearLayout page = mActivity.findViewById(R.id.system_page_container);
+        page.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+
         TextView title = mActivity.findViewById(R.id.system_title);
         title.setText(getDisplayName());
 
-        createDefaultCategories();
+        organizeCategories();
 
         //Initialize the page
         initTheme(mActivity);
 
-        //Load the categories on to the page
-        for(Category category : categories)
-            category.loadToPage(page);
+        Button deleteSystem = mActivity.findViewById(R.id.system_page_delete);
+        deleteSystem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ConfirmAlert(view.getContext(), "Deleting this system is irreversible.",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                delete((SystemActivity) mActivity);
+                            }
+                        });
+            }
+        });
 
+        //Load the categories on to the page
+        for(Category category : categories) {
+            if(category != null)
+                category.loadToPage(page);
+        }
     }
 
     //Boiler plate method to get the current theme of the app
@@ -217,107 +428,140 @@ public class System implements Serializable
 
     }
 
-    // The remove category method is called by the system editor dialog
-    public boolean removeCategory(Category toRemove)
+    // Save this system by turning it into a data object that the Database implementation can handle
+    public InspectionData save()
     {
 
-        //TODO: Reload the page, call open() method?
+        //Create a Data object
+        InspectionData systemInformation = new InspectionData(this);
 
-        boolean removed = categories.remove(toRemove);
+        //Create a list to store THIS system's data.
+        Map<String, Object> data = new HashMap<>();
 
+        //Data in the system document will only be the system's settings
+        //All other data will be stored in the Category collection of the system document.
+        //Every system will also have a subsystem collection.
 
-        return categories.remove(toRemove);
-        
-    }
-
-    public System getSubSystemByStringConstant(String subSystemConstant)
-    {
-
-        ArrayList<System> subSystems = getSubSystems();
-
-        if(subSystems != null)
+        //Loop through every category
+        for(Category category : categories)
         {
 
-            for(System subSystem : subSystems)
+            //The Settings category defines aspects of the system itself, and therefore should be saved in the system
+            if (category instanceof Settings)
+                data.put("SETTINGS", category.save(systemInformation)); // This is the only data saved to the system's file
+            else if(category instanceof Sub_System)
             {
 
-                if(subSystem != null)
-                    if(subSystem.getDisplayName().equals(subSystemConstant))
-                    {
+                for(System subSystem : getSubSystems())
+                    systemInformation.addSubSystemData(subSystem.save());
 
-                        return subSystem;
-
-                    }
-
+            }
+            else {
+                //Create data for the category
+                systemInformation.addCategoryData(category.save(systemInformation));
             }
 
         }
-        return null; // The subsystem was not found in this system.
 
-    }
 
-   /* public InspectionData save() // to database
-    {
-
-        InspectionData systemInformation = new InspectionData(this);
-        Map<String, Object> data = new HashMap<>();
-
-        data.put("COMPLETE", saveSetting(getSetting(SystemSettingsConstants.COMPLETE)));
-        data.put("PARTIAL", saveSetting(getSetting(SystemSettingsConstants.PARTIAL)));
-        data.put("RESIDENCE_QUALITY", saveSetting(getSetting(SystemSettingsConstants.QUALITY)));
 
         systemInformation.addSystemData(data);
 
         return systemInformation;
 
-    }*/
-
-    Map<String, Object> saveSetting(CategoryItem setting)
-    {
-
-        Map<String, Object> status = new HashMap<>();
-        status.put("STATUS", setting.isApplicable()); // Save the status of the setting
-
-        if(setting.hasComments() && setting.getCommentCount() > 0)
-            status.put("COMMENTS", saveCommentMedia(setting.getCommentMedia())); // Save comments if the setting has comments
-
-        return status;
-
     }
 
-    void loadSetting(String key, Map<String, Object> systemData, CategoryItem setting)
+    //Load this system's data
+    public void loadFrom(Context context, Map<String, Object> allSystemData)
     {
 
-        if(systemData.containsKey(key))
+        //allSystemData contains the  data of this system, its categories, its subsystems, and its subsystems data and categories.
+
+
+        //Separate all of the different types of data
+        if (allSystemData.containsKey("System"))
         {
 
-            Map<String, Object> status = (Map<String, Object>) systemData.get(key); // Retrieve the information saved in the above method
-            setting.setApplicability((boolean)status.get("STATUS")); // Set the setting to true or false
+            Map<String, Object> systemData = (Map<String, Object>) allSystemData.get("System");
+            
+            /*
+            Load system settings
+             */
+            if (systemData.containsKey("SETTINGS"))
+                getCategory(Category.TYPE.SETTINGS).loadFrom(context, (Map<String,Object>) systemData.get("SETTINGS"));
 
-            if(status.containsKey("COMMENTS"))
-                loadCommentsFrom((ArrayList<String>)status.get("COMMENTS"), setting.getCommentMedia()); // Load comments if they were saved.
+        }
 
+        if (allSystemData.containsKey("Data"))
+        {
+
+            //Get the data HashMap from the system data
+            Map<String, Object> subData = (Map<String, Object>) allSystemData.get("Data");
+
+            if (subData.containsKey("Categories"))
+            {
+
+                //Get the Category data HashMap from the subData
+                Map<String, Map<String, Object>> allCategoryData = (Map<String, Map<String, Object>>) subData.get("Categories");
+
+                //Loop through all the data sets
+                for (Map<String, Object> categoryData : allCategoryData.values())
+                {
+
+                    //Get the category info
+                    Map<String, Object> categoryInfo = (Map<String,Object>) ((HashMap<String, Object>) categoryData).get("Category Info");
+                    String categoryType = (String) categoryInfo.get("Type"); // Get the category type
+
+                    //Load each category's information
+                    getCategory(Category.TYPE.valueOf(categoryType)).loadFrom(context, (Map<String, Object>) categoryData);
+
+
+                }
+
+            }
+
+            if (subData.containsKey("Sub Systems"))
+            {
+
+                //Get the data for all subsystems in this system
+                Map<String, Object> allSubSystemData = (Map<String, Object>) subData.get("Sub Systems");
+
+                //Loop through the sub systems
+                for (System subSystem : getSubSystems())
+                {
+
+                    if (allSubSystemData.containsKey(subSystem.getDisplayName()))
+                    {
+
+                        //Get the data of the subsystem
+                        Map<String, Object> subSystemData = (Map<String, Object>) allSubSystemData.get(subSystem.getDisplayName());
+
+                        subSystem.loadFrom(context, subSystemData);
+
+                    }
+
+                }
+
+            }
 
         }
 
     }
 
-   /* public void loadFrom(Map<String, Object> systemData, Context context) // Loads the system from saved information in the database. Context is used for creating image files for pictures.
+    //Method that deletes this system from the inspection
+    public void delete(SystemActivity activity)
     {
 
-        loadSetting("COMPLETE", systemData, getSetting(SystemSettingsConstants.COMPLETE));
-        loadSetting("PARTIAL", systemData, getSetting(SystemSettingsConstants.PARTIAL));
-        loadSetting("RESIDENCE_QUALITY", systemData, getSetting(SystemSettingsConstants.QUALITY));
+        //Remove the system from the inspection
+        Main.inspectionSchedule.inspection.getSystemList().remove(this);
 
-    }*/
-    /*
-    The System Data is stored as exampled:
-    Map<SYSTEM_CONSTANT, Map<String, Object> systemData>
-    Map<"ROOF", Map<"System", Map<String, Object> mainSystemData>>>
-    Map<"ROOF", Map<"SubSystems", Map<String, Object> allSubSystemData>>
-    Map<"ROOF", Map<"SubSystems", Map<"ROOF_COVERING", Map<String, Object> subSystemData>>>
+        activity.onBackPressed();
 
-     */
+        //Delete all the saved configurations of the items inside this system.
+        //While the system will no longer be saved, the items that belong to it will still persist in the preferences if we don't clear them.
+        Configuration.deleteSystemConfiguration(activity, this);
+
+    }
 
     public int countCommentsIn(ArrayList<? extends CategoryItem>... items)
     {
@@ -355,344 +599,5 @@ public class System implements Serializable
         return media;
 
     }
-
-   /* public boolean isQuality()
-    {
-
-        return getSetting(SystemSettingsConstants.QUALITY).isApplicable();
-
-    }*/
-
-   /* //Method to initialize the inherited Restrictions recycler
-    public void initInheritedRestrictionsRecycler(Activity mActivity, MainSystem system)
-    {
-
-        RecyclerView recyclerView = mActivity.findViewById(R.id.inspector_system_inherited_restriction_recycler);
-        View emptyView = mActivity.findViewById(R.id.inspector_system_inherited_restriction_recycler_emptyView);
-        InheritedRestrictionsAdapter adapter = new InheritedRestrictionsAdapter(system, recyclerView, emptyView);
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setNestedScrollingEnabled(false);
-
-    }*/
-
-/*    //Method to initialize the system settings recycler
-    public void initSystemSettingsRecycler(Activity mActivity)
-    {
-
-        RecyclerView settingList = mActivity.findViewById(R.id.inspector_system_settings);
-        CheckBoxRecyclerAdapter adapter = new CheckBoxRecyclerAdapter(settings);
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
-
-        settingList.setAdapter(adapter);
-        settingList.setLayoutManager(manager);
-        settingList.setNestedScrollingEnabled(false);
-
-    }*/
-
-    /*
-    Recycler Views
-     */
-/*
-    public void initSubSystemRecycler(Activity mActivity, ArrayList<SubSystem> subSystems)
-    {
-
-        RecyclerView recyclerView = mActivity.findViewById(R.id.inspection_system_subsystem_recycler);
-        SubSystemAdapterRecycler adapter = new SubSystemAdapterRecycler(this, subSystems, mActivity);
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
-
-        recyclerView.addItemDecoration(new SubSystemItemDecoration());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setNestedScrollingEnabled(false);
-
-    }
-*/
-
-   /* public void addStandardImageRecyclerDecoration(RecyclerView recyclerView)
-    {
-
-        SystemMediaItemDecorator decorator = new SystemMediaItemDecorator();
-        recyclerView.addItemDecoration(decorator);
-
-    }*/
-
-   /* *//*
-    Repeated System Variables
-     *//*
-    public Observation getGeneralComment(SystemSection section)
-    {
-
-        return new Observation("General Comment", section).setHasComments(true, false);
-
-    }
-
-    public Observation getFurtherEvaluationObservation(SystemSection section)
-    {
-
-        return new Observation("Further Evaluation Recommended", section).setHasComments(true, false);
-
-    }
-
-    public Observation getServiceExpectancyObservation(SystemSection section)
-    {
-
-        return new Observation("Near/Past Service Expectancy", section).setHasComments(true, false);
-
-    }*/
-
-    /*
-    Save and Load Custom Comment Media (used for situational objects. i.e. Roof Age)
-     */
-
-    public ArrayList<String> saveCommentMedia(InspectionMedia media)
-    {
-
-        return media.getComments();
-
-    }
-
-    public void loadCommentsFrom(ArrayList<String> savedComments, InspectionMedia target)
-    {
-
-        if(savedComments != null)
-        {
-
-            target.addComments(savedComments);
-
-        }
-
-    }
-
-    /*
-   Save SubSystem Data
-    */
-   /* public void saveSubSystemDataTo(InspectionData systemData) // Saves this System's subsystem data (database).
-    {
-
-        if(getSubSystems() != null)
-            for(SubSystem subSystem : getSubSystems())
-            {
-
-                if(subSystem != null)
-                    systemData.addSubSystemData(subSystem.save());
-
-            }
-
-    }*/
-
-    /*
-    Save and Load restrictions (Database)
-     */
-
-    /*public Map<String, Object> saveRestriction(ArrayList<Restriction> restrictions, InspectionData savingTo)
-    {
-
-        Map<String, Object> dataToSave = new HashMap<>();
-
-        for(Restriction restriction : restrictions)
-        {
-
-            if(restriction.isApplicable())
-            {
-
-                dataToSave.put(restriction.getSection().toString(), restriction.save(savingTo));
-
-            }
-
-        }
-
-        return dataToSave;
-
-    }*/
-
-   /* public void loadRestrictions(Context context, String key, Map<String, Object> systemData, ArrayList<Restriction> loadingTo) // Load the comments from the database onto the restriction
-    {
-
-        if(systemData.containsKey(key))
-        {
-
-            Map<String, Object> restrictionsData = (Map<String, Object>)systemData.get(key);
-
-            for(String savedRestrictionSection : restrictionsData.keySet())
-            {
-
-                for(Restriction target : loadingTo)
-                {
-
-                    if(target.getSection().toString().equals(savedRestrictionSection))
-                    {
-
-                        target.loadFrom(context, (Map<String,Object>)restrictionsData.get(savedRestrictionSection));
-                        break;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }*/
-
-    /*
-
-    Save and Load observations (Database)
-
-     */
-    /*public Map<String, Object> saveObservations(ArrayList<Observation> observations, InspectionData savingTo)
-    {
-
-        Map<String, Object> dataToSave = new HashMap<>();
-
-        for(Observation observation : observations)
-        {
-
-            if(observation.isApplicable())
-            {
-
-                dataToSave.put(observation.getSection().toString(), observation.save(savingTo));
-
-            }
-
-        }
-
-        return dataToSave;
-
-    }*/
-    /*public void loadObservations(Context context, String key, Map<String, Object> systemData, ArrayList<Observation> loadingTo) // Load the comments and media from the database into this observation
-    {
-
-        if(systemData.containsKey(key))
-        {
-
-            Map<String, Object> observationsData = (Map<String, Object>)systemData.get(key);
-
-            for(String savedRestrictionSection : observationsData.keySet())
-            {
-
-                for(Observation target : loadingTo)
-                {
-
-                    if(target.getSection().toString().equals(savedRestrictionSection))
-                    {
-
-                        target.loadFrom(context, (Map<String,Object>)observationsData.get(savedRestrictionSection));
-                        break;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }*/
-
-    /*
-
-    Save and Load CheckList items (Database)
-
-     */
-
-    /*public Map<String, Object> saveCheckListItems(ArrayList<CheckListItem> items, InspectionData savingTo)
-    {
-
-        Map<String, Object> dataToSave = new HashMap<>();
-
-        for(CheckListItem item : items)
-            if(item.isApplicable())
-                dataToSave.put(item.getSection().toString(), item.save(savingTo));
-
-        return dataToSave;
-
-    }
-
-    public void loadCheckListItems(Context context, String key, Map<String, Object> systemData, ArrayList<CheckListItem> targetCheckListItems) // Load the comments and media from the database into this item
-    {
-
-        if(systemData.containsKey(key))
-        {
-
-            Map<String, Object> checklistItemsData = (Map<String, Object>)systemData.get(key);
-
-            for(String savedCheckListItem : checklistItemsData.keySet())
-            {
-
-                for(CheckListItem checkListItem : targetCheckListItems)
-                {
-
-                    if(checkListItem.getSection().toString().equals(savedCheckListItem))
-                    {
-
-                        checkListItem.loadFrom(context, (Map<String, Object>)checklistItemsData.get(savedCheckListItem));
-                        break;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-*/
-    /*
-
-    Save and Load media (Database)
-
-     */
-
-    /*public ArrayList<Map<String, Object>> saveImageMedia(ArrayList<InspectionMedia> media, InspectionData savingTo)
-    {
-
-        *//*
-
-        All images are saved in an array list of Map<String, Object>
-
-         *//*
-        ArrayList<Map<String,Object>> savedMedia = new ArrayList<>();
-        for(InspectionMedia aMedia : media)
-        {
-
-            savedMedia.add(aMedia.save());
-            if(!aMedia.isCommentMedia()) {
-                aMedia.CompressImageFile();
-                savingTo.addPicture(aMedia);
-            }
-        }
-
-        return savedMedia;
-
-    }*/
-
-    /*public void loadImageMediaTo(Context context, String key, Map<String, Object> systemData, ArrayList<InspectionMedia> targetList, SystemSection targetSection)
-    {
-
-        if(systemData.containsKey(key))
-        {
-
-            ArrayList<Map<String, Object>> mediaData = (ArrayList<Map<String, Object>>)systemData.get(key);
-
-            for(Map<String, Object> imageInfo : mediaData)
-            {
-
-
-                InspectionMedia savedMedia = new InspectionMedia(targetSection).createImageFileFromDatabase(context, (String) imageInfo.get("Name"));
-                if(imageInfo.containsKey("Comments"))
-                    savedMedia.addComments((ArrayList<String>)imageInfo.get("Comments"));
-
-                targetList.add(savedMedia);
-
-            }
-
-        }
-
-    }*/
 
 }

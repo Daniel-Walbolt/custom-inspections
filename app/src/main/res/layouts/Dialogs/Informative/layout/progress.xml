@@ -16,7 +16,7 @@
         android:text="Progress"/>
 
     <ProgressBar
-        android:id="@+id/dialog_upload_progressBar"
+        android:id="@+id/dialog_progress_progressBar"
         android:layout_width="300dp"
         android:layout_margin="10dp"
         style="?android:attr/progressBarStyleHorizontal"
@@ -24,12 +24,22 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/dialog_upload_progressText"
+        android:id="@+id/dialog_progress_progressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textColor="@color/contrastColor"
         android:textSize="14sp"
         android:text="0%"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:background="@drawable/red_button"
+        android:layout_marginTop="20dp"
+        style="@style/InformationText"
+        android:id="@+id/dialog_progress_cancel"/>
+        />
 
 </LinearLayout>

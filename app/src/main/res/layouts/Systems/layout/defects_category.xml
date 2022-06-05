@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -26,9 +27,23 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/defects_category_emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/textColor"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:text="You have no defects! \n Press the edit icon to get started."/>
+
     <androidx.recyclerview.widget.RecyclerView
         style="@style/CategoryRecycler"
         android:id="@+id/defects_category_items"
+        android:layoutAnimation="@anim/category_item_animation"
         android:background="@drawable/defect_category_background">
 
         <!-- Insert content programmatically here -->

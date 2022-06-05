@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/system_section_settings">
+
+        <TextView
+            style="@style/CategoryTitle"
+            android:text="Settings"/>
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        style="@style/CategoryRecycler"
+        android:id="@+id/settings_recycler"
+        android:layoutAnimation="@anim/category_item_animation"
+        android:background="@drawable/settings_category_background">
+
+        <!-- Insert content programmatically here -->
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>

@@ -29,7 +29,7 @@
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:drawableStart="@drawable/image_icon"
+                android:drawableStart="@drawable/image_icon_contrast"
                 android:drawablePadding="5dp"
                 android:padding="5dp"
                 android:textSize="16sp"

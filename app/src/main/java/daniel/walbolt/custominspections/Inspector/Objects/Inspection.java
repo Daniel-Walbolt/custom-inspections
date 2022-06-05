@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.ProgressDialog;
-import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.UploadDialog;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.MajorComponent;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
-import daniel.walbolt.custominspections.R;
 
 public class Inspection
 {
@@ -20,9 +23,9 @@ public class Inspection
 
     Singleton class
 
-    Represents the final report
+    Connects systems, database, and customers together
 
-    Controls the progress bar
+    Controls the progress bar of the inspection
 
     stores all the information of every inspection.
 
@@ -30,23 +33,24 @@ public class Inspection
 
     public boolean hasLoaded = false;
 
-    private ArrayList<System> systemList;               // Stores all the system that currently are in the report.
+    private ArrayList<System> systemList; // Stores all the system that currently are in the report.
+    private ArrayList<MajorComponent> majorComponents; // Stores all items that are required in each inspection.
 
-    public Inspection()
+    public Inspection(Activity mActivity)
     {
+
+        //Delete any possible pictures that are saved on the device from a previous inspection
+        InspectionMedia.deleteDirectories(mActivity);
 
         systemList = new ArrayList<>();
 
     }
 
-
+    // Load the systems that are stored in System Preferences.
     public void loadDefaultSystems(Activity mActivity)
     {
 
-        //Every time an inspection is loaded, it loads the saved list of systems from the database NOT the saved systems in the inspection.
-        // If a past inspection is loaded, inconsistencies will be discarded.
-
-        //TODO: load systems from the saved system configuration in the database
+        Configuration.loadInspectionConfiguration(mActivity);
 
     }
 
@@ -70,23 +74,23 @@ public class Inspection
 
     }
 
-    /*//Upload the information of this inspection into the database
-    public void upload(UploadDialog dialog)
+    //Upload the information of this inspection into the database
+    public void upload(ProgressDialog dialog)
     {
 
-        FirebaseBusiness database = FirebaseBusiness.getInstance();
+        FirebaseBusiness database = new FirebaseBusiness();
         ArrayList<InspectionData> inspectionData = getInspectionData();
 
         database.startUpload(dialog, inspectionData);
 
     }
 
-    //Convert this inspection's information into an object more easy to save to the database.
+    //Convert this inspection's information into a list of objects. This makes it easier to save to the database.
     private ArrayList<InspectionData> getInspectionData()
     {
 
         ArrayList<InspectionData> data = new ArrayList<>();
-        for(MainSystem system : systemList)
+        for(System system : systemList)
         {
 
             InspectionData systemData = system.save();
@@ -98,7 +102,7 @@ public class Inspection
         return data;
 
     }
-*/
+
     public ArrayList<System> getSystemList()
     {
 
@@ -106,70 +110,33 @@ public class Inspection
 
     }
 
-    public void loadPastInspection(Context context, Main systemPage) // Starts the loading process
+    public void loadPastInspection(Context context) // Starts the loading process
     {
 
         ProgressDialog loading = new ProgressDialog(context);
-        FirebaseBusiness.getInstance().fetchInspectionSystems(context, loading, systemPage);
+        new FirebaseBusiness().fetchInspectionSystems( loading);
 
     }
 
-    public void finalizeLoadedInspection(Context context, Map<String, Object> allSystemsData, Main systemPage) // Method called when loading has fetched the files from database
+    public void finalizeLoadedInspection(Context context, Map<String, Object> allSystemsData) // Method called when loading has fetched the system information from the database
     {
 
+        //Loop through every system that was loaded by Configuration
         for(System system : getSystemList())
         {
 
+            //Find the data for every system possible.
             if(allSystemsData.containsKey(system.getDisplayName()))
             {
 
-                Map<String, Object> systemData = (Map<String, Object>)allSystemsData.get(system.getDisplayName());
+                java.lang.System.out.println("Found system data for :  " + system.getDisplayName());
+                Map<String, Object> allSystemData = (Map<String, Object>)allSystemsData.getOrDefault(system.getDisplayName(), new HashMap<String, Object>());
 
-                if(systemData == null) continue; // If the data happens to not exist for this system, ignore it.
-
-                if(systemData.containsKey("System"))
-                {
-
-                    //system.loadFrom((Map<String, Object>)systemData.get("System"), context);
-
-                }
-
-                if(system.getSubSystems() != null)
-                {
-
-                    Map<String, Object> subSystemsList = (Map<String, Object>)systemData.get("SubSystems"); // Load from the database list because it is possible not every sub-system is saved.
-
-                    if(subSystemsList != null)
-                    {
-
-                        ArrayList<String> subSystemConstants = new ArrayList<>();
-                        for(System subSystem : system.getSubSystems())
-                            subSystemConstants.add(subSystem.getDisplayName());
-
-                        for(String savedSubSystemConstant : subSystemsList.keySet())
-                        {
-
-                            System subSystem = system.getSubSystemByStringConstant(savedSubSystemConstant);
-
-                            if(subSystem != null)
-                            {
-
-                                //subSystem.loadFrom((Map<String, Object>)subSystemsList.get(savedSubSystemConstant), context);
-
-                            }
-
-                        }
-
-                    }
-
-                }
+                system.loadFrom(context, allSystemData);
 
             }
 
         }
-
-        systemPage.updateSystemList();
-
     }
 
     public ArrayList<String> getInspectedSystems()
@@ -180,11 +147,27 @@ public class Inspection
         for(System inspectedSystem : getSystemList())
         {
 
+            //Here we store the name of the exact name of the system.
+            // This list is used for the database to know the system files to look for while loading.
             inspectedSystems.add(inspectedSystem.getDisplayName());
 
         }
 
         return inspectedSystems;
+
+    }
+
+    public void addMajorComponent(MajorComponent component)
+    {
+
+        this.majorComponents.add(component);
+
+    }
+
+    public ArrayList<MajorComponent> getMajorComponents()
+    {
+
+        return this.majorComponents;
 
     }
 

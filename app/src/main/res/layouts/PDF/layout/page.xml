@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1275px"
+    android:layout_height="1650px"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20px"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+    <!-- Padding may vary depending on printer compatibility -->
+
+    <!-- Not every page will have a page number or a header, but the majority will. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/pdf_page_header">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PDF_Subheading"
+            android:background="@drawable/orange_border_view"
+            android:textStyle="bold"
+            android:text="Chapter Name"
+            android:id="@+id/pdf_page_chapter"
+            android:padding="8px"/>
+
+        <View style="@style/Divider"
+            android:layout_gravity="center_vertical"
+            android:background="@color/WR_orange_dark"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_page_content"
+        android:layout_width="1235px"
+        android:layout_height="1480px"
+        android:layout_alignTop="@id/pdf_page_header"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pdf_page_header" />
+    <!-- Content of the page goes here -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View style="@style/Divider"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/WR_orange_dark"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PDF_Subheading"
+            android:textStyle="bold"
+            android:text="Page 1"
+            android:id="@+id/pdf_page_number"
+            android:padding="4px"
+            android:paddingStart="20px"
+            android:paddingEnd="20px"
+            android:background="@drawable/orange_border_view"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

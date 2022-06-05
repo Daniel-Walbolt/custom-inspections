@@ -1,16 +1,22 @@
 package daniel.walbolt.custominspections.Inspector.Objects.CategoryItems;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItemRecycler;
+import daniel.walbolt.custominspections.Adapters.CategoryItemRecycler;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CategoryDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
+import daniel.walbolt.custominspections.Inspector.Pages.Main;
 
 public class CategoryGroup extends CategoryItem
 {
@@ -34,6 +40,11 @@ public class CategoryGroup extends CategoryItem
         items = new ArrayList<>();
     }
 
+    public CategoryGroup(String name, Category category, long ID) {
+        super(name, category, ID);
+        items = new ArrayList<>();
+    }
+
     //Adds a category item to this group
     public void addItem(CategoryItem item)
     {
@@ -46,12 +57,78 @@ public class CategoryGroup extends CategoryItem
 
     }
 
-    //Removes the CategoryItem from this group.
-    public boolean removeItem(CategoryItem targetItem)
+    @Override
+    public Map<String, Object> save(InspectionData saveTo)
     {
 
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("ID", getID());
+
+        ArrayList<Map<String, Object>> itemData = new ArrayList<>();
+
+        for (CategoryItem groupItem : items)
+        {
+
+            itemData.add(groupItem.save(saveTo));
+
+        }
+
+        data.put("Items", itemData);
+
+        return data;
+
+    }
+
+    @Override
+    public void loadFrom(Context context, Map<String, Object> groupData)
+    {
+
+        //A group must also load its items data:
+        ArrayList<Map<String, Object>> allItemData = new ArrayList<>();
+
+        if (groupData.containsKey("Items"))
+            allItemData = (ArrayList<Map<String, Object>>) groupData.get("Items");
+
+        //This is the same algorithm that is in the category loadFrom method.
+        for (Map<String, Object> itemData : allItemData)
+        {
+
+            //Get the ID from the item data
+            if (itemData.containsKey("ID"))
+            {
+
+                long ID =  (long) itemData.get("ID");
+
+                //Loop through every item in the category and find the item with the same ID
+                for (CategoryItem item : items)
+                {
+
+                    if (item.getID() == ID)
+                        item.loadFrom(context, itemData);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    //Removes the CategoryItem from this group.
+    public boolean removeItem(Context context, CategoryItem targetItem)
+    {
+
+        //If we removed the item passed from this group,
         if(this.items.remove(targetItem)) {
+
+            //set the item's group to null
             targetItem.setGroup(null);
+
+            //Delete item configuration
+            if(!Main.inspectionSchedule.isPastInspection)
+                Configuration.deleteItemConfiguration(context, targetItem);
+
             return true;
         }
         else
@@ -61,10 +138,10 @@ public class CategoryGroup extends CategoryItem
 
     //Initialize the recycler that displays this group's contents
     //This is called by a CategoryItemRecycler adapter whenever the item is this group.
-    public void initRecycler(RecyclerView groupRecycler)
+    public void initRecycler(RecyclerView groupRecycler, TextView emptyView)
     {
 
-        CategoryItemRecycler adapter = new CategoryItemRecycler(this.items); // Create a CategoryItem recycler using the group's items.
+        CategoryItemRecycler adapter = new CategoryItemRecycler(this.items, emptyView,groupRecycler ); // Create a CategoryItem recycler using the group's items.
         LinearLayoutManager manager = new LinearLayoutManager(groupRecycler.getContext(), LinearLayoutManager.VERTICAL, false);
         groupRecycler.setAdapter(adapter); // Set the recycler's adapter as the one just created
         groupRecycler.setLayoutManager(manager); // Set the recycler's layout manager to the one just created
@@ -75,10 +152,10 @@ public class CategoryGroup extends CategoryItem
     //Initialize the recycler that displays this group's contents
     //This is called by a CategoryItemRecycler adapter whenever the item is this group.
     // This method is used when the RecyclerView is in a dialog.
-    public void initDialogRecycler(RecyclerView groupRecycler, CategoryDialog dialog)
+    public void initDialogRecycler(RecyclerView groupRecycler, CategoryDialog dialog, TextView emptyView)
     {
 
-        CategoryItemRecycler adapter = new CategoryItemRecycler(this.items, dialog); // Create a CategoryItem recycler using the group's items.
+        CategoryItemRecycler adapter = new CategoryItemRecycler(this.items, dialog, emptyView, groupRecycler); // Create a CategoryItem recycler using the group's items.
         LinearLayoutManager manager = new LinearLayoutManager(groupRecycler.getContext(), LinearLayoutManager.VERTICAL, false);
         groupRecycler.setAdapter(adapter); // Set the recycler's adapter as the one just created
         groupRecycler.setLayoutManager(manager); // Set the recycler's layout manager to the one just created

@@ -1,13 +1,10 @@
 package daniel.walbolt.custominspections.Adapters;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,17 +25,19 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
 
     private boolean hasComments = true;
 
-    public MediaRecyclerAdapter(ArrayList<InspectionMedia> media, final RecyclerView thisRecyclerView, final TextView thisEmptyView)
-    {
+    public MediaRecyclerAdapter(ArrayList<InspectionMedia> media, final RecyclerView thisRecyclerView, final TextView thisEmptyView) {
 
         this.media = media;
 
-        if(!media.isEmpty())
-        {
+        if (!media.isEmpty()) {
 
             thisRecyclerView.setVisibility(View.VISIBLE);
             thisEmptyView.setVisibility(View.GONE);
 
+        }
+        else {
+            thisEmptyView.setVisibility(View.VISIBLE);
+            thisRecyclerView.setVisibility(View.GONE);
         }
 
         registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -132,7 +131,7 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
 
         System.out.println(media.get(position).getFileName());
 
-        if(media.get(position).getFile() != null)
+        if(media.get(position).getImageFile() != null)
             holder.mImageView.setImageURI(media.get(position).getURI(holder.itemView.getContext()));
 
     }

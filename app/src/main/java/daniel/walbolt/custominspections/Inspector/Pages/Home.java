@@ -1,4 +1,4 @@
-package daniel.walbolt.custominspections.Inspector;
+package daniel.walbolt.custominspections.Inspector.Pages;
 
 import android.app.Activity;
 import android.content.Context;
@@ -67,19 +67,23 @@ public class Home
         //Set content view
         activity.setContentView(R.layout.app_home);
 
-        //TODO: Retrieve database object
-        FirebaseBusiness.getInstance().setHomePage(this);
-        schedules = FirebaseBusiness.getInstance().loadSchedules();
+        //Get the schedules (inspections TO BE COMPLETED)
+        schedules = new FirebaseBusiness().loadSchedules(this);
         pastInspections = new ArrayList<>();
 
         //Initialize the page
         initTheme(activity);
 
-        //Intitialize the buttons on the page
+        //Initialize the buttons on the page
         initButtons(activity);
+
+        //Initialize the text fields on the page
+        initEditText(activity);
 
         //Initialize the scheduler that contains the scheduled inspections
         initSchedulesRecycler(activity);
+
+        initPastInspectionRecycler(activity);
 
     }
 
@@ -242,11 +246,11 @@ public class Home
 
     }
 
-    //This method is called by the SEARCH date button.
+    //This method is called by the SEARCH button.
     private void loadPastInspections(Activity mActivity)
     {
 
-        //Retrieve a calendar object and set it to the date specified by the user
+        //Create a calendar object to define the time-interval we are searching for  inspections in.
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date()); // Set the search time to now by default.
 
@@ -279,6 +283,7 @@ public class Home
         {
 
             Toast.makeText(mActivity, "Error reading date!", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
 
         }
 
@@ -289,10 +294,10 @@ public class Home
         calendar.set(Calendar.SECOND, 0);
 
         //Retrieve the database saved inspections using the calendar information
-        FirebaseBusiness db = FirebaseBusiness.getInstance();
+        FirebaseBusiness db = new FirebaseBusiness();
         pastInspections.clear();
         updatePastInspectionRecycler();
-        db.loadPastInspections(calendar, searchEntireMonth, pastInspections);
+        db.loadPastInspections(calendar, searchEntireMonth, pastInspections, this);
 
     }
 

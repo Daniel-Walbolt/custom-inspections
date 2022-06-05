@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/title_notch"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/title_notch_text"
+            android:id="@+id/system_title"
+            android:maxLines="1"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="end"
+            android:layout_width="215dp"
+            android:text="Front System"
+            android:textSize="19sp"/>
+
+        <TextView
+            style="@style/title_notch_text"
+            android:textSize="12sp"
+            android:id="@+id/theme_switch"
+            android:text="Light theme"/>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="60dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/system_page_container"
+                android:animateLayoutChanges="true"
+                android:paddingBottom="60dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/system_section_media">
+
+                    <TextView
+                        style="@style/CategoryTitle"
+                        android:text="Front Picture"/>
+
+                </RelativeLayout>
+
+                <!-- Programmatically add categories here -->
+
+            </LinearLayout>
+
+            <!-- This space is usually reserved by the delete system button. -->
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>

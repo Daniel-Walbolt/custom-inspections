@@ -2,8 +2,11 @@ package daniel.walbolt.custominspections.Inspector.Dialogs.Editors;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,7 +29,7 @@ public class TextArrayDialog extends Dialog
      */
 
     private TextView listSize;
-    private RecyclerView list;
+    private RecyclerView recyclerView;
     private ArrayList<String> strings;
 
     public TextArrayDialog(@NonNull Context context, ArrayList<String> list)
@@ -43,6 +46,20 @@ public class TextArrayDialog extends Dialog
         listSize = findViewById(R.id.text_array_dialog_count);
         initRecycler();
 
+        Button addText = findViewById(R.id.text_array_dialog_add);
+        addText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextInputDialog textInput = new TextInputDialog(getContext(), "Add Text", "Text that appears at progress steps along a slider.", "");
+                textInput.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        strings.add(textInput.getText());
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
         this.strings = list; // Store the reference to the list being edited
 
@@ -53,14 +70,14 @@ public class TextArrayDialog extends Dialog
     private void initRecycler()
     {
 
-        list = findViewById(R.id.text_array_dialog_list);
+        recyclerView = findViewById(R.id.text_array_dialog_list);
 
         TextArrayRecyclerAdapter adapter = new TextArrayRecyclerAdapter(strings, listSize);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
 
-        list.setAdapter(adapter);
-        list.setLayoutManager(manager);
-        list.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setNestedScrollingEnabled(false);
 
 
     }

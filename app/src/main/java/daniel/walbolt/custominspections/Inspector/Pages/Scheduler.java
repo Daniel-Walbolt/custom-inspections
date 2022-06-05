@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import daniel.walbolt.custominspections.Activities.ScheduleActivity;
-import daniel.walbolt.custominspections.Inspector.Home;
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
 import daniel.walbolt.custominspections.R;
 

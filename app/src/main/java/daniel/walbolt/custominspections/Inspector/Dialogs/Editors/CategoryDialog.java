@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import daniel.walbolt.custominspections.Adapters.CategoryItemDialog.CategoryItemRecycler;
+import daniel.walbolt.custominspections.Adapters.CategoryItemRecycler;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Creators.CategoryItemDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
@@ -71,20 +71,10 @@ public class CategoryDialog extends Dialog
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         itemRecycler.getAdapter().notifyDataSetChanged(); // Update the category item recycler
-                    }
-                });
-            }
-        });
 
-        //Initialize the functionality of the delete category button
-        Button delete = findViewById(R.id.category_dialog_delete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ConfirmAlert(getContext(), "Are you sure you want to delete this " + category.getName() + " category?\nThis action is irreversible.", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        deleteThisCategory();
+                        //Save the configuration of the category
+
+
                     }
                 });
             }
@@ -101,9 +91,11 @@ public class CategoryDialog extends Dialog
         //Find the RecyclerView of this dialog
         itemRecycler = findViewById(R.id.category_dialog_items_recycler);
 
+        TextView emptyView = findViewById(R.id.category_dialog_emptyView);
+
         // Create a CategoryItemRecycler adapter that is in EDIT MODE.
         // Items in this dialog should not behave the same way they do on a system page.
-        CategoryItemRecycler adapter = new CategoryItemRecycler(category.getCategoryItems(), this);
+        CategoryItemRecycler adapter = new CategoryItemRecycler(category.getCategoryItems(), this, emptyView, itemRecycler );
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         itemRecycler.setAdapter(adapter);
         itemRecycler.setLayoutManager(manager);
@@ -121,13 +113,6 @@ public class CategoryDialog extends Dialog
                 itemRecycler.getAdapter().notifyDataSetChanged(); // After editing, update the category's items
             }
         });
-
-    }
-
-    private void deleteThisCategory()
-    {
-
-        category.delete();
 
     }
 

@@ -1,20 +1,30 @@
 package daniel.walbolt.custominspections.Inspector.Objects.CategoryItems;
 
+import android.content.Context;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
+import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 
-public class Slider extends CategoryItem
+public class Slider extends CategoryItem implements InfoItem
 {
 
     //The slider is a basic info-item with an easy slider to pick amongst several values.
     // These values are determined when creating the item, and can be edited.
 
     private ArrayList<String> content; // This list contains the words that should be displayed at each section
+    private int progress = 0;
 
     public Slider(String name, Category category) {
         super(name, category);
         content = new ArrayList<>();
+    }
+
+    public Slider(String name, Category category, long ID) {
+        super(name, category, ID);
     }
 
     public void setContent(ArrayList<String> content)
@@ -42,6 +52,18 @@ public class Slider extends CategoryItem
 
     }
 
+    public void setProgress(int newProgress)
+    {
+        this.progress = newProgress;
+    }
+
+    public int getProgress()
+    {
+
+        return this.progress;
+
+    }
+
     public float getMin()
     {
 
@@ -49,5 +71,37 @@ public class Slider extends CategoryItem
 
     }
 
+    public String getSelectedItem()  // Currently only called by PDF Modules. Returns the string that matches the progress
+    {
+
+        return content.get(progress - 1);
+
+    }
+
+    @Override
+    public Map<String, Object> save(InspectionData saveTo)
+    {
+
+        Map<String, Object> itemData = super.save(saveTo);
+
+        itemData.put("Progress", progress);
+
+        return itemData;
+
+    }
+
+    @Override
+    public void loadFrom(Context context, Map<String, Object> itemData)
+    {
+
+        super.loadFrom(context, itemData);
+
+        if (itemData.containsKey("Progress")) {
+            Long progressLong = (long) itemData.get("Progress");
+            progress = progressLong.intValue();
+
+        }
+
+    }
 
 }

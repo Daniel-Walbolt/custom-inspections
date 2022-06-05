@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/contrastColor"
-            android:text="Enter a Name"
+            android:text="Create System"
             android:textStyle="bold"/>
 
         <EditText

@@ -57,7 +57,7 @@
             android:id="@+id/info_item_picture"
             android:tooltipText="Add comment(s)"
             android:visibility="gone"
-            android:src="@drawable/image_icon"/>
+            android:src="@drawable/image_icon_contrast"/>
 
     </LinearLayout>
 
@@ -70,6 +70,7 @@
         android:layout_marginLeft="13dp"
         android:paddingLeft="6dp"
         android:id="@+id/observation_item_content"
+        android:animateLayoutChanges="true"
         android:visibility="gone">
 
         <TextView style="@style/InformationText"

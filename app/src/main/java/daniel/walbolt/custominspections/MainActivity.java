@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import daniel.walbolt.custominspections.Inspector.Home;
+import daniel.walbolt.custominspections.Inspector.Pages.Home;
 
 public class MainActivity extends AppCompatActivity
 {

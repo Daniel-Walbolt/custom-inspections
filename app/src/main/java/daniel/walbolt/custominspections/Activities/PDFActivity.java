@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import daniel.walbolt.custominspections.MainActivity;
+import daniel.walbolt.custominspections.PDF.PDFPreview;
 
 public class PDFActivity extends MainActivity
 {
@@ -15,7 +16,8 @@ public class PDFActivity extends MainActivity
     {
 
         super.onCreate(savedInstanceState);
-       // new PDFPreview(this);
+
+        new PDFPreview(this);
 
     }
 
