@@ -413,23 +413,38 @@ public class Configuration
         for(Category category : system.getCategories())
         {
 
+            //Delete all the category information of the system
             deleteCategoryConfiguration(context, category);
 
         }
 
         systemPreferences.edit().clear().apply();
 
-        //Instead of saving the entire inspection configuration, just save its list of systems
-        SharedPreferences inspectionPreferences = context.getSharedPreferences(inspectionConfigurationLocation, Context.MODE_PRIVATE);
-        Set<String> systemNames = new HashSet<>();
-        for(System inspectionSystem : Main.inspectionSchedule.inspection.getSystemList())
+        if (!system.isSubSystem())
         {
 
-            systemNames.add(inspectionSystem.getDisplayName());
+            //If the System being deleted is a Main-System, re-save the inspection.
+            //Instead of saving the entire inspection configuration, just save its list of systems
+            SharedPreferences inspectionPreferences = context.getSharedPreferences(inspectionConfigurationLocation, Context.MODE_PRIVATE);
+            Set<String> systemNames = new HashSet<>();
+            for(System inspectionSystem : Main.inspectionSchedule.inspection.getSystemList())
+            {
+
+                systemNames.add(inspectionSystem.getDisplayName());
+
+            }
+
+            inspectionPreferences.edit().putStringSet(mainSystemLocation, systemNames).apply();
 
         }
+        else
+        {
 
-        inspectionPreferences.edit().putStringSet(mainSystemLocation, systemNames).apply();
+            //The System being deleted is a Sub-System. The list of sub-systems should be re-saved in the parent system.
+            //While not exactly eficient. We can just save the entire parent system because the Sub-System category will overwrite the save with the current systems.
+            saveSystemConfiguration(context, system.getParentSystem());
+
+        }
 
     }
 
