@@ -5,4 +5,7 @@
         android:width="4px"
         android:color="@color/WR_orange_dark"/>
 
+    <solid
+        android:color="@color/windowBackground"/>
+
 </shape>

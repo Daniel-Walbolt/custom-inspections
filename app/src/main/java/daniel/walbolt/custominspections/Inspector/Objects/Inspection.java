@@ -43,6 +43,7 @@ public class Inspection
         InspectionMedia.deleteDirectories(mActivity);
 
         systemList = new ArrayList<>();
+        majorComponents = new ArrayList<>();
 
     }
 

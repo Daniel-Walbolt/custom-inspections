@@ -30,30 +30,7 @@ public class PDFController
         modules = new ArrayList<>();
         chapters = new ArrayList<>();
 
-    }
-
-    public int getRequiredPages()
-    {
-
-        establishHeight();
-        int pages = (height % Page.PAGE_HEIGHT) > 0 ? ((int)(height / Page.PAGE_HEIGHT) + 1) : ((int)(height / Page.PAGE_HEIGHT));
-
-        if(pages == 0) // Can never have 0 pages
-            pages = 1;
-        return pages;
-
-    }
-
-    public void createPages(ArrayList<Page> target, int count)
-    {
-
-        for(int i = 0; i < count; i++)
-        {
-
-            Page page = new Page("Blah", i);
-            target.add(page);
-
-        }
+        getSystemModules(); // Get the modules that will display the inspection information, this is computationally intensive.
 
     }
 
@@ -82,8 +59,10 @@ public class PDFController
         for(System system : Main.inspectionSchedule.inspection.getSystemList())
         {
 
-            //Loop through every system in the inspection.
+            //Every system is a new chapter.
+            Chapter systemChapter = new Chapter(system.getDisplayName());
 
+            //Loop through every system in the inspection.
             for(Category category : system.getCategories())
             {
 

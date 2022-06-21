@@ -16,7 +16,7 @@ public class Slider extends CategoryItem implements InfoItem
     // These values are determined when creating the item, and can be edited.
 
     private ArrayList<String> content; // This list contains the words that should be displayed at each section
-    private int progress = 0;
+    private int progress = 1; // Default progress is the minimum
 
     public Slider(String name, Category category) {
         super(name, category);

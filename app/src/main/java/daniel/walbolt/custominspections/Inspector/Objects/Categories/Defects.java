@@ -12,8 +12,8 @@ import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
 import daniel.walbolt.custominspections.R;
 
-public class Defect extends Category{
-    public Defect(System parent) {
+public class Defects extends Category{
+    public Defects(System parent) {
         super(TYPE.DEFECT, parent);
     }
 

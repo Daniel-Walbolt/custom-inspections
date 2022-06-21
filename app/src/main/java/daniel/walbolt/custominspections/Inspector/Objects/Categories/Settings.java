@@ -68,26 +68,30 @@ public class Settings extends Category
             SettingItem partial = new SettingItem("Mark System as Partially Complete", this, 1,(buttonView, isChecked)
                     -> getSystem().setSetting(SystemSetting.PARTIAL, isChecked));
 
-            SettingItem complete = new SettingItem("Mark System as Complete", this, 2, null);
-            complete.setCheckEvent((buttonView, isChecked) -> {
-                getSystem().setSetting(SystemSetting.COMPLETE, isChecked);
+            SettingItem completeSetting = new SettingItem("Mark System as Complete", this, 2, null);
+            completeSetting.setCheckEvent((buttonView, isChecked) -> {
 
-                if(isChecked)
+                if(isChecked) // If the user is trying to complete this system...
                 {
+                    boolean isCheckable = true;
 
-                    //CHeck if the system has sub systems
+                    //Check if the system has sub systems
                     if(!getSystem().getSubSystems().isEmpty())
                     {
 
+                        //Iterate through each sub system
                         for(System subSystem : getSystem().getSubSystems())
                         {
 
-                            if(!subSystem.isComplete())
+                            //If a sub system is NOT completed and NOT excluded
+                            if(!subSystem.isExcluded() && !subSystem.isComplete() )
                             {
 
+                                //If any of the sub systems are not complete, this system can not be completed.
                                 new ErrorAlert(buttonView.getContext(), "You can not complete a Main System until all Sub-Systems are complete!");
-                                complete.setApplicability(false);
-                                buttonView.setChecked(false);
+                                buttonView.setChecked(false); // Uncheck the checkbox
+                                completeSetting.setApplicability(false);
+                                isCheckable = false; // This system can not be completed
                                 break;
 
                             }
@@ -96,7 +100,25 @@ public class Settings extends Category
 
                     }
 
+                    completeSetting.getSystem().setSetting(SystemSetting.COMPLETE, isCheckable);
+
                 }
+                else // The user is trying to disable the setting
+                {
+
+                    //Check if this system is a subsystem.
+                    if(completeSetting.getSystem().isSubSystem())
+                    {
+
+                        //If the system is a sub-system, it must disable the parent system from being complete.
+                        completeSetting.getSystem().getParentSystem().setSetting(SystemSetting.COMPLETE, false);
+
+                    }
+
+                    completeSetting.getSystem().setSetting(SystemSetting.COMPLETE, false);
+
+                }
+
 
             });
 
@@ -124,7 +146,7 @@ public class Settings extends Category
             SettingItem quality = new SettingItem( "Mark as Quality of Residence", this, 4,(buttonView, isChecked)
                     -> getSystem().setSetting(SystemSetting.QUALITY, isChecked));
 
-            categoryItems.addAll(Arrays.asList(complete, partial, quality, exclude));
+            categoryItems.addAll(Arrays.asList(completeSetting, partial, quality, exclude));
 
         }
         

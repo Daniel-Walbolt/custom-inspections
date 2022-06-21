@@ -17,8 +17,7 @@ public class DefectItem extends CategoryItem
 {
 
     //False means that this defect requires service/repair
-    private boolean isMonitorAndMaintain = true;
-    private SEVERITY severity = SEVERITY.LOW; // default severity level
+    private SEVERITY severity = SEVERITY.MAINTAIN; // default severity level
 
     public DefectItem(String name, Category category)
     {
@@ -29,20 +28,6 @@ public class DefectItem extends CategoryItem
 
     public DefectItem(String name, Category category, long ID) {
         super(name, category, ID);
-    }
-
-    public void setMonitorAndMaintain(boolean isMonitorAndMaintain)
-    {
-
-        this.isMonitorAndMaintain = isMonitorAndMaintain;
-
-    }
-
-    public boolean isMonitorAndMaintain()
-    {
-
-        return isMonitorAndMaintain;
-
     }
 
     public void setSeverity(SEVERITY severity)
@@ -72,9 +57,6 @@ public class DefectItem extends CategoryItem
 
         Map<String, Object> defectData = super.save(saveTo);
 
-        //Save the type of defect this is
-        defectData.put("Monitor Maintain",  isMonitorAndMaintain);
-
         //Save the priority of this defect
         defectData.put("Severity", severity.toString());
 
@@ -87,9 +69,6 @@ public class DefectItem extends CategoryItem
 
         super.loadFrom(context, itemData);
 
-        if (itemData.containsKey("Monitor Maintain"))
-            isMonitorAndMaintain = (boolean) itemData.get("Monitor Maintain");
-
         if(itemData.containsKey("Severity"))
             severity = SEVERITY.valueOf((String) itemData.get("Severity"));
 
@@ -97,7 +76,7 @@ public class DefectItem extends CategoryItem
 
 
     public enum SEVERITY {
-        MONITOR_MAINTAIN {
+        MAINTAIN {
             @Override
             public String getPDFSeverity() {
                 return "Monitor & Maintain";
@@ -108,21 +87,10 @@ public class DefectItem extends CategoryItem
                 return 0;
             }
         },
-        LOW {
+        MILD {
             @Override
             public String getPDFSeverity() {
-                return "Low Priority";
-            }
-
-            @Override
-            public int getProgress() {
-                return 0;
-            }
-        },
-        MEDIUM {
-            @Override
-            public String getPDFSeverity() {
-                return "Medium Priority";
+                return "Mild";
             }
 
             @Override
@@ -133,7 +101,7 @@ public class DefectItem extends CategoryItem
         HIGH {
             @Override
             public String getPDFSeverity() {
-                return "High Priority";
+                return "High";
             }
 
             @Override

@@ -79,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/InformationText"
+            android:id="@+id/info_item_numeric_unit"
             android:text="Unit"/>
 
     </LinearLayout>

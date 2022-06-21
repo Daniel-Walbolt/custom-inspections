@@ -35,7 +35,8 @@ public class Page {
     private final int pageNumber;
 
     //Every page has a header that contains some basic information
-    private String headerChapter; // The name of the chapter this page belongs to
+    private String headerName; // The name of the chapter this page belongs to
+    private boolean hasHeader;
 
     //In order to maximize the amount of content we can fit onto a page, we keep track of the vertical space in pixels left on the page.
     private int occupiedHeight;
@@ -45,11 +46,13 @@ public class Page {
     private ArrayList<Module> modules;
 
     //New pages are only created when delegating modules. If a module does not fit onto the current page, a new page is created.
-    public Page(String headerName, int pageNumber)
+    public Page(String headerName, int pageNumber, boolean hasHeader)
     {
 
         modules = new ArrayList<>();
         this.pageNumber = pageNumber;
+        this.headerName = headerName;
+        this.hasHeader = hasHeader; // Some pages don't have a header.
 
     }
 
@@ -60,11 +63,19 @@ public class Page {
         this.pageView = page;
         this.pageContent = page.findViewById(R.id.pdf_page_content);
 
+        // Show the number of the page on the Page view for consistency, the number always has three places.
         TextView number = page.findViewById(R.id.pdf_page_number);
         String numberText = String.valueOf(pageNumber);
         if (numberText.length() < 3)
             numberText = numberText.length() == 1 ? "00" + pageNumber : "0" + pageNumber;
-        number.setText(numberText);
+        number.setText("Page " + numberText);
+
+        TextView title = page.findViewById(R.id.pdf_page_title);
+        title.setText(headerName); // Set the title of the page
+
+        TextView header = page.findViewById(R.id.pdf_page_header);
+        header.setVisibility(hasHeader ? View.VISIBLE : View.GONE);
+
 
     }
 
@@ -99,6 +110,7 @@ public class Page {
     public void initModules()
     {
 
+        //Render all the allocated modules onto the page view.
         for (Module module : modules) {
 
             View moduleView = module.initAndGetViews(pageContent.getContext());
@@ -106,7 +118,6 @@ public class Page {
                 pageContent.addView(moduleView);
 
         }
-
 
     }
 

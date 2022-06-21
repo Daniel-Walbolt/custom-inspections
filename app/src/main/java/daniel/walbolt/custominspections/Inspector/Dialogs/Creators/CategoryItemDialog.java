@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,7 +29,7 @@ import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.TextArrayDialo
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.TextInputDialog;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.DescriptionDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defect;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defects;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Observations;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Restrictions;
@@ -283,7 +281,7 @@ public class CategoryItemDialog extends Dialog
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        editItem.setCommentHint(textInputDialog.getText());
+                        editItem.setCommentHint(textInputDialog.getText().isEmpty() ? null :  textInputDialog.getText());
                         Toast.makeText(getContext(), "Edited Comment Hint", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -389,7 +387,7 @@ public class CategoryItemDialog extends Dialog
                 return new ObservationItem(name.getText().toString(), category);
 
         }
-        else if(category instanceof Defect)
+        else if(category instanceof Defects)
         {
 
             if(typeSpinner.getSelectedItem().equals("Defect"))
@@ -520,7 +518,7 @@ public class CategoryItemDialog extends Dialog
             types.add(0, "Observation");
         else if(category instanceof Restrictions)
             types.add(0, "Restriction");
-        else if(category instanceof Defect)
+        else if(category instanceof Defects)
             types.add(0, "Defect");
 
         types.add("Group"); // Every category has the ability to render Groups

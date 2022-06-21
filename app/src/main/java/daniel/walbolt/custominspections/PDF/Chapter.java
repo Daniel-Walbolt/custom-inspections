@@ -19,10 +19,25 @@ public class Chapter
     private int majorDefectCount;
     private int minorDefectCount;
 
-    public Chapter(String systemName)
+    public Chapter(String chapterName)
     {
 
-        this.name = systemName;
+        this.name = chapterName;
+
+    }
+
+    //This method is only called by the PDFController while converting inspection
+    public void setPageStart(int pageStart)
+    {
+
+        this.pageStart = pageStart;
+
+    }
+
+    public void setPageEnd(int pageEnd)
+    {
+
+        this.pageEnd = pageEnd;
 
     }
 

@@ -72,43 +72,17 @@
         android:id="@+id/defect_item_content"
         android:visibility="gone">
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Monitor &amp; Maintain"
-                android:textSize="13dp"
-                android:id="@+id/defect_item_monitor"
-                android:fontFamily="sans-serif"
-                android:layout_marginRight="20dp"/>
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Service Repair"
-                android:id="@+id/defect_item_repair"
-                android:textSize="13dp"
-                android:fontFamily="sans-serif"/>
-
-        </RadioGroup>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/defect_item_severity_content"
             android:orientation="vertical"
-            android:visibility="gone"
             android:layout_marginTop="10dp">
 
             <TextView style="@style/InformationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
-                android:text="Priority"/>
+                android:text="Priority Level"/>
 
             <View style="@style/Divider"/>
 
@@ -123,7 +97,6 @@
                 app:bsb_show_section_text="true"
                 app:bsb_touch_to_seek="true"
                 app:bsb_seek_step_section="true"
-
 
                 app:bsb_track_color="@color/gray_unfocused"
                 app:bsb_second_track_color="@color/WR_orange"

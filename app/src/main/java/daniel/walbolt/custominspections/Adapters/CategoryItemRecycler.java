@@ -1,18 +1,14 @@
 package daniel.walbolt.custominspections.Adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.TransitionManager;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.Transformation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -243,7 +239,18 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             if(item instanceof CategoryGroup)
                 initCategoryGroup(holder, (CategoryGroup) item);
             else
+            {
+
+                holder.checkBox.setChecked(item.isApplicable());
+                holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        compoundButton.setChecked(item.isApplicable()); // Button should not work in the dialog.
+                    }
+                });
                 initBasicInfoItem(holder, item);
+
+            }
 
         }
         else
@@ -353,18 +360,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isInDialog) // If the recycler is in a dialog, remove checkbox functionality
-                {
-
-                    item.setApplicability(isChecked);
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-
-                }
-                else
-                    holder.comments.setVisibility(View.GONE);
-
+                item.setApplicability(isChecked);
             }
         });
+
         holder.checkBox.setChecked(item.isApplicable()); // Set the current state of the item. Doing this after the listener is set means the function is performed
 
 
@@ -423,21 +422,15 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isInDialog) // If the recycler is in a dialog, remove checkbox functionality
-                {
-
                     item.setApplicability(isChecked);
                     animateViewOnVisibilityChange(holder.slider, isChecked);
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-
-                }
-
             }
         });
+
         holder.checkBox.setChecked(item.isApplicable()); // Set the current state of the item. Doing this after the listener is set means the function is performed
 
         //Customize the slider view
-        holder.slider.getConfigBuilder().sectionCount(item.getMax()-1).animDuration(500)
+        holder.slider.getConfigBuilder().sectionCount(item.getMax()-1)
                 .max(item.getMax()).min(item.getMin()).build();
         holder.slider.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
             @NonNull
@@ -488,22 +481,16 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         //Create checkbox functionality
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isInDialog)
-                    buttonView.setChecked(false);
-                else
-                {
-
-                    item.setApplicability(isChecked);
-                    animateViewOnVisibilityChange(holder.content, isChecked);
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                item.setApplicability(isChecked);
+                animateViewOnVisibilityChange(holder.content, isChecked);
             }
         });
+
         holder.checkBox.setChecked(item.isApplicable());
 
-        holder.numeric.addTextChangedListener(new TextWatcher() {
+        holder.numericInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -516,11 +503,12 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
             @Override
             public void afterTextChanged(Editable s) {
-                item.setText(holder.numeric.getText().toString());
+                item.setText(holder.numericInput.getText().toString());
             }
         });
 
-        holder.numeric.setText(item.getText()); // Set the current text that is saved
+        holder.numericInput.setText(item.getText()); // Set the current text that is saved
+        holder.numericUnit.setText(item.getUnit()); // Set the unit of the numeric entry
 
     }
 
@@ -531,21 +519,16 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isInDialog)
-                    buttonView.setChecked(false);
-                else
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
 
-                    observation.setApplicability(isChecked);
-                    animateViewOnVisibilityChange(holder.content, isChecked);
+                observation.setApplicability(isChecked);
+                animateViewOnVisibilityChange(holder.content, isChecked);
 
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-                    animateButtonVisibilityChange(holder.pictures, isChecked);
-                    enablePictures(holder, observation);
+                animateButtonVisibilityChange(holder.comments, isChecked);
+                animateButtonVisibilityChange(holder.pictures, isChecked);
+                enablePictures(holder, observation);
 
-
-                }
             }
         });
         holder.checkBox.setChecked(observation.isApplicable());
@@ -561,20 +544,16 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isInDialog)
-                    buttonView.setChecked(false);
-                else
-                {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
 
-                    restriction.setApplicability(isChecked);
-                    animateViewOnVisibilityChange(holder.content, isChecked);
+                restriction.setApplicability(isChecked);
+                animateViewOnVisibilityChange(holder.content, isChecked);
 
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-                    animateButtonVisibilityChange(holder.pictures, isChecked);
-                    enablePictures(holder, restriction);
+                animateButtonVisibilityChange(holder.comments, isChecked);
+                animateButtonVisibilityChange(holder.pictures, isChecked);
+                enablePictures(holder, restriction);
 
-                }
             }
         });
         holder.checkBox.setChecked(restriction.isApplicable());
@@ -591,46 +570,19 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         //Enable defect checkbox functionality
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isInDialog)
-                    buttonView.setChecked(false);
-                else
-                {
-
-                    defect.setApplicability(isChecked);
-                    animateViewOnVisibilityChange(holder.content, isChecked);
-
-                    animateButtonVisibilityChange(holder.comments, isChecked);
-                    animateButtonVisibilityChange(holder.pictures, isChecked);
-                    enablePictures(holder, defect);
-
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                defect.setApplicability(isChecked);
+                animateViewOnVisibilityChange(holder.content, isChecked);
+                animateButtonVisibilityChange(holder.comments, isChecked);
+                animateButtonVisibilityChange(holder.pictures, isChecked);
+                enablePictures(holder, defect);
             }
         });
         holder.checkBox.setChecked(defect.isApplicable());
 
         //Enable defect image recycler
         defect.initMedia(holder.mediaRecycler, holder.recyclerEmptyView); // Initialize the recycler for the media
-
-
-        holder.maintain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                defect.setMonitorAndMaintain(isChecked);
-                defect.setSeverity(DefectItem.SEVERITY.MONITOR_MAINTAIN);
-                holder.severity.setProgress(defect.getSeverity().getProgress());
-            }
-        });
-        holder.maintain.setChecked(defect.isMonitorAndMaintain());
-
-        holder.repair.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                defect.setMonitorAndMaintain(!isChecked);
-                animateViewOnVisibilityChange(holder.severity, isChecked);
-            }
-        });
-        holder.repair.setChecked(!defect.isMonitorAndMaintain());
 
         holder.severity.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
             @NonNull
@@ -639,8 +591,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 array.clear();
 
                 // Populate the array with the desired content
-                array.put(0, "Low");
-                array.put(1, "Medium");
+                array.put(0, "Maintain");
+                array.put(1, "Mild");
                 array.put(2, "High");
 
                 return array;
@@ -654,10 +606,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 {
 
                     case 0:
-                        defect.setSeverity(DefectItem.SEVERITY.LOW);
+                        defect.setSeverity(DefectItem.SEVERITY.MAINTAIN);
                         break;
                     case 1:
-                        defect.setSeverity(DefectItem.SEVERITY.MEDIUM);
+                        defect.setSeverity(DefectItem.SEVERITY.MILD);
                         break;
                     case 2:
                         defect.setSeverity(DefectItem.SEVERITY.HIGH);
@@ -681,10 +633,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Trigger the setting's purpose
                 settingItem.setApplicability(isChecked);
                 settingItem.getCheckEvent().onCheckedChanged(buttonView, isChecked);
-
             }
         });
         holder.checkBox.setChecked(settingItem.isApplicable());
@@ -732,7 +682,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
         BubbleSeekBar slider;
 
-        EditText numeric;
+        EditText numericInput;
+        TextView numericUnit;
         LinearLayout content;
 
         //In the case the CategoryItem is a CategoryGroup
@@ -744,11 +695,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         TextView recyclerEmptyView;
         
         //In the case the CategoryItem is a defect
-        RadioButton maintain;
-        RadioButton repair;
         BubbleSeekBar severity;
-        LinearLayout severityContent;
-
 
         /*
 
@@ -790,7 +737,8 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             else if(viewType == 4) // Item is a Numeric Entry
             {
 
-                numeric = itemView.findViewById(R.id.info_item_numeric_input);
+                numericInput = itemView.findViewById(R.id.info_item_numeric_input);
+                numericUnit = itemView.findViewById(R.id.info_item_numeric_unit);
                 content = itemView.findViewById(R.id.info_item_numeric_content);
                 initCheckableItemCommonViews();
 
@@ -828,11 +776,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 mediaRecycler = itemView.findViewById(R.id.defect_item_media_recycler);
                 recyclerEmptyView = itemView.findViewById(R.id.defect_item_media_emptyView);
                 
-                maintain = itemView.findViewById(R.id.defect_item_monitor);
-                repair = itemView.findViewById(R.id.defect_item_repair);
-                
-                severity = itemView.findViewById(R.id.defect_item_severity);
-                severityContent = itemView.findViewById(R.id.defect_item_severity_content);
+                severity = itemView.findViewById(R.id.defect_item_severity); // The severity slider
 
                 initCheckableItemCommonViews();
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import daniel.walbolt.custominspections.Adapters.PDF.PDFPageDecoration;
+import daniel.walbolt.custominspections.Adapters.PDF.PDFPageRecyclerAdapter;
 import daniel.walbolt.custominspections.R;
 
 public class PDFPreview
@@ -21,15 +22,18 @@ public class PDFPreview
 
     private NestedScrollView pdfContainer;
     private RecyclerView pages;
-    //private PDFPageRecyclerAdapter pdfRecyclerAdapter;
+    private PDFPageRecyclerAdapter pdfRecyclerAdapter;
 
     public PDFPreview(Activity activity)
     {
 
+        //Display the PDF Preview page
         activity.setContentView(R.layout.pdf_viewer);
 
+        //Initialize the views on the page
         initViews(activity);
 
+        //I'm not really sure what this code is doing, but I think it helps determine the size of the pages.
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point smallestSize = new Point();
         Point largestSize = new Point();
@@ -57,38 +61,41 @@ public class PDFPreview
         });
 
         pages.setMinimumHeight(height);
-
     }
 
     private void initViews(final Activity activity)
     {
 
+        pdfContainer = activity.findViewById(R.id.pdf_scrollView);
         pages = pdfContainer.findViewById(R.id.pdf_recycler); // The Recycler View
 
-        //pdfRecyclerAdapter = new PDFPageRecyclerAdapter(pages);
+        //Create the PDFController. This class filters the inspection information and displays it properly.
+        PDFController controller = new PDFController();
+
+
         LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
-       // pages.setAdapter(pdfRecyclerAdapter);
         pages.setLayoutManager(manager);
         pages.setNestedScrollingEnabled(false);
         pages.addItemDecoration(new PDFPageDecoration());
 
+        //The generate button finalizes the drawn PDF and turns it into a real PDF file.
         final Button generate = activity.findViewById(R.id.pdf_generate);
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //generatePDF(activity, adapter);
+                generatePDF(activity);
             }
         });
 
     }
 
-    /*private void generatePDF(Activity activity, PDFPageRecyclerAdapter adapter)
+    private void generatePDF(Activity activity)
     {
 
         PDFAssembler generator = new PDFAssembler(activity,  this);
-        generator.generatePDF(activity, adapter);
+        generator.generatePDF();
 
-    }*/
+    }
 
     public ArrayList<Page> getPages()
     {

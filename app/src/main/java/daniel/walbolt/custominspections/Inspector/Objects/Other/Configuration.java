@@ -7,11 +7,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defect;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defects;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Media;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Observations;
@@ -849,7 +848,7 @@ public class Configuration
         else if(categoryName.toUpperCase().equals("RESTRICTION"))
             return new Restrictions(system);
         else if(categoryName.toUpperCase().equals("DEFECT"))
-            return new Defect(system);
+            return new Defects(system);
         else if(categoryName.toUpperCase().equals("SUB SYSTEMS"))
             return new Sub_System(system);
         else if(categoryName.toUpperCase().equals("CONTEXT MEDIA"))

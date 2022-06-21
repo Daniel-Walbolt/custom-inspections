@@ -3,22 +3,15 @@ package daniel.walbolt.custominspections.Inspector.Objects;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.provider.MediaStore;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
-
-import com.xw.repo.BubbleSeekBar;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +20,7 @@ import daniel.walbolt.custominspections.Constants.SystemSetting;
 import daniel.walbolt.custominspections.Constants.SystemTags;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defect;
+import daniel.walbolt.custominspections.Inspector.Objects.Categories.Defects;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Media;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Observations;
@@ -35,13 +28,10 @@ import daniel.walbolt.custominspections.Inspector.Objects.Categories.Restriction
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Settings;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Sub_System;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
-import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.SettingItem;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
-import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.MainActivity;
-import daniel.walbolt.custominspections.PDF.Module;
 import daniel.walbolt.custominspections.R;
 
 public class System implements Serializable
@@ -98,7 +88,7 @@ public class System implements Serializable
             categories.add(new Information(this));
             categories.add(new Observations(this));
             categories.add(new Restrictions(this));
-            categories.add(new Defect(this));
+            categories.add(new Defects(this));
             if(!isSubSystem())
                 categories.add(new Sub_System(this));
             categories.add(new Settings(this));
@@ -126,7 +116,7 @@ public class System implements Serializable
                 organizedCategories[2] = category;
             else if(category instanceof Restrictions)
                 organizedCategories[3] = category;
-            else if(category instanceof Defect)
+            else if(category instanceof Defects)
                 organizedCategories[4] = category;
             else if(category instanceof Sub_System)
                 organizedCategories[5] = category;
@@ -555,9 +545,9 @@ public class System implements Serializable
         //Remove the system from the inspection
         if (!isSubSystem())
             Main.inspectionSchedule.inspection.getSystemList().remove(this); // Remove a MainSystem from the inspection
-        else
+        else {
             getParentSystem().getSubSystems().remove(this); // Remove a Sub-System from a Main-System
-
+        }
         activity.onBackPressed(); //Leave the System activity
 
         //Delete all the saved configurations of the items inside this system.
