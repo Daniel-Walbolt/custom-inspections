@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400px"
+    android:layout_height="70px"
+    style="@style/PDF_InformationText"
+    android:text="This is an example of information text that can be displayed.">
+
+</TextView>
+
+<!-- The height of the view should be estimated to be about 35px * the number of lines as long as the text size doesn't change. -->

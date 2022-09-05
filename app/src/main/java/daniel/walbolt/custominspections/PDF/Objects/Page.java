@@ -1,11 +1,13 @@
-package daniel.walbolt.custominspections.PDF;
+package daniel.walbolt.custominspections.PDF.Objects;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import daniel.walbolt.custominspections.PDF.Modules.CategoryHeaderModule;
 import daniel.walbolt.custominspections.R;
 
 public class Page {
@@ -27,9 +29,9 @@ public class Page {
     //The pageContent is located on the pageView in order to create a top down left to right order.
     private LinearLayout pageContent;
 
-    //Width and Height in pixels of the page content area.
+    //Width and Height in pixels of the page's *content area*.
     static final int PAGE_HEIGHT = 1480;
-    static final int PAGE_WIDTH = 1234;
+    static final int PAGE_WIDTH = 1235;
 
     // Every page has a number assigned to it as it is loaded.
     private final int pageNumber;
@@ -39,7 +41,7 @@ public class Page {
     private boolean hasHeader;
 
     //In order to maximize the amount of content we can fit onto a page, we keep track of the vertical space in pixels left on the page.
-    private int occupiedHeight;
+    private int remainingHeight;
 
     //As the PDFController assigns Modules to pages based off their available space, it adds the Module objects to the Page.
     //This list is later used to load all of the modules onto the page layout.
@@ -50,6 +52,7 @@ public class Page {
     {
 
         modules = new ArrayList<>();
+        this.remainingHeight = PAGE_HEIGHT;
         this.pageNumber = pageNumber;
         this.headerName = headerName;
         this.hasHeader = hasHeader; // Some pages don't have a header.
@@ -73,7 +76,7 @@ public class Page {
         TextView title = page.findViewById(R.id.pdf_page_title);
         title.setText(headerName); // Set the title of the page
 
-        TextView header = page.findViewById(R.id.pdf_page_header);
+        RelativeLayout header = page.findViewById(R.id.pdf_page_header);
         header.setVisibility(hasHeader ? View.VISIBLE : View.GONE);
 
 
@@ -86,17 +89,10 @@ public class Page {
 
     }
 
-    public int getOccupiedHeight()
+    public int getRemainingHeight()
     {
 
-        return occupiedHeight;
-
-    }
-
-    public void setOccupiedHeight(int newHeight)
-    {
-
-        this.occupiedHeight = newHeight;
+        return remainingHeight;
 
     }
 
@@ -104,6 +100,20 @@ public class Page {
     {
 
         return pageNumber;
+
+    }
+
+    public String getHeader()
+    {
+
+        return headerName;
+
+    }
+
+    public boolean hasHeader()
+    {
+
+        return hasHeader;
 
     }
 
@@ -121,21 +131,38 @@ public class Page {
 
     }
 
-    void addModule(Module... modules)
+    public void addModule(Module... modules)
     {
 
         for (Module module : modules) {
 
-            //If the module being added is not null (just a precaution)
+            //Check if the module being added is null (just a precaution)
             if (module != null) {
 
                 //Add the module to the module list in this chapter
                 this.modules.add(module);
 
+                if (module.height == 0) // If the module's height hasn't been established yet...
+                    module.establishHeight();
+
+                this.remainingHeight -= module.height;
+
             }
+
 
         }
 
+    }
+
+    public ArrayList<Module> getModules()
+    {
+
+        return this.modules;
+
+    }
+
+    public boolean isEmpty() {
+        return modules.isEmpty();
     }
 
 }

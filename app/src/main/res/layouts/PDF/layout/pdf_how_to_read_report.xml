@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1235px"
+    android:layout_height="1480px"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/pdf_page_header"
+        android:layout_marginTop="20px">
+
+        <View style="@style/Divider"
+            android:layout_centerInParent="true"
+            android:background="@color/WR_orange_dark"/>
+
+        <TextView
+            android:id="@+id/pdf_page_title"
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/orange_border_view"
+            android:paddingTop="8px"
+            android:paddingBottom="8px"
+            android:paddingStart="12px"
+            android:paddingEnd="12px"
+            android:text="How to Read This Report"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="In our efforts to enhance the client experience of home inspections, we looked to improve the reporting process. As a result, you have access to a more complex and information dense report. Here's some guidelines on how you can get the most out of this report."
+        style="@style/PDF_InformationText"
+        android:textAlignment="center"
+        android:padding="20px"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Systems, Sub-Systems, and Categories"
+        android:padding="8px"
+        android:layout_marginTop="40px"
+        style="@style/PDF_Subheading" />
+
+    <View style="@style/Divider"
+        android:background="@color/WR_orange_dark"
+        android:layout_width="300px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_InformationText"
+        android:padding="10px"
+        android:text="  Systems represent the larger components of any residence (i.e. the electrical, plumbing, and exterior systems). Sub-Systems are the more specific componenets of the residence. For example, 'recepticles' could be a sub-system of the 'electrical' system.\n\n
+    Categories are one of the ways we organize systems into more understandable parts. Categories always start on a new page and display a single type of information about the system. "/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="All About Defects"
+        android:padding="8px"
+        android:layout_marginTop="40px"
+        style="@style/PDF_Subheading" />
+
+    <View style="@style/Divider"
+        android:background="@color/WR_orange_dark"
+        android:layout_width="300px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_InformationText"
+        android:padding="10px"
+        android:text="  We refer to defects as any kind of problem with a feature of an installed system. Defects come in 3 different priority levels: 'High', 'Mild', 'Maintain.' Ideally, all features of every system would be at 'Maintain,' but this is rarely the case. \n\n
+    The priority level is determined by the inspector. 'High' priority means that the defect is a safety hazard and should be repaired immediately. 'Mild' priority indicates a high-cost repair or an otherwise non-safety hazard. Finally, 'Maintain' priority means that the feature needs small cost repairs to continue functioning properly."/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Information, Observations, Restrictions"
+        android:padding="8px"
+        style="@style/PDF_Subheading"
+        android:layout_marginTop="40px"/>
+
+    <View style="@style/Divider"
+        android:background="@color/WR_orange_dark"
+        android:layout_width="300px"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_InformationText"
+        android:padding="10px"
+        android:text="  'Information' is a category displayed as a checklist of features of the residence. What does this house have to offer?\n\n
+    'Observations' is a category that describes the aesthetical and functional state of a feature. This class of data was created to give more information to the client than a typical report. Observations can indicate a problem with the house, but aren't necessarily a concern in traditional inspection standards.\n\n
+    'Restrictions' describes the ability to inspect the residence. We will not get on the roof if it is icy. We will not move all of your furnishings or equipment to gain sight of a cloest or wall socket. Less restrictions means more information for you!"/>
+
+</LinearLayout>

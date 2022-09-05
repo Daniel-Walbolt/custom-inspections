@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             style="@style/InformationText"
             android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/info_item_title"
             android:text="Category Item Name"/>
 

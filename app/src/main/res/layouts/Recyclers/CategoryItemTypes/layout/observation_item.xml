@@ -21,8 +21,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/InformationText"
             android:ellipsize="end"
+            android:maxLines="1"
+            style="@style/InformationText"
             android:id="@+id/info_item_title"
             android:text="Category Item Name"/>
 

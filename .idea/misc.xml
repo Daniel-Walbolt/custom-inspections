@@ -3,6 +3,50 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/PDF/drawable/black_curved_border.xml" value="0.227" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/PDF/drawable/orange_border_view.xml" value="0.119" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/drawable/progress_bar.xml" value="0.227" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/drawable/system_tag_background.xml" value="0.227" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/interactables/drawable/image_circle.xml" value="0.227" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Alerts/layout/alert_error.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/category_item_dialog.xml" value="0.2" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/text_array_dialog.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/text_input_dialog.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Informative/layout/front_dialog.xml" value="0.266796875" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/camera_page.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/front_page.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/scheduler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/$R3GXCO8.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_category_start.xml" value="0.5" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_chapter_start.xml" value="0.33" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_checklist.xml" value="0.19398907103825136" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_checklist_info.xml" value="0.67" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_comment.xml" value="0.5" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_defect.xml" value="0.33" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_image.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_info_section_display.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_observation.xml" value="0.33" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_restriction.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_system_tag.xml" value="0.5" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_table_mark.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/page.xml" value="0.15" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_front.xml" value="0.33" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_front_page.xml" value="0.33" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_how_to_read_report.xml" value="0.5" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_information_text.xml" value="0.25" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_viewer.xml" value="0.22" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/category_group.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/defect_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_checkbox_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_numeric_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_slider_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/observation_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/picture_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/restriction_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/media_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/recycler_system_tag.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Systems/layout/media_category.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Systems/layout/settings_category.xml" value="0.267578125" />
         <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/drawables/backgrounds/drawable/themed_background.xml" value="0.2703125" />
         <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/drawables/backgrounds/drawable/view_colored_edge_background_rounded.xml" value="0.2703125" />
         <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/layout/activity_main.xml" value="0.1793478260869565" />
@@ -10,10 +54,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawables/icons/camera_icons/drawable/camera_confirm_icons.xml" />
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

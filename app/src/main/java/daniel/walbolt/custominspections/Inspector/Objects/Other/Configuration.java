@@ -62,9 +62,18 @@ public class Configuration
     private static final String hintLocation = "HINT";
     private static final String sliderTextLocation = "SLIDER_TEXT";
     private static final String IDLocation = "ID";
+    private static final String numericUnitLocation = "NUMERIC_UNIT";
 
     //The default value of the 'typeLocation' key
     private static final String defaultType = "CHECKBOX";
+
+    //Constants for definining what how categories are saved. Future name changes should not be changed here. Doing so would delete every system of its categories.
+    private static final String infoCategory = "INFORMATION";
+    private static final String observationsCategory = "OBSERVATIONS";
+    private static final String restrictionsCategory = "RESTRICTIONS";
+    private static final String defectCategory = "DEFECTS";
+    private static final String subSystemCategory = "SUB SYSTEMS";
+    private static final String mediaCategory = "CONTEXT MEDIA";
 
     //Save the configuration of the entire inspection
     public static void saveInspectionConfiguration(Context context)
@@ -149,7 +158,7 @@ public class Configuration
             {
 
                 //Add the category to the system's category-name list.
-                categoryNames.add(category.getName());
+                categoryNames.add(getCategoryConstant(category));
                 saveCategoryConfiguration(context, category);
 
             }
@@ -693,6 +702,13 @@ public class Configuration
 
             itemEditor.putString(sliderTextLocation, jsonText);
         }
+
+        if (item instanceof Numeric)
+        {
+
+            itemEditor.putString(numericUnitLocation, ((Numeric)item).getUnit());
+
+        }
         itemEditor.apply();
 
     }
@@ -723,6 +739,13 @@ public class Configuration
 
         }
 
+        if (item instanceof Numeric)
+        {
+
+            ((Numeric)item).setUnit(itemPreferences.getString(numericUnitLocation, "Units"));
+
+        }
+
     }
 
     //Gets a category's preferences
@@ -730,16 +753,16 @@ public class Configuration
     private static SharedPreferences getCategoryPreferences(Context context, System parent, String categoryName)
     {
 
-        SharedPreferences categoryPrefereneces;
+        SharedPreferences categoryPreferences;
 
         if(parent.isSubSystem())
-            categoryPrefereneces = context.getSharedPreferences(parent.getParentSystem().getDisplayName().toUpperCase() + "_SUBSYSTEM_" + parent.getDisplayName().toUpperCase() +
+            categoryPreferences = context.getSharedPreferences(parent.getParentSystem().getDisplayName().toUpperCase() + "_SUBSYSTEM_" + parent.getDisplayName().toUpperCase() +
                     "_" + categoryName.toUpperCase(), Context.MODE_PRIVATE);
         else
-            categoryPrefereneces = context.getSharedPreferences(parent.getDisplayName().toUpperCase() + "_" + categoryName.toUpperCase(), Context.MODE_PRIVATE);
+            categoryPreferences = context.getSharedPreferences(parent.getDisplayName().toUpperCase() + "_" + categoryName.toUpperCase(), Context.MODE_PRIVATE);
 
 
-        return categoryPrefereneces;
+        return categoryPreferences;
 
     }
 
@@ -841,20 +864,40 @@ public class Configuration
     {
 
         //Names of categories are pre-defined
-        if(categoryName.toUpperCase().equals("INFORMATION"))
+        if(categoryName.toUpperCase().equals(infoCategory))
             return new Information(system);
-        else if(categoryName.toUpperCase().equals("OBSERVATION"))
+        else if(categoryName.toUpperCase().equals(observationsCategory))
             return new Observations(system);
-        else if(categoryName.toUpperCase().equals("RESTRICTION"))
+        else if(categoryName.toUpperCase().equals(restrictionsCategory))
             return new Restrictions(system);
-        else if(categoryName.toUpperCase().equals("DEFECT"))
+        else if(categoryName.toUpperCase().equals(defectCategory))
             return new Defects(system);
-        else if(categoryName.toUpperCase().equals("SUB SYSTEMS"))
+        else if(categoryName.toUpperCase().equals(subSystemCategory))
             return new Sub_System(system);
-        else if(categoryName.toUpperCase().equals("CONTEXT MEDIA"))
+        else if(categoryName.toUpperCase().equals(mediaCategory))
             return new Media(system);
         else
             return null;
+
+    }
+
+    private static String getCategoryConstant(Category category)
+    {
+
+        if(category instanceof Information)
+            return infoCategory;
+        else if(category instanceof Observations)
+            return observationsCategory;
+        else if(category instanceof Restrictions)
+            return restrictionsCategory;
+        else if(category instanceof Defects)
+            return defectCategory;
+        else if(category instanceof Sub_System)
+            return subSystemCategory;
+        else if(category instanceof Media)
+            return mediaCategory;
+        else
+            return "";
 
     }
 

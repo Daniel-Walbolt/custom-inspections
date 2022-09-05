@@ -23,14 +23,15 @@ public class PictureItem extends CategoryItem implements MajorComponent
 
     private static final long ID = 123456;
 
-    private InspectionMedia media; // This media is image only.
     private boolean pictureTaken = false;
 
     public PictureItem(String name, Category category, boolean isMajor)
     {
         super(name, category, ID);
 
-        media = new InspectionMedia(this);
+        //In order to utilize the CategoryItem's save functionality, we have to store this media in a list for pictures.
+        //This also allows for the picture count functionality to work.
+        getPictures().add(new InspectionMedia(this)); // Create the media to store this section's picture.
 
         if (isMajor)
             addComponent(this);
@@ -48,7 +49,14 @@ public class PictureItem extends CategoryItem implements MajorComponent
     public InspectionMedia getMedia()
     {
 
-        return media;
+        return getPictures().get(0);
+
+    }
+
+    public void setMedia(InspectionMedia media)
+    {
+
+        getPictures().set(0, media);
 
     }
 
@@ -71,6 +79,6 @@ public class PictureItem extends CategoryItem implements MajorComponent
 
     @Override
     public String getComponentDescription() {
-        return description;
+        return "Residence Front Image";
     }
 }

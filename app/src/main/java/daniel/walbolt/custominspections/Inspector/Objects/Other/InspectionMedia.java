@@ -114,9 +114,9 @@ public class InspectionMedia
         //Create the file the directories that will store the image.
         // The image can be cancelled, but the use of storage here is minimal.
         if(section != null)
-            this.fileName = getSectionMediaFileName(section);
+            this.fileName = getSectionMediaFileName(section); // We're taking a picture for a section, and should therefore include the name of the section in the path
         else
-            this.fileName = getContextMediaFileName(category);
+            this.fileName = getContextMediaFileName(category); // We're taking a picture, not storing it in a section
 
         //Create the directories and the file that will store the image
         createImageFile(context);
@@ -137,7 +137,7 @@ public class InspectionMedia
         //Get the App's personal file directory
         File externalDir = context.getFilesDir();
 
-        //Create / get this Inspection's directory based on its ID.
+        //Create / get this Inspection's directory for pictures
         File mainDir = new File(externalDir,"Inspection Pictures");
         mainDir.mkdirs();
 

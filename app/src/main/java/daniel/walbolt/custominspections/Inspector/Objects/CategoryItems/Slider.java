@@ -71,10 +71,13 @@ public class Slider extends CategoryItem implements InfoItem
 
     }
 
-    public String getSelectedItem()  // Currently only called by PDF Modules. Returns the string that matches the progress
+    public String getSelectedItem()  // Currently only called by PDF Modules. Returns the string that matches the progress, defaults if the slider doesn't have options
     {
 
-        return content.get(progress - 1);
+        if (content.size() > progress-1)
+            return content.get(progress - 1);
+        else
+            return "Default Option";
 
     }
 

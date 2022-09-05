@@ -72,6 +72,8 @@ public class SystemActivity extends MainActivity
             system.open(this);
 
         }
+        else
+            finish();
 
     }
 

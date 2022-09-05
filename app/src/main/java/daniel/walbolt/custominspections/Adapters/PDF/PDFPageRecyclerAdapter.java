@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,12 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import daniel.walbolt.custominspections.Inspector.Objects.System;
-import daniel.walbolt.custominspections.Inspector.Pages.Main;
-import daniel.walbolt.custominspections.PDF.Chapter;
-import daniel.walbolt.custominspections.PDF.Module;
-import daniel.walbolt.custominspections.PDF.PDFController;
-import daniel.walbolt.custominspections.PDF.Page;
+import daniel.walbolt.custominspections.PDF.Objects.Page;
 import daniel.walbolt.custominspections.R;
 
 /*
@@ -31,7 +27,7 @@ public class PDFPageRecyclerAdapter extends RecyclerView.Adapter<PDFPageRecycler
 
     ArrayList<Page> pages;
 
-    public PDFPageRecyclerAdapter(final RecyclerView attachedTo, ArrayList<Page> pages)
+    public PDFPageRecyclerAdapter(ArrayList<Page> pages)
     {
 
         //Pages are the foundational object that display content.
@@ -54,9 +50,10 @@ public class PDFPageRecyclerAdapter extends RecyclerView.Adapter<PDFPageRecycler
     public void onBindViewHolder(@NonNull PageHolder holder, int position)
     {
 
+
         Page page = pages.get(position);
         page.attachPageView(holder.itemView); // Handles the title and number
-        page.initModules();
+        page.initModules(); // Initialize the page's modules onto the page view.
 
     }
 
@@ -73,7 +70,7 @@ public class PDFPageRecyclerAdapter extends RecyclerView.Adapter<PDFPageRecycler
 
         // Header of the page. Each page automatically has it ENABLED. Certain pages will disable it, e.g. front page.
         // Note: The header layout contains the pageTitle TextView.
-        LinearLayout header;
+        RelativeLayout header;
 
         TextView pageNumber;
         TextView pageTitle;
@@ -81,6 +78,7 @@ public class PDFPageRecyclerAdapter extends RecyclerView.Adapter<PDFPageRecycler
         public PageHolder(@NonNull View itemView)
         {
             super(itemView);
+            initViews(itemView);
         }
 
         private void initViews(View itemView)

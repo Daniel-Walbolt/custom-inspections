@@ -204,6 +204,8 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
 
             view.setOnClickListener(this);
 
+            view.invalidate();
+
         }
 
         private long firstTap = 0;
@@ -211,9 +213,7 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
 
         @Override
         public void onClick(View v) {
-            if(firstTap == 0)
-                firstTap = System.currentTimeMillis();
-            else if(System.currentTimeMillis() - firstTap < 500) // The view was double-tapped
+            if(System.currentTimeMillis() - firstTap < 500) // The view was double-tapped
             {
 
                 new ImageDialog(itemView.getContext(), media.get(getAdapterPosition()));
@@ -221,7 +221,7 @@ public class MediaRecyclerAdapter extends RecyclerView.Adapter<MediaRecyclerAdap
 
             }
             else // If the tap was not within half a second, reset.
-                firstTap = 0;
+                firstTap = System.currentTimeMillis();
 
         }
     }

@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +23,7 @@ public class TextInputDialog extends Dialog
     private TextView description; // describes what the text is used for
     private Button confirm;
 
-    public TextInputDialog(@NonNull Context context, String title, String description, String defaultText)
+    public TextInputDialog(@NonNull Context context, String title, String description, String defaultText, int textCharLimit, boolean textInputOnly)
     {
 
         super(context);
@@ -36,8 +38,15 @@ public class TextInputDialog extends Dialog
         this.description = findViewById(R.id.text_input_dialog_description);
         this.description.setText(description);
 
+        TextView maxCharacters = findViewById(R.id.text_input_dialog_charMax);
+            maxCharacters.setText("Max of " +  textCharLimit + " characters.");
+
         this.text = findViewById(R.id.text_input_dialog_text);
         this.text.setText(defaultText);
+            InputFilter[] filters = new InputFilter[1];
+            filters[0] = new InputFilter.LengthFilter(textCharLimit);
+            this.text.setFilters(filters);
+            this.text.setInputType(textInputOnly ? InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS : InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         this.confirm = findViewById(R.id.text_input_dialog_confirm);
         this.confirm.setOnClickListener(new View.OnClickListener() {

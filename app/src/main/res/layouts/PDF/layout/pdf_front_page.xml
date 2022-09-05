@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1235px"
+    android:layout_height="1480px"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="400px"
+        android:maxHeight="400px"
+        android:background="@drawable/image_placeholder_background"
+        android:src="@drawable/image_icon_contrast"
+        android:id="@+id/pdf_front_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:adjustViewBounds="true"/>
+
+    <LinearLayout
+        android:id="@+id/pdf_front_title_block"
+        android:layout_width="800px"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            style="@style/PDF_Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6px"
+            android:text="Residence Report"
+            android:textSize="17sp" />
+
+        <View
+            style="@style/Divider"
+            android:layout_marginTop="6px"
+            android:background="@color/WR_orange_dark" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6px"
+            android:text="Walbolt Residential"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_front_inspection_block"
+        android:layout_width="800px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:orientation="vertical"
+        android:paddingStart="20px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pdf_front_title_block">
+
+        <TextView
+            style="@style/PDF_Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspection Details" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:padding="6px"
+            android:id="@+id/pdf_front_address"
+            android:text="1234 Example Street Drive" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/PDF_Subheading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:padding="6px"
+                android:id="@+id/pdf_front_temp"
+                android:text="Temp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6px"
+                style="@style/PDF_Subheading"
+                android:text="&#xb0;F"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6px"
+                android:text="Weather"
+                android:id="@+id/pdf_front_weather"
+                android:ellipsize="end"
+                style="@style/PDF_Subheading"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:padding="6px"
+            android:id="@+id/pdf_front_time"
+            android:text="xx / xx / xxxx @ xx:xx" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6px"
+            android:id="@+id/pdf_front_house_details"
+            android:text="XXXX sqft - XXX years old"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_front_inspector_block"
+        android:layout_width="800px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:orientation="vertical"
+        android:paddingStart="20px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pdf_front_inspection_block">
+
+        <TextView
+            style="@style/PDF_Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inspector Details" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:id="@+id/pdf_front_inspector_name"
+            android:padding="6px"
+            android:text="Name: Steve Walbolt" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:padding="6px"
+            android:id="@+id/pdf_front_inspector_license"
+            android:text="License: NACHI123456789" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:padding="6px"
+            android:id="@+id/pdf_front_company_phone"
+            android:text="Phone: 419-xxx-xxxx" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:padding="6px"
+            android:id="@+id/pdf_front_company_email"
+            android:text="Email: exampleMmail@gmail.com" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pdf_front_defect_block"
+        android:layout_width="1235px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:orientation="vertical"
+        android:paddingStart="20px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pdf_front_inspector_block">
+
+        <TextView
+            style="@style/PDF_Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Overview" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6px"
+            android:id="@+id/pdf_front_total_defect_count"
+            android:text="### Total Defects" />
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6px"
+            android:id="@+id/pdf_front_hp_defect_count"
+            android:text="### High Priority Defects" />
+
+        <View style="@style/Divider"
+            android:layout_width="300px"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/PDF_InformationText"
+            android:padding="6px"
+            android:textSize="7sp"
+            android:id="@+id/pdf_front_hp_defect_systems"
+            android:text="Applicable Systems: Electrical, Plumbing, Exterior"/>
+
+        <TextView
+            style="@style/PDF_Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pdf_front_restrictions_count"
+            android:padding="6px"
+            android:text="### Restrictions" />
+
+        <View style="@style/Divider"
+            android:layout_width="300px"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/PDF_InformationText"
+            android:textSize="7sp"
+            android:id="@+id/pdf_front_restrictions_systems"
+            android:padding="6px"
+            android:text="Affected Systems: Electrical, Plumbing, Exterior"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/PDF_InformationText"
+            android:textSize="7sp"
+            android:padding="6px"
+            android:id="@+id/pdf_front_excluded_systems"
+            android:text="Excluded Systems: Electrical, Plumbing, Exterior"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/PDF_InformationText"
+            android:textSize="7sp"
+            android:padding="6px"
+            android:textStyle="italic"
+            android:text="Any system can be excluded if a severe restriction is present at the time of inspection.\nSome systems can be excluded because the client did not pay for its additonal charge."/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_InformationText"
+        app:layout_constraintTop_toBottomOf="@id/pdf_front_defect_block"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="7sp"
+        android:padding="6px"
+        android:text="For more detailed information about the inspection, please visit the indiviudal system chapters."/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

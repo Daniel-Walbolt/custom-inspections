@@ -4,13 +4,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="@drawable/image_square"
     android:padding="5px">
 
     <ImageView
-        android:layout_width="150px"
-        android:layout_height="150px"
+        android:layout_width="350px"
+        android:layout_height="350px"
         android:id="@+id/module_image_image"
-        android:background="@drawable/image_square"
         android:cropToPadding="true"
         android:scaleType="centerCrop"
         android:src="@drawable/image_icon_contrast"/>

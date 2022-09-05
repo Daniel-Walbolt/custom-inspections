@@ -1,11 +1,13 @@
 package daniel.walbolt.custominspections.PDF;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,14 +17,31 @@ import java.util.ArrayList;
 
 import daniel.walbolt.custominspections.Adapters.PDF.PDFPageDecoration;
 import daniel.walbolt.custominspections.Adapters.PDF.PDFPageRecyclerAdapter;
+import daniel.walbolt.custominspections.PDF.Objects.Page;
 import daniel.walbolt.custominspections.R;
 
 public class PDFPreview
 {
 
     private NestedScrollView pdfContainer;
-    private RecyclerView pages;
+    private RecyclerView pageRecycler;
     private PDFPageRecyclerAdapter pdfRecyclerAdapter;
+    private ArrayList<Page> pages;
+
+    /*
+    The PDFPreview class starts the PDF rendering process.
+
+    Opens the PDF container page
+
+    Initialize the buttons on the page (upload button)
+
+    Establish the size of the pages through wizardry
+
+    Create the PDFController
+
+    Interacting with the generate button will initiate the PDFAssembler which takes the generated pages from the Controller and puts them into a pdf file.
+
+     */
 
     public PDFPreview(Activity activity)
     {
@@ -30,86 +49,61 @@ public class PDFPreview
         //Display the PDF Preview page
         activity.setContentView(R.layout.pdf_viewer);
 
-        //Initialize the views on the page
+        //Initialize the views of the preview
         initViews(activity);
 
-        //I'm not really sure what this code is doing, but I think it helps determine the size of the pages.
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        Point smallestSize = new Point();
-        Point largestSize = new Point();
-        display.getCurrentSizeRange(smallestSize, largestSize);
-        final int width = smallestSize.x;
-        final int height = smallestSize.y;
-
-        final ViewTreeObserver observer= pages.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                System.out.println("Pages dimensions : " + pages.getWidth() +  ", " + pages.getHeight());
-
-                if(pages.getWidth() != 0 && pages.getHeight() != 0)
-                {
-
-                    double scaleX = (double) width/pages.getWidth();
-
-                    pages.setScaleX((float)scaleX-0.3f);
-                    pages.setScaleY((float)scaleX-0.3f);
-
-                }
-            }
-        });
-
-        pages.setMinimumHeight(height);
     }
 
     private void initViews(final Activity activity)
     {
 
         pdfContainer = activity.findViewById(R.id.pdf_scrollView);
-        pages = pdfContainer.findViewById(R.id.pdf_recycler); // The Recycler View
+        pageRecycler = pdfContainer.findViewById(R.id.pdf_recycler); // The Recycler View
 
-        //Create the PDFController. This class filters the inspection information and displays it properly.
-        PDFController controller = new PDFController();
-
-
-        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
-        pages.setLayoutManager(manager);
-        pages.setNestedScrollingEnabled(false);
-        pages.addItemDecoration(new PDFPageDecoration());
+        getPages(activity);
 
         //The generate button finalizes the drawn PDF and turns it into a real PDF file.
         final Button generate = activity.findViewById(R.id.pdf_generate);
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generatePDF(activity);
+                finishPDF(generate.getContext());
             }
         });
 
     }
 
-    private void generatePDF(Activity activity)
+    private void finishPDF(Context context)
     {
 
-        PDFAssembler generator = new PDFAssembler(activity,  this);
-        generator.generatePDF();
+        PDFAssembler generator = new PDFAssembler(context, this, pages);
+        generator.printPDF();
 
     }
 
-    public ArrayList<Page> getPages()
+    public void getPages(Activity activity)
     {
 
-        //The adapter is created when initializing this class
-        return new ArrayList<>();
+        //Create the PDFController. This class filters the inspection information and displays it properly.
+        PDFController controller = new PDFController();
+        pages = controller.generatePages(activity);
+
+        PDFPageRecyclerAdapter PDFAdapter = new PDFPageRecyclerAdapter(pages);
+
+        LinearLayoutManager manager = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
+
+
+        pageRecycler.setLayoutManager(manager);
+        pageRecycler.setNestedScrollingEnabled(false);
+        pageRecycler.addItemDecoration(new PDFPageDecoration());
+        pageRecycler.setAdapter(PDFAdapter);
 
     }
 
     public int getPageCount()
     {
 
-        //TODO: Get Page Count
-        return 1;
+        return pages.size();
 
     }
 

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
-import daniel.walbolt.custominspections.PDF.Module;
+import daniel.walbolt.custominspections.PDF.Objects.Module;
 import daniel.walbolt.custominspections.R;
 
 public class ImageModule extends Module
@@ -25,8 +25,8 @@ public class ImageModule extends Module
     {
 
         this.image = image;
-        this.width = 162;
-        this.height = 162;
+        this.width = 360;
+        this.height = 360;
 
     }
 

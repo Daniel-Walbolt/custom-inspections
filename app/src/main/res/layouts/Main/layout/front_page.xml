@@ -38,29 +38,232 @@
             android:paddingTop="60dp">
 
             <LinearLayout
+                android:id="@+id/system_page_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/system_page_container"
                 android:animateLayoutChanges="true"
+                android:orientation="vertical"
                 android:paddingBottom="60dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/system_section_media">
+                    android:layout_marginTop="10dp"
+                    android:background="@color/system_section_information">
 
                     <TextView
                         style="@style/CategoryTitle"
-                        android:text="Front Picture"/>
+                        android:text="Additional Info" />
 
                 </RelativeLayout>
 
-                <!-- Programmatically add categories here -->
+                <androidx.recyclerview.widget.RecyclerView
+                    style="@style/CategoryRecycler"
+                    android:id="@+id/media_category_recycler"
+                    android:layoutAnimation="@anim/category_item_animation"
+                    android:background="@drawable/information_category_background">
+
+                    <!-- Insert content programmatically here -->
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subheading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="Temperature" />
+
+                    <EditText
+                        android:id="@+id/front_page_temp"
+                        style="@style/InformationText"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_field_underline_background"
+                        android:hint="Type here"
+                        android:inputType="number"
+                        android:maxLength="3" />
+
+                    <TextView
+                        style="@style/InformationText"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="&#xb0;F" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="required"
+                        android:paddingEnd="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/error_red"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/Subheading"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Weather"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <View
+                    style="@style/Divider"
+                    android:layout_width="100dp"
+                    android:layout_marginStart="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_sunny"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Sunny"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_cloudy"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Cloudy"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_stormy"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Stormy"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:textAlignment="viewEnd"
+                        android:layout_height="wrap_content"
+                        android:text="1 required"
+                        android:paddingEnd="10dp"
+                        android:textColor="@color/error_red"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_rain"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Rain"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_snow"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Snow"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_hail"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Hail"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_dry"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Dry"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_humid"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Humid"/>
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/front_page_weather_fog"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="wrap_content"
+                        style="@style/InformationText"
+                        android:text="Fog"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- This space is usually reserved by the delete system button. -->
 
         </LinearLayout>
 

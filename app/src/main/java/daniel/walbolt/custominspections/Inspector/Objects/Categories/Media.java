@@ -49,13 +49,20 @@ public class Media extends Category
 
     }
 
+    public ArrayList<InspectionMedia> getMedia()
+    {
+
+        return media;
+
+    }
+
     @Override
     public void initRecycler()
     {
 
         //The information category loads basic CategoryItems (Check Boxes, Sliders, Numerics, Groups)
         //The CategoryItemRecycler handles groups as well as other items
-        MediaRecyclerAdapter adapter = new MediaRecyclerAdapter(media, categoryRecycler, emptyView);
+        MediaRecyclerAdapter adapter = new MediaRecyclerAdapter(media, categoryRecycler, emptyView, false);
         LinearLayoutManager manager = new LinearLayoutManager(categoryRecycler.getContext(), RecyclerView.HORIZONTAL, false);
         categoryRecycler.setAdapter(adapter);
         categoryRecycler.setLayoutManager(manager);

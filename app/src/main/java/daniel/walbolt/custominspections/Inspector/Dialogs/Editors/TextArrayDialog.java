@@ -31,6 +31,7 @@ public class TextArrayDialog extends Dialog
     private TextView listSize;
     private RecyclerView recyclerView;
     private ArrayList<String> strings;
+    private int textCharMax = 16;
 
     public TextArrayDialog(@NonNull Context context, ArrayList<String> list)
     {
@@ -43,6 +44,33 @@ public class TextArrayDialog extends Dialog
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setCanceledOnTouchOutside(true);
 
+        initViews();
+
+        show();
+
+    }
+
+    public TextArrayDialog(Context context, ArrayList<String> list, int charLimit)
+    {
+
+        super(context);
+
+        this.textCharMax = charLimit > 0 ? charLimit : textCharMax;
+        this.strings = list;
+
+        setContentView(R.layout.text_array_dialog);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setCanceledOnTouchOutside(true);
+
+        initViews();
+
+        show();
+
+    }
+
+    private void initViews()
+    {
+
         listSize = findViewById(R.id.text_array_dialog_count);
         initRecycler();
 
@@ -50,7 +78,7 @@ public class TextArrayDialog extends Dialog
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextInputDialog textInput = new TextInputDialog(getContext(), "Add Text", "Text that appears at progress steps along a slider.", "");
+                TextInputDialog textInput = new TextInputDialog(getContext(), "Add Text", "Text that appears at progress steps along a slider.", "",  textCharMax, true);
                 textInput.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
@@ -60,10 +88,6 @@ public class TextArrayDialog extends Dialog
                 });
             }
         });
-
-        this.strings = list; // Store the reference to the list being edited
-
-        show();
 
     }
 

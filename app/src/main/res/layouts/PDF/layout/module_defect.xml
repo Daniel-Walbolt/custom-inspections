@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1200px"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Height before adding comments is about 200px -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_Subheading"
+        android:text="Defect - Group Name"
+        android:paddingTop="10px"
+        android:paddingBottom="10px"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:id="@+id/module_defect_title"/>
+
+    <View
+        style="@style/Divider"
+        android:layout_width="1000px"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/WR_orange_dark"
+        android:layout_marginBottom="5px"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="15px">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PDF_Subheading"
+            android:textSize="9sp"
+            android:padding="4px"
+            android:text="Priority:"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/PDF_Subheading"
+            android:id="@+id/module_defect_priority"
+            android:textSize="9sp"
+            android:padding="4px"
+            android:text="HIGH"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_Subheading"
+        android:textSize="9sp"
+        android:text="Inspector Comments"
+        android:textAlignment="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/module_defect_comments"
+        android:padding="10px"
+        android:background="@drawable/black_curved_border">
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/PDF_Subheading"
+        android:layout_marginTop="10px"
+        android:id="@+id/module_defect_imageText"
+        android:text="Images"
+        android:textAlignment="center"/>
+
+    <!-- Insert Grid Module here for the observation images -->
+
+</LinearLayout>

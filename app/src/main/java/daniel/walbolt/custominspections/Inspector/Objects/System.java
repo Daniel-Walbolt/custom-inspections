@@ -46,7 +46,6 @@ public class System implements Serializable
 
      */
 
-
     //Context Media
     private Media systemMedia;
 
@@ -274,7 +273,8 @@ public class System implements Serializable
         int mediaCount = 0;
 
         for(Category category : categories)
-            mediaCount += category.getMediaCount();
+            if(category != null)
+                mediaCount += category.getMediaCount();
 
         return mediaCount;
 
@@ -286,7 +286,8 @@ public class System implements Serializable
         int commentCount = 0;
 
         for(Category category : categories)
-            commentCount += category.getCommentCount();
+            if(category != null)
+                commentCount += category.getCommentCount();
 
         return commentCount;
 
@@ -442,19 +443,19 @@ public class System implements Serializable
             else if(category instanceof Sub_System)
             {
 
+                //Add the data of each sub system
                 for(System subSystem : getSubSystems())
                     systemInformation.addSubSystemData(subSystem.save());
 
             }
             else {
-                //Create data for the category
+                //Add the data of each category
                 systemInformation.addCategoryData(category.save(systemInformation));
             }
 
         }
 
-
-
+        //Add the setting information of this system
         systemInformation.addSystemData(data);
 
         return systemInformation;
@@ -467,8 +468,8 @@ public class System implements Serializable
 
         //allSystemData contains the  data of this system, its categories, its subsystems, and its subsystems data and categories.
 
-
         //Separate all of the different types of data
+        //Get the system's data
         if (allSystemData.containsKey("System"))
         {
 
@@ -482,6 +483,7 @@ public class System implements Serializable
 
         }
 
+        //Get the system's category and subsystem data.
         if (allSystemData.containsKey("Data"))
         {
 

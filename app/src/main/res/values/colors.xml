@@ -6,6 +6,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="tintBackground">#858585</color>
+    <color name="dark_gray">#222222</color>
+    <color name="error_red">#C11111</color>
 
     <color name="WR_orange">#ff6d00</color>=
     <color name="WR_orange_light">#ff9e40</color>
@@ -24,6 +26,10 @@
     <color name="system_section_settings">#FFAB00</color>
     <color name="system_section_subsystems">#01983F</color>
     <color name="system_section_media">#01C69F</color>
+
+    <color name="defect_priority_high">#FF1414</color>
+    <color name="defect_priority_mild">#B300FF</color>
+    <color name="defect_priority_maintain">#043DDC</color>
 
     <!-- Themed Colors -->
 

@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.Environment;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
+import daniel.walbolt.custominspections.PDF.Objects.Page;
 
 public class PDFAssembler extends PrintDocumentAdapter
 {
@@ -43,17 +45,19 @@ public class PDFAssembler extends PrintDocumentAdapter
     private PrintedPdfDocument pdfDocument;
     private Context context;
     private PDFPreview preview;
+    private ArrayList<Page> pages;
 
-    public PDFAssembler(Context context, PDFPreview preview)
+    public PDFAssembler(Context context, PDFPreview preview, ArrayList<Page> pages)
     {
 
         this.context = context;
         this.preview = preview;
+        this.pages = pages;
 
     }
 
     // Call THIS method to start the printing process!
-    public void generatePDF()
+    public void printPDF()
     {
 
         //PrintAttributes help determine margins, resolution, and the desired size of paper to print on.
@@ -64,17 +68,65 @@ public class PDFAssembler extends PrintDocumentAdapter
                 .setMediaSize(PrintAttributes.MediaSize.NA_LETTER)
                 .build();
 
-        // These lines start the process of drawing each page onto a PDF Page.
-        PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
-        printManager.print("Print Inspection Report", this, attributes);
+        PrintedPdfDocument pdf = new PrintedPdfDocument(context, attributes);
 
-        Toast.makeText(context, "PDF Created.", Toast.LENGTH_SHORT).show();
+        for (Page androidPage : pages)
+        {
+
+            PdfDocument.Page pdfPage = pdf.startPage(androidPage.getPageNumber());
+
+            View pageLayout = androidPage.getView();
+
+            //Create the bitmap that will store the content on the page
+            Bitmap bitmap = Bitmap.createBitmap(pageLayout.getWidth(), pageLayout.getHeight(), Bitmap.Config.ARGB_8888);
+
+            Canvas canvas = new Canvas(bitmap);
+            pageLayout.draw(canvas); // Draw the page onto the canvas exactly the same size as it.
+
+            Rect src = new Rect(0, 0, pageLayout.getWidth(), pageLayout.getHeight());
+
+            //Now get the PdfDocument Page's Canvas and measure it
+            Canvas pageCanvas = pdfPage.getCanvas();
+            float pageWidth = pageCanvas.getWidth();
+            float pageHeight = pageCanvas.getHeight();
+
+            //Find the scale factor to fit the rectangle onto the pageCanvas while preserving aspect ratio
+            float scale = Math.min(pageWidth/src.width(), pageHeight/src.height());
+            float left = pageWidth / 2 - src.width() * scale / 2;
+            float top = pageHeight / 2 - src.height() * scale / 2;
+            float right = pageWidth / 2 + src.width() * scale / 2;
+            float bottom = pageHeight / 2 + src.height() * scale / 2;
+            RectF dst = new RectF(left, top, right, bottom);
+
+            //Draw the view's bitmap onto the page's canvas using the scalar rectangle
+            pageCanvas.drawBitmap(bitmap, src, dst, null);
+
+            pdf.finishPage(pdfPage);
+
+        }
+
+        try {
+            pdf.writeTo(getFileOutputStream(context));
+            Toast.makeText(context, "PDF Created.", Toast.LENGTH_SHORT).show();
+        }
+        catch(IOException e)
+        {
+
+            e.printStackTrace();
+            Toast.makeText(context, "Error saving PDF.", Toast.LENGTH_SHORT).show();
+
+        }
+        finally {
+            pdf.close();
+        }
 
         if(pdfFile != null)
         {
 
+            System.out.println("Uploading PDF");
+            
             FirebaseBusiness database = new FirebaseBusiness();
-            database.uploadPDF(FileProvider.getUriForFile(context, "roofandskillet.fileprovider", pdfFile), "Inspection_Report_" + Main.inspectionSchedule.getScheduleID());
+                database.uploadPDF(Uri.fromFile(pdfFile), "Inspection_Report_" + Main.inspectionSchedule.getScheduleID());
             Toast.makeText(context, "PDF Uploaded", Toast.LENGTH_SHORT).show();
 
         }
@@ -110,7 +162,7 @@ public class PDFAssembler extends PrintDocumentAdapter
         // Here we take an input view, and draw it entirely on a canvas. We take this canvas and put it on a rectangle.
         // We then scale the rectangle to fit the page's canvas while preserving aspect ratio
 
-        for (Page page : preview.getPages())
+        for (Page page : pages)
         {
 
             PdfDocument.Page pdfPage = pdfDocument.startPage(page.getPageNumber());
@@ -144,16 +196,21 @@ public class PDFAssembler extends PrintDocumentAdapter
 
         }
 
+        System.out.println("------------------------------------");
+        System.out.println(pdfDocument.getPages());
+
         try {
             pdfDocument.writeTo(getFileOutputStream(context));
         }catch(Exception e)
         {
 
-            e.printStackTrace();
+            writeResultCallback.onWriteFailed(e.toString());
+            return;
 
         }
         finally {
             pdfDocument.close();
+            pdfDocument = null;
         }
 
         writeResultCallback.onWriteFinished(new PageRange[] {new PageRange(0, preview.getPageCount()-1)});
@@ -192,5 +249,4 @@ public class PDFAssembler extends PrintDocumentAdapter
         return null;
 
     }
-
 }

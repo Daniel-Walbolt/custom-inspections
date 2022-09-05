@@ -3,15 +3,15 @@ package daniel.walbolt.custominspections.Inspector.Objects.CategoryItems;
 import android.content.Context;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
-import daniel.walbolt.custominspections.Inspector.Objects.Other.MajorComponent;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.MediaRecycler;
+import daniel.walbolt.custominspections.R;
 
 public class DefectItem extends CategoryItem
 {
@@ -83,6 +83,14 @@ public class DefectItem extends CategoryItem
             }
 
             @Override
+            public int getPDFColor(Context context)
+            {
+
+                return ContextCompat.getColor(context, R.color.defect_priority_maintain);
+
+            }
+
+            @Override
             public int getProgress() {
                 return 0;
             }
@@ -91,6 +99,14 @@ public class DefectItem extends CategoryItem
             @Override
             public String getPDFSeverity() {
                 return "Mild";
+            }
+
+            @Override
+            public int getPDFColor(Context context)
+            {
+
+                return ContextCompat.getColor(context, R.color.defect_priority_mild);
+
             }
 
             @Override
@@ -105,6 +121,14 @@ public class DefectItem extends CategoryItem
             }
 
             @Override
+            public int getPDFColor(Context context)
+            {
+
+                return ContextCompat.getColor(context, R.color.defect_priority_high);
+
+            }
+
+            @Override
             public int getProgress() {
                 return 2;
             }
@@ -112,6 +136,7 @@ public class DefectItem extends CategoryItem
 
         public abstract String getPDFSeverity();
         public abstract int getProgress(); // Return the appropriate progress of the defect slider
+        public abstract int getPDFColor(Context context); // Return the color that identifies the progress
 
     }
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/HeaderText"
-        android:text="Edit List"
+        android:text="Text List"
         android:textAlignment="center"/>
 
     <View style="@style/Divider"/>

@@ -284,8 +284,6 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
     private void animateViewOnVisibilityChange(View animatedView, boolean visible)
     {
 
-        final int actualHeight = animatedView.getMeasuredHeight();
-
         Animation animation;
 
         if(visible)
@@ -440,6 +438,11 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
                 // Populate the array with the desired content
                 int index = 0;
+
+                //Add the default options to the slider, minimum length of the slider is 2.
+                array.put(0, "Default 1");
+                array.put(1, "Default 2");
+
                 for(String content : item.getContent())
                 {
 

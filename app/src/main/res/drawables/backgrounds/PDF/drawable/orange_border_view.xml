@@ -6,6 +6,6 @@
         android:color="@color/WR_orange_dark"/>
 
     <solid
-        android:color="@color/windowBackground"/>
+        android:color="@color/white"/>
 
 </shape>

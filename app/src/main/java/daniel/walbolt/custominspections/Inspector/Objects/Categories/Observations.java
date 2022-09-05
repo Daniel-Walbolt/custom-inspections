@@ -9,7 +9,10 @@ import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
+import java.util.ArrayList;
+
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CategoryDialog;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.ObservationItem;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
 import daniel.walbolt.custominspections.R;
 

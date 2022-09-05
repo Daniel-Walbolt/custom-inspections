@@ -11,7 +11,7 @@
         <TextView style="@style/PDF_InformationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Water Heater Age:"
+            android:text="Information Slider"
             android:id="@+id/module_info_title"
             android:maxLines="1"/>
 
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/module_info_option"
-            android:text="15 years"
+            android:text=" - Step 4"
             android:textStyle="bold"
             android:maxLines="1"/>
 

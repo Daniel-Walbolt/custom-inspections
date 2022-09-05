@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -140,6 +141,33 @@ public class Main {
             }
         });
 
+        ProgressBar progressBar = activity.findViewById(R.id.main_inspection_progress);
+        TextView progressText = activity.findViewById(R.id.inspection_progress);
+
+        //A system is considered complete if it is excluded or marked as complete.
+        int systemsComplete = 0;
+
+        //Get all the systems, custom or made by user.
+        ArrayList<System> allSystems = new ArrayList<>();
+            allSystems.addAll(inspectionSchedule.inspection.getSystemList());
+            allSystems.addAll(inspectionSchedule.inspection.getCustomSystems());
+        for (System system : allSystems)
+            if (system.isComplete() || system.isExcluded())
+                systemsComplete++;
+
+        if(inspectionSchedule.inspection.getSystemList().size() > 0)
+        {
+
+            int progress = (int) (100 * ((double) systemsComplete / (double) inspectionSchedule.inspection.getSystemList().size()));
+            String textProgress = "Progress (" + progress + "%):";
+            progressText.setText(textProgress);
+
+            progressBar.setProgress(progress);
+        }
+        else
+            progressBar.setProgress(0);
+
+
         TextView pdf = activity.findViewById(R.id.inspection_main_pdf);
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,21 +187,41 @@ public class Main {
                 if (!unsatisfiedComponents.isEmpty())
                 {
 
+                    Log.d("UPDATE", "Unable to open PDF: " + unsatisfiedComponents);
+
                     //Build a list showing the incomplete MajorComponents.
-                    StringBuilder errorMessage = new StringBuilder();
-                    for (String component : unsatisfiedComponents)
-                        errorMessage.append(component + ", ");
+                    StringBuilder errorMessage = new StringBuilder("Incomplete Components!\n");
+                    for (int i = 0; i < unsatisfiedComponents.size(); i++)
+                    {
+
+                        String desc = unsatisfiedComponents.get(i);
+                        errorMessage.append(desc);
+                        if  (i+1<unsatisfiedComponents.size())
+                            errorMessage.append(", ");
+
+                    }
 
                     new ErrorAlert(v.getContext(), errorMessage.toString()); // Display an Error Dialog that shows what MajorComponents aren't completed
-
 
                 }
                 else // There are no incomplete MajorComponents
                 {
 
-                    //Render the PDF preview.
-                    Intent pdfPreview = new Intent(activity, PDFActivity.class);
-                    activity.startActivity(pdfPreview);
+                    //Check if all the Systems are COMPLETE, or EXCLUDED
+                    if (progressBar.getProgress() == 100)
+                    {
+
+                        //Render the PDF preview.
+                        Intent pdfPreview = new Intent(activity, PDFActivity.class);
+                        activity.startActivity(pdfPreview);
+
+                    }
+                    else
+                    {
+
+                        new ErrorAlert(v.getContext(), "Not all systems are complete/excluded!");
+                        Log.d("UPDATE", "Unable to open PDF");
+                    }
 
                 }
 
@@ -203,26 +251,6 @@ public class Main {
             }
         });
 
-        ProgressBar progressBar = activity.findViewById(R.id.main_inspection_progress);
-        TextView progressText = activity.findViewById(R.id.inspection_progress);
-
-        int systemsComplete = 0;
-        for (System system : inspectionSchedule.inspection.getSystemList())
-            if (system.isComplete() || system.isExcluded())
-                systemsComplete++;
-
-        if(inspectionSchedule.inspection.getSystemList().size() > 0)
-        {
-
-            int progress = (int) (100 * ((double) systemsComplete / (double) inspectionSchedule.inspection.getSystemList().size()));
-            String textProgress = "Progress (" + progress + "%):";
-            progressText.setText(textProgress);
-
-            progressBar.setProgress(progress);
-        }
-        else
-            progressBar.setProgress(0);
-
     }
 
     private void initRecyclerView(Activity mActivity)
@@ -232,8 +260,11 @@ public class Main {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
 
         TextView emptyView = mActivity.findViewById(R.id.inspection_main_systems_emptyView);
+        ArrayList<System> systems = new ArrayList<>();
+        systems.addAll(inspectionSchedule.inspection.getCustomSystems());
+        systems.addAll(inspectionSchedule.inspection.getSystemList());
 
-        InspectionSystemAdapter systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, inspectionSchedule.inspection.getSystemList(), false );
+        InspectionSystemAdapter systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, systems, false );
 
         systemList.setAdapter(systemListAdapter);
         systemList.setLayoutManager(linearLayoutManager);

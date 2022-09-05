@@ -298,7 +298,7 @@ public abstract class Category
         DEFECT {
             @Override
             public String getDisplayName() {
-                return "Defect";
+                return "Defects";
             }
         },
         MEDIA {
@@ -310,13 +310,13 @@ public abstract class Category
         OBSERVATION {
             @Override
             public String getDisplayName() {
-                return "Observation";
+                return "Observations";
             }
         },
         RESTRICTION {
             @Override
             public String getDisplayName() {
-                return "Restriction";
+                return "Restrictions";
             }
         },
         SETTINGS {

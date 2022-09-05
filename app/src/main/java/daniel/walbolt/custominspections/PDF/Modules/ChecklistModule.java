@@ -7,16 +7,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
-import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryGroup;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Checkbox;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.InfoItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Numeric;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Slider;
-import daniel.walbolt.custominspections.PDF.Module;
+import daniel.walbolt.custominspections.PDF.Objects.Module;
 import daniel.walbolt.custominspections.R;
 
  /*
@@ -29,19 +26,12 @@ public class ChecklistModule extends Module {
     private ArrayList<CategoryItem> information;
     private String header;
 
-    public ChecklistModule(String sectionTitle, CategoryItem... items)
+    public ChecklistModule(String sectionTitle, ArrayList<CategoryItem> items)
     {
 
         this.header = sectionTitle;
-
-        //Only add the items that belong in the Information category.
-        for(CategoryItem item : items)
-        {
-
-            if (item instanceof InfoItem)
-                information.add(item);
-
-        }
+        this.information = new ArrayList<>();
+        this.information.addAll(items);
 
     }
 
@@ -58,6 +48,8 @@ public class ChecklistModule extends Module {
             totalHeight += 50; // Each item is displayed by a 50px tall TextView
 
         }
+
+        this.height = totalHeight;
 
     }
 
@@ -83,7 +75,7 @@ public class ChecklistModule extends Module {
             for (CategoryItem item : information)
             {
 
-                View itemView = LayoutInflater.from(context).inflate(R.layout.module_info_section_display, container, true);
+                View itemView = LayoutInflater.from(context).inflate(R.layout.module_checklist_info, container, false);
 
                 TextView itemTitle = itemView.findViewById(R.id.module_info_title);
                     itemTitle.setText(item.getName());
@@ -95,13 +87,13 @@ public class ChecklistModule extends Module {
                     {
 
                         if (item instanceof Slider)
-                            itemOption.setText(((Slider)item).getSelectedItem());
+                            itemOption.setText(" - " + ((Slider)item).getSelectedItem());
                         else  // Item is a numeric
-                            itemOption.setText(((Numeric)item).getText() + " " + ((Numeric)item).getUnit());
+                            itemOption.setText(" - " +  ((Numeric)item).getText() + " " + ((Numeric)item).getUnit());
 
                     }
                     
-
+                container.addView(itemView);
 
             }
 

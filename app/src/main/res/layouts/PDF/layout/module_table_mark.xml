@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="800px"
+    android:layout_height="60px"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="650px"
+        android:layout_height="wrap_content"
+        android:text="Table Mark Title"
+        android:ellipsize="end"
+        android:id="@+id/module_table_mark_title"
+        style="@style/PDF_Subheading"/>
+
+    <TextView
+        android:id="@+id/module_table_mark_number"
+        style="@style/PDF_Subheading"
+        android:layout_width="150px"
+        android:layout_height="wrap_content"
+        android:text="###" />
+
+</LinearLayout>

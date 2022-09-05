@@ -33,16 +33,24 @@
 
         <EditText
             android:inputType="textMultiLine"
+            android:maxLength="10"
             android:id="@+id/text_input_dialog_text"
             android:layout_width="300dp"
+            android:maxLines="4"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:maxLines="4"
-            android:ellipsize="end"
             android:hint="Start here"
             android:textAlignment="center"
             android:textColor="@color/textColor"
             style="@style/inspector_editText"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/InformationText"
+            android:id="@+id/text_input_dialog_charMax"
+            android:text="Max of %% characters."
+            android:textAlignment="center"/>
 
         <Button
             android:id="@+id/text_input_dialog_confirm"

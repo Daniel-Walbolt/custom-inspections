@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="60px"
+    android:padding="5px"
+    android:layout_marginRight="20px"
+    android:background="@drawable/system_tag_background"
+    android:id="@+id/module_systemtag_background">
+
+    <TextView
+        android:id="@+id/module_systemtag_title"
+        style="@style/PDF_InformationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Incomplete"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140px"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="100px">
+
+        <View style="@style/Divider"
+            android:layout_centerVertical="true"
+            android:background="@color/WR_orange_dark"/>
+
+        <TextView
+            android:id="@+id/module_category_start_title"
+            style="@style/PDF_Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/orange_border_view"
+            android:maxWidth="600px"
+            android:paddingStart="30px"
+            android:paddingTop="10px"
+            android:paddingEnd="30px"
+            android:paddingBottom="10px"
+            android:text="Information" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:maxWidth="1100px"
+        android:layout_height="wrap_content"
+        style="@style/PDF_InformationText"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/module_category_start_description"
+        android:text="This is the start of the Information category for the *insert name* system"/>
+
+
+</LinearLayout>

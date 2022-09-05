@@ -12,6 +12,7 @@ import daniel.walbolt.custominspections.Inspector.Objects.Other.Configuration;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.MajorComponent;
+import daniel.walbolt.custominspections.Inspector.Pages.Front;
 import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
 
@@ -34,6 +35,7 @@ public class Inspection
     public boolean hasLoaded = false;
 
     private ArrayList<System> systemList; // Stores all the system that currently are in the report.
+    private ArrayList<System> customSystems; // Stores all the systems that are hard coded in every inspection. These systems are separated so the PDF doesn't try and render unique systems that don't have the same architecture.
     private ArrayList<MajorComponent> majorComponents; // Stores all items that are required in each inspection.
 
     public Inspection(Activity mActivity)
@@ -43,6 +45,7 @@ public class Inspection
         InspectionMedia.deleteDirectories(mActivity);
 
         systemList = new ArrayList<>();
+        customSystems = new ArrayList<>();
         majorComponents = new ArrayList<>();
 
     }
@@ -50,6 +53,12 @@ public class Inspection
     // Load the systems that are stored in System Preferences.
     public void loadDefaultSystems(Activity mActivity)
     {
+
+        /*
+        Add all the default systems here. As of right now, the Front System is the only hard coded system.
+         */
+        Front frontSystem = new Front();
+        customSystems.add(frontSystem);
 
         Configuration.loadInspectionConfiguration(mActivity);
 
@@ -68,6 +77,14 @@ public class Inspection
                 return system;
 
             }
+
+        }
+
+        for (System customSystem : customSystems)
+        {
+
+            if (customSystem.getDisplayName().equals(systemName))
+                return customSystem;
 
         }
 
@@ -108,6 +125,13 @@ public class Inspection
     {
 
         return systemList;
+
+    }
+
+    public ArrayList<System> getCustomSystems()
+    {
+
+        return customSystems;
 
     }
 

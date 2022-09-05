@@ -49,6 +49,11 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
+    <style name="PDF_Heading" parent="HeaderText">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="PDF_Subheading" parent="Subheading">
         <item name="android:textSize">9sp</item>
         <item name="android:textColor">@color/black</item>
@@ -73,6 +78,7 @@
 
     <style name="PDF_InformationText" parent="InformationText">
         <item name="android:textSize">7sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <!-- Edit Text Field -->

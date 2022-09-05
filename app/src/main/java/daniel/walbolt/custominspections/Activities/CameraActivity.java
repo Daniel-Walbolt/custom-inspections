@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,8 +40,11 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+import daniel.walbolt.custominspections.Adapters.Gestures.DragAndScale;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.R;
 
@@ -64,6 +71,12 @@ public class CameraActivity extends AppCompatActivity
     private PreviewView previewView;
     private ImageView captureView;
     private RelativeLayout shapeContainer;
+
+    private SeekBar scaleBar;
+    private LinearLayout scaleContainer;
+    private View targetView; // Target for the scaleBar
+    private Timer timer; // Timer to hide scaling features after inactivity
+    private boolean isScaling = false;
 
     private ImageCapture imageCapture;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
@@ -152,6 +165,35 @@ public class CameraActivity extends AppCompatActivity
         previewView = findViewById(R.id.camera_view);
         captureView = findViewById(R.id.capture_view);
         shapeContainer = findViewById(R.id.shape_container);
+        scaleContainer = findViewById(R.id.camera_page_scaling_container);
+        scaleBar = findViewById(R.id.camera_page_scale);
+
+        scaleBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                float scale = i / 100f;
+                if (targetView != null)
+                {
+
+                    targetView.setScaleX(scale);
+                    targetView.setScaleY(scale);
+
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) 
+            {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+                scaleContainer.setVisibility(View.GONE);
+
+            }
+        });
 
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,9 +343,9 @@ public class CameraActivity extends AppCompatActivity
         drawableImage.setImageDrawable(AppCompatResources.getDrawable(this,R.drawable.image_square));
         drawableImage.setScaleType(ImageView.ScaleType.MATRIX); // Essential scaling type for PINCH to ZOOM feature
 
-        //Define listeners for touch events
-        ScaleGestureDetector GSD = new ScaleGestureDetector(this, new ScaleListener(drawableImage));
-        drawableImage.setOnTouchListener(getShapeTouchListener(drawableImage, GSD));
+        DragAndScale dragAndScaleListener = new DragAndScale(this);
+
+        drawableImage.setOnTouchListener(dragAndScaleListener);
 
         // Center the drawable by placing layout parameters on it
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(300, 300);
@@ -322,9 +364,9 @@ public class CameraActivity extends AppCompatActivity
         drawableImage.setImageDrawable(AppCompatResources.getDrawable(this,R.drawable.image_circle));
         drawableImage.setScaleType(ImageView.ScaleType.MATRIX); // Essential scaling type for PINCH to ZOOM feature
 
-        //Define listeners for touch events.
-        ScaleGestureDetector GSD = new ScaleGestureDetector(this, new ScaleListener(drawableImage));
-        drawableImage.setOnTouchListener(getShapeTouchListener(drawableImage, GSD));
+        DragAndScale dragAndScaleListener = new DragAndScale(this);
+
+        drawableImage.setOnTouchListener(dragAndScaleListener);
 
         // Center the drawable by placing layout parameters on it
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(300, 300);
@@ -335,69 +377,13 @@ public class CameraActivity extends AppCompatActivity
 
     }
 
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        private float scale = 1f;   // Scale variable for scaling intensity
-        private ImageView imageDrawable; // The image drawable this listener is scaling
-        private Matrix matrix;
-
-        public ScaleListener(ImageView imageDrawable)
-        {
-
-            this.imageDrawable = imageDrawable;
-            matrix = new Matrix();
-
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector detector)
-        {
-
-            System.out.println("Scaling : " + detector.getScaleFactor());
-
-            scale *= detector.getScaleFactor();
-            scale = Math.max(0.5f, Math.min(scale, 10f));
-            matrix.setScale(scale, scale); // Scale the x and y the same amount
-            imageDrawable.setScaleX(scale);
-            imageDrawable.setScaleY(scale);
-            return true;
-
-        }
-
-    }
-
-    private float dX;
-    private float dY;
-    private int lastEvent;
-    private View.OnTouchListener getShapeTouchListener(ImageView drawableImage, ScaleGestureDetector GSD)
+    public void activateScaling(View target)
     {
+        this.targetView = target;
 
-        return new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-
-                GSD.onTouchEvent(event);
-
-                switch(event.getAction())
-                {
-
-                    case MotionEvent.ACTION_DOWN:
-                        lastEvent = MotionEvent.ACTION_DOWN;
-                        dX = drawableImage.getX() - event.getRawX();
-                        dY = drawableImage.getY() - event.getRawY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        lastEvent = MotionEvent.ACTION_MOVE;
-                        drawableImage.setX(event.getRawX() + dX);
-                        drawableImage.setY(event.getRawY() + dY);
-                        break;
-                }
-
-                return true;
-            }
-        };
+        int initialScale = Math.round(target.getScaleX() * 100);
+        scaleBar.setProgress(initialScale);
+        scaleContainer.setVisibility(View.VISIBLE);
 
     }
 
@@ -408,4 +394,5 @@ public class CameraActivity extends AppCompatActivity
         return;
 
     }
+
 }

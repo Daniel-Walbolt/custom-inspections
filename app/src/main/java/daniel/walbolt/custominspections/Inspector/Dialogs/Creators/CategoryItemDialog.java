@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,6 +46,10 @@ import daniel.walbolt.custominspections.R;
 
 public class CategoryItemDialog extends Dialog
 {
+
+    /*
+    The CategoryItemDialog is a pop-up that allows the creation and editing of category items
+     */
 
     private TextView title;
     private ImageButton dialogInfo;
@@ -132,6 +137,7 @@ public class CategoryItemDialog extends Dialog
 
         title = findViewById(R.id.category_item_dialog_title);;
         name = findViewById(R.id.category_item_name);
+
         typeSpinner = findViewById(R.id.category_item_dialog_type);
 
         typeSettings = findViewById(R.id.categoy_item_dialog_type_content);
@@ -163,7 +169,7 @@ public class CategoryItemDialog extends Dialog
                         "Sections are what hold information during an inspection. " +
                         "Name them wisely, and group them in a way that will help you organize!\n\n" +
                         "Note: Groups can not be in another group.\n" +
-                        "You can not change the type (Check Box, etc.) when editing!");
+                        "You can not change the type (Check Box, etc.) when editing an existing item!");
             }
         });
 
@@ -194,6 +200,9 @@ public class CategoryItemDialog extends Dialog
                 });
             }
         });
+
+        if (editItem == null)
+            delete.setVisibility(View.GONE);
 
         /*
         Initialize the views of the dialog based on the dialog state
@@ -261,7 +270,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit Description",
                         "This description is only displayed to you when filling out a report.\nIt can be accessed by pressing the info. icon on a section. ",
-                        editItem.getDescription() != null ? editItem.getDescription() : "");
+                        editItem.getDescription() != null ? editItem.getDescription() : "", 500, false);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -277,7 +286,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit Hint",
                         "This hint is only displayed to you when opening a Comment Editor.\nIt should describe what 'topic' you want described in the comments.",
-                        editItem.getCommentHint() != null ? editItem.getCommentHint() : "");
+                        editItem.getCommentHint() != null ? editItem.getCommentHint() : "", 500, false);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -293,7 +302,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit PDF Description",
                         "This description is displayed to you AND CLIENTS in the final PDF.\nThis description is used to describe what this section means to a client.",
-                        editItem.getPdfDescription() != null ? editItem.getPdfDescription() : "");
+                        editItem.getPdfDescription() != null ? editItem.getPdfDescription() : "", 200, false);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -338,11 +347,11 @@ public class CategoryItemDialog extends Dialog
         allSettings.setVisibility(View.VISIBLE);
 
         editSlider.setVisibility(editItem instanceof Slider ? View.VISIBLE : View.GONE); // Show slider settings if this section is a slider.
-        editSlider.setOnClickListener(v -> new TextArrayDialog(getContext(),((Slider)editItem).getContent()));;
+        editSlider.setOnClickListener(v -> new TextArrayDialog(getContext(),((Slider)editItem).getContent(), 12));;
 
         editNumeric.setVisibility(editItem instanceof Numeric ? View.VISIBLE : View.GONE);
         editNumeric.setOnClickListener(v -> {
-            TextInputDialog input = new TextInputDialog(getContext(), "Numeric Unit", "The unit that describes the number being entered",  ((Numeric)editItem).getUnit());
+            TextInputDialog input = new TextInputDialog(getContext(), "Numeric Unit", "The unit that describes the number being entered",  ((Numeric)editItem).getUnit(), 12, true);
             input.setOnDismissListener(e -> {
                 ((Numeric)editItem).setUnit(input.getText());
             });
