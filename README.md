@@ -13,3 +13,10 @@ The start of every inspection is the scheduling process, and this app handles it
 Additionally, the user can remove a schedule in the case it gets cancelled, or the inspection is completed.
 
 ![RemoveSchedules](https://user-images.githubusercontent.com/61804729/194942503-53b4fd60-ce5c-4b62-bd17-19f8aa1d53f4.gif)
+
+Upon opening the first-ever inspection, the user will be introduced to the "inspection-hub." This Activity provides access to the tools to inspect residences.
+Without prior configuration, the custom-coded "Front" system is the only system available. There are also buttons to upload data and create the PDF; which we will come back to later.
+
+![FirstInspection](https://user-images.githubusercontent.com/61804729/194943671-f4852c6a-77db-4e1d-99f6-46384e405a72.gif)
+
+
