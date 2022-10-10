@@ -16,7 +16,8 @@ Additionally, the user can remove a schedule in the case it gets cancelled, or t
 
 Upon opening the first-ever inspection, the user will be introduced to the "inspection-hub." This Activity provides access to the tools to inspect residences.
 Without prior configuration, the custom-coded "Front" system is the only system available. There are also buttons to upload data and create the PDF; which we will come back to later.
+Here is also a good place to demonstrate the app's ability to change its theme!
 
 ![FirstInspection](https://user-images.githubusercontent.com/61804729/194943671-f4852c6a-77db-4e1d-99f6-46384e405a72.gif)
-
+![NightAndLightTheme](https://user-images.githubusercontent.com/61804729/194944063-a73d5344-258d-4aea-8fe5-8d2be3b166da.gif)
 
