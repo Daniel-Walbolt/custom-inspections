@@ -49,3 +49,8 @@ Section scope comments are accessible for only the item whose comments are being
 
 ![CommentsShowcase](https://user-images.githubusercontent.com/61804729/195698717-33cf82ab-f6d1-48c8-bef7-664b56610005.gif)
 
+The next category to talk about is the Sub System category. This category is very unique because it stores other "child" systems! This is another method of grouping together information, because when it comes to properties, there is a lot to talk about. Providing the tools to group information like this is crucial for making sure the screen doesn't get too crowded, and the final report is also easier to read. Sub-systems are the same as the System object we have been talking about with only a couple differences. For one, a Sub System does not have a Sub System category of its own, and this is to not make the inspection overly confusing; one nested system is enough. Secondly, in the final report, a Sub System will appear within the chapter of its "parent" system.
+
+![SubSystemShowcase](https://user-images.githubusercontent.com/61804729/195702712-4c764e61-986f-41de-bd20-7c73f0c7f860.gif)
+
+
