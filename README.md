@@ -42,7 +42,10 @@ Unlike the Information category, the observations, restrictions, and defects onl
 Observations, Restrictions, and Defects sometimes require comments from the inspector to give more information. This app allows for comments on these types of items, and has a robust system to make boiler-plate comments quicker.
 
 Global scope comments are comments that can be accessed throughout the entire inspection, in every system, for every item that has comments.
+
 System scope comments are accessible for every item that has comments within the same system.
+
+Section scope comments are accessible for only the item whose comments are being edited.
 
 ![CommentsShowcase](https://user-images.githubusercontent.com/61804729/195698717-33cf82ab-f6d1-48c8-bef7-664b56610005.gif)
 
