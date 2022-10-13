@@ -28,3 +28,11 @@ After the user creates a system, the app stores the data into SharedPreferences.
 ![SystemCreation](https://user-images.githubusercontent.com/61804729/195437912-bbccc3c7-787e-4553-a96c-4bda463fd367.gif)
 ![SystemConfigurationContinuity](https://user-images.githubusercontent.com/61804729/195437979-47653ecc-6a5c-4bbf-8d6a-697e97eede63.gif)
 
+Now that we have created a system, it is automatically filled with default Categories. Categories are yet again another way of grouping related information. Much less complex than a System, but each Category groups together different kinds of information. Within the Information system, we can create 4 types of items: Check Box, Numeric Entry, Slider, or Group.
+
+![CreatingASlider](https://user-images.githubusercontent.com/61804729/195696026-c3ed7f77-e0ac-497d-89bb-8519c6660d7b.gif)
+![CreatingASlider](https://user-images.githubusercontent.com/61804729/195696041-d9443ef5-8cd9-4448-87ce-707141623bec.gif)
+![CreatingANumeric](https://user-images.githubusercontent.com/61804729/195696049-ac306660-7dd9-422a-82e0-9c8e3fe89b98.gif)
+![CreatingAGroup](https://user-images.githubusercontent.com/61804729/195696324-f6e19a12-1fc2-4389-8db6-c30880f2a251.gif)
+
+
