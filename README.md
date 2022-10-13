@@ -35,4 +35,14 @@ Now that we have created a system, it is automatically filled with default Categ
 ![CreatingANumeric](https://user-images.githubusercontent.com/61804729/195696049-ac306660-7dd9-422a-82e0-9c8e3fe89b98.gif)
 ![CreatingAGroup](https://user-images.githubusercontent.com/61804729/195696324-f6e19a12-1fc2-4389-8db6-c30880f2a251.gif)
 
+Unlike the Information category, the observations, restrictions, and defects only show 2 types of items, 1 being a Group. Their layouts are similar, but are used for very different purposes in an inspection.
+
+![ShowcaseObservationsRestrictions Defects](https://user-images.githubusercontent.com/61804729/195698522-8f6714ce-c098-493b-8a1e-4d41d7688ace.gif)
+
+Observations, Restrictions, and Defects sometimes require comments from the inspector to give more information. This app allows for comments on these types of items, and has a robust system to make boiler-plate comments quicker.
+
+Global scope comments are comments that can be accessed throughout the entire inspection, in every system, for every item that has comments.
+System scope comments are accessible for every item that has comments within the same system.
+
+![CommentsShowcase](https://user-images.githubusercontent.com/61804729/195698717-33cf82ab-f6d1-48c8-bef7-664b56610005.gif)
 
