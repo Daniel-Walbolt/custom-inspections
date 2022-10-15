@@ -21,7 +21,7 @@ Here is also a good place to demonstrate the app's ability to change its theme!
 ![FirstInspection](https://user-images.githubusercontent.com/61804729/194943671-f4852c6a-77db-4e1d-99f6-46384e405a72.gif)
 ![NightAndLightTheme](https://user-images.githubusercontent.com/61804729/194944063-a73d5344-258d-4aea-8fe5-8d2be3b166da.gif)
 
-Systems will be mentioned a lot in this documentation, so it's important to clarify what they are. A system is a category of inspection. Whether the inspection be for homes or businesses, a system represents an aspect of the property that needs to be inspected. In the final PDF systems are used as chapters, not unlike a book, to group together related information. This app allows the user to create systems whenever they want.
+Systems will be mentioned a lot in this documentation, so it's important to clarify what they are. A system is a componenent of an inspection. Whether the inspection be for homes or businesses, a system represents an aspect of the property that needs to be inspected. In the final PDF systems are used as chapters, not unlike a book, to group together related information. This app allows the user to create systems whenever they want.
 
 After the user creates a system, the app stores the data into SharedPreferences. As a result, every inspection henceforth will include that system in the "inspection-hub."
 
