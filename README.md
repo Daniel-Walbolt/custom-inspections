@@ -6,7 +6,7 @@ This app was a huge learning project, so hyper-efficient coding practices, or ev
 
 This project is a continous learning project, and I think it is turning out fantastic despite not being 'up to standard.' This app is still a work-in-progress, but has a lot of core-functionality completed. Let's go over it!
 
-The start of every inspection is the scheduling process, and this app handles it seamlessly. 
+The start of every inspection is the scheduling process, and this app handles it efficiently. 
 
 ![Schedules](https://user-images.githubusercontent.com/61804729/194942411-53a84155-293f-47eb-8e5c-6c0f6f2d4c57.gif)
 
