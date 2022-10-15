@@ -53,4 +53,9 @@ The next category to talk about is the Sub System category. This category is ver
 
 ![SubSystemShowcase](https://user-images.githubusercontent.com/61804729/195702712-4c764e61-986f-41de-bd20-7c73f0c7f860.gif)
 
+The final category in every system is the Settings category. This category is not editable by the user, and is hard-coded. This category provides basic tools to help the inspector during an inspection. Marking the system as partially complete will show the inspector that the system still needs more inspection. Likewise, marking a system as complete will signify to the inspection app that the system is done. A system can also be marked as excluded, which is equivalent to "complete" status, but means the system will not show up on the report. Some properties do not have every system configured in the app, so excluding systems is almost always going to happen. Finally, a system can be marked as a quality of the property to indicate to the client that this system is in excellent condition.
+
+![SystemCompletionShowcase](https://user-images.githubusercontent.com/61804729/196004360-d16655a2-2ede-4881-b4ff-f4919987faf8.gif)
+![SystemExclusionAndQualityShowcase](https://user-images.githubusercontent.com/61804729/196004364-020efa69-f2ba-442c-860c-7b5bf9acac21.gif)
+
 
