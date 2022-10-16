@@ -8,14 +8,21 @@
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/drawable/progress_bar.xml" value="0.227" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/backgrounds/drawable/system_tag_background.xml" value="0.227" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/drawables/interactables/drawable/image_circle.xml" value="0.227" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Alerts/layout/alert_description.xml" value="0.1153052805280528" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Alerts/layout/alert_error.xml" value="0.267578125" />
-        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/category_item_dialog.xml" value="0.2" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/category_dialog.xml" value="0.18510928961748635" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/category_item_dialog.xml" value="0.1" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/systems_dialog.xml" value="0.131640625" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/text_array_dialog.xml" value="0.267578125" />
-        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/text_input_dialog.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Creators/layout/text_input_dialog.xml" value="0.33" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Dialogs/Informative/layout/front_dialog.xml" value="0.266796875" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/app_home.xml" value="0.13102524866105586" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/camera_page.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/front_page.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/inspection_front.xml" value="0.13102524866105586" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Main/layout/scheduler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Other/layout/checkbox.xml" value="0.266796875" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Other/layout/checkbox_option.xml" value="0.266796875" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/$R3GXCO8.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_category_start.xml" value="0.5" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/module_chapter_start.xml" value="0.33" />
@@ -37,14 +44,19 @@
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/PDF/layout/pdf_viewer.xml" value="0.22" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/category_group.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/defect_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_advanced_checkbox.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_checkbox_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_numeric_2_recycler.xml" value="0.2226775956284153" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_numeric_recycler.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/info_item_slider_recycler.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/observation_item.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/picture_item.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/CategoryItemTypes/layout/restriction_item.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/inspection_schedule_recycler.xml" value="0.14617486338797814" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/media_recycler.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/past_schedule_recycler.xml" value="0.14617486338797814" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/recycler_system_tag.xml" value="0.267578125" />
+        <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Recyclers/layout/system_recycler.xml" value="0.131640625" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Systems/layout/media_category.xml" value="0.267578125" />
         <entry key="..\:/Daniel/3. Development/1.5 Projects/Android Projects/custom-inspections/app/src/main/res/layouts/Systems/layout/settings_category.xml" value="0.267578125" />
         <entry key="..\:/Users/dwalb/AndroidStudioProjects/Custom_Inspections/app/src/main/res/drawables/backgrounds/drawable/themed_background.xml" value="0.2703125" />

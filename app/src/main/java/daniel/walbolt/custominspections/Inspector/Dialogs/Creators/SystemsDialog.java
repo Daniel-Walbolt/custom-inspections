@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import daniel.walbolt.custominspections.Adapters.InspectionSystemAdapter;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ErrorAlert;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
+import daniel.walbolt.custominspections.Inspector.Pages.Main;
 import daniel.walbolt.custominspections.R;
 
 public class SystemsDialog extends Dialog
@@ -27,17 +28,19 @@ public class SystemsDialog extends Dialog
 
     /*
 
-    The Systems Dialog is opened from the Main inspection page and it prompts the user to create a new System.
-
+   The Systems Dialog prompts the user to enter a System name.
+    If the name is unique to the new system, a new system will be created and added to the list provided in the constructor.
      */
 
-    public SystemsDialog(Context context, ArrayList<System> systemList, System parent)
+    public SystemsDialog(Context context, System parent)
     {
 
         super(context);
 
         this.parent = parent;
-        this.systemList = systemList;
+        if (parent != null)
+            this.systemList = parent.getSubSystems();
+
         isSubSystem = true;
 
         //Initialize the view of the dialog
@@ -66,10 +69,18 @@ public class SystemsDialog extends Dialog
             public void onClick(View v)
             {
 
-                checkName(systemName);
-                //Add a new system to the system list
-                systemList.add(new System(systemName.getText().toString(), parent));
-                dismiss();
+                if (checkName(systemName))
+                {
+
+                    //If the system list is not null, then the system list is a subsystem list.
+                    if (systemList != null)
+                        systemList.add(new System(systemName.getText().toString(), parent)); // Add the system to the target list.
+                    else // Otherwise, the target system list is the user-created Main System list. In this case, I need to call a method to add the system.
+                        Main.inspectionSchedule.inspection.addUserSystem(new System(systemName.getText().toString(), parent));
+
+                    dismiss();
+
+                }
 
             }
         });
@@ -80,6 +91,7 @@ public class SystemsDialog extends Dialog
     private boolean checkName(EditText systemName)
     {
 
+        // The system the user is creating can not have a blank name.
         if(systemName.getText().toString().isEmpty())
         {
 
@@ -87,27 +99,26 @@ public class SystemsDialog extends Dialog
             return false;
 
         }
-        else
+        else if (systemList == null) // The new system is being added to the Main System list
+            systemList = Main.inspectionSchedule.inspection.getAllSystems();
+
+        //The system name is valid, loop through the systems already in the target list
+        for(System system : systemList)
         {
 
-            //If the system name is valid, loop through the systems already in the target list
-            for(System system : systemList)
+            //If the system has the same spelling as any other system's name in the list, return false.
+            if(system.getDisplayName().equalsIgnoreCase(systemName.getText().toString()))
             {
 
-                if(system.getDisplayName().equalsIgnoreCase(systemName.getText().toString()))
-                {
+                new ErrorAlert(getContext(), "Another system already has that name!");
 
-                    new ErrorAlert(getContext(), "Another system already has that name!");
-
-                    return false;
-
-                }
+                return false;
 
             }
 
-            return true;
-
         }
+
+        return true;
 
     }
 

@@ -1,31 +1,22 @@
 package daniel.walbolt.custominspections.Inspector.Pages;
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import daniel.walbolt.custominspections.Constants.SystemTags;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Category;
 import daniel.walbolt.custominspections.Inspector.Objects.Categories.Information;
-import daniel.walbolt.custominspections.Inspector.Objects.Categories.Media;
-import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryGroup;
-import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Checkbox;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.AdvancedCheckbox;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Numeric;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.PictureItem;
-import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Slider;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionData;
 import daniel.walbolt.custominspections.Inspector.Objects.Other.InspectionMedia;
 import daniel.walbolt.custominspections.Inspector.Objects.System;
@@ -44,16 +35,15 @@ public class Front extends System
 
     private ImageView frontImageView;
     private PictureItem frontImage;
-    private boolean sunny, cloudy, stormy, rain, snow, hail, dry, humid, fog = false;
-    private Media mediaCategory;
-
-    private String temperatureText = "";
+    private AdvancedCheckbox weather;
+    private Numeric temperature;
+    private Information infoCategory;
 
     public Front()
     {
         super("Front", null);
 
-        createItems();
+        createDefaultCategories();
 
     }
 
@@ -64,8 +54,21 @@ public class Front extends System
         if (this.getCategories().isEmpty())
         {
 
-            mediaCategory = new Media(this);
-            categories.add(mediaCategory);
+            infoCategory = new Information(this);  // Create the category that stores our custom information
+
+            frontImage = new PictureItem("Front Picture", infoCategory, true);
+            infoCategory.addItem(frontImage);
+
+            weather = new AdvancedCheckbox("Weather", infoCategory);
+            weather.setCheckBoxNames("Sunny","Cloudy","Rain","Snow","Fog","Humid","Stormy","Hail");
+            infoCategory.addItem(weather);
+
+            temperature = new Numeric("Temperature", infoCategory);
+            temperature.setVersion2(true);
+            temperature.setUnit("\u00B0F");
+            infoCategory.addItem(temperature);
+
+            categories.add(infoCategory);
 
         }
 
@@ -100,8 +103,8 @@ public class Front extends System
 
         //Return the status of this system.
         boolean image = frontImage.getCompletionStatus();
-        boolean temp = !temperatureText.isEmpty(); // Edit Text can only contain up to 3 numbers, no text
-        boolean weather = weatherChecked();
+        boolean temp = !temperature.getText().isEmpty();
+        boolean weather = this.weather.getCheckedBoxes().size() > 1;
 
         return image && temp && weather;
 
@@ -113,120 +116,11 @@ public class Front extends System
 
         activity.setContentView(R.layout.front_page);
 
-        //Initialize the views
-        ImageButton imageButton = activity.findViewById(R.id.front_page_capture_image);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        LinearLayout page = activity.findViewById(R.id.system_page_container);
+        page.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
 
-            @Override
-            public void onClick(View view) {
-
-                //Create a media object to store the reference to the image and handle saving and loading it
-                InspectionMedia imageController = new InspectionMedia(mediaCategory);
-
-                //Add the media object to this category's media
-                frontImage.setMedia(imageController);
-
-                imageController.takePicture(view.getContext());
-
-            }
-
-        });
-
-        frontImageView = activity.findViewById(R.id.front_page_front_image);
-        if (frontImage.getMedia().getImageFile() != null && frontImage.getMedia().getImageFile().exists()) {
-
-            frontImage.setPictureTaken(true);
-            frontImageView.setImageURI(frontImage.getMedia().getURI(activity)); // Display the image
-
-        }
-
-        /*
-        The inspector is required to describe the weather during inspection.
-        The more detail the better, generally. Only of the options is required... more are possible.
-         */
-        CheckBox sunnyCheck = activity.findViewById(R.id.front_page_weather_sunny); sunnyCheck.setChecked(sunny);
-        CheckBox cloudyCheck = activity.findViewById(R.id.front_page_weather_cloudy); cloudyCheck.setChecked(cloudy);
-        CheckBox rainCheck = activity.findViewById(R.id.front_page_weather_rain); rainCheck.setChecked(rain);
-        CheckBox stormyCheck = activity.findViewById(R.id.front_page_weather_stormy); stormyCheck.setChecked(stormy);
-        CheckBox snowCheck = activity.findViewById(R.id.front_page_weather_snow); snowCheck.setChecked(snow);
-        CheckBox dryCheck = activity.findViewById(R.id.front_page_weather_dry); dryCheck.setChecked(dry);
-        CheckBox hailCheck = activity.findViewById(R.id.front_page_weather_hail); hailCheck.setChecked(hail);
-        CheckBox humidCheck = activity.findViewById(R.id.front_page_weather_humid); humidCheck.setChecked(humid);
-        CheckBox fogCheck = activity.findViewById(R.id.front_page_weather_fog); fogCheck.setChecked(fog);
-
-        sunnyCheck.setOnCheckedChangeListener((btn, b) -> {
-           if (b)
-           {
-
-               cloudyCheck.setChecked(false);
-               stormyCheck.setChecked(false);
-
-           }
-
-           sunny = b;
-
-        });
-
-        cloudyCheck.setOnCheckedChangeListener((btn, b) -> {
-            if (b)
-            {
-                sunnyCheck.setChecked(false);
-                stormyCheck.setChecked(false);
-            }
-            cloudy = b;
-        });
-
-        stormyCheck.setOnCheckedChangeListener((btn, b) -> {
-            if (b)
-            {
-                sunnyCheck.setChecked(false);
-                cloudyCheck.setChecked(false);
-            }
-            stormy = b;
-        });
-
-        rainCheck.setOnCheckedChangeListener((btn, b) -> {
-            rain = b;
-        });
-
-        snowCheck.setOnCheckedChangeListener((btn, b) -> {
-            snow = b;
-        });
-
-        dryCheck.setOnCheckedChangeListener((btn, b) -> {
-            dry = b;
-        });
-
-        hailCheck.setOnCheckedChangeListener((btn, b) -> {
-            hail = b;
-        });
-
-        humidCheck.setOnCheckedChangeListener((btn, b) -> {
-            humid = b;
-        });
-
-        fogCheck.setOnCheckedChangeListener((btn, b) -> {
-            fog = b;
-        });
-
-        EditText temperature = activity.findViewById(R.id.front_page_temp);
-            temperature.setText(temperatureText);
-            temperature.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    temperatureText = s.toString();
-                }
-            });
+        for (Category category : categories)
+            category.loadToPage(page);
 
     }
 
@@ -240,8 +134,8 @@ public class Front extends System
         //Create a list to store THIS system's data.
         Map<String, Object> data = new HashMap<>();
 
-        data.put("Temperature", temperatureText);
-        data.put("Weather", saveWeather());
+        data.put("Temperature", temperature.getText());
+        data.put("Weather", weather.save(systemInformation));
         data.put("Picture", frontImage.save(systemInformation));
 
         systemInformation.addSystemData(data);
@@ -259,8 +153,10 @@ public class Front extends System
 
             Map<String, Object> systemData = (Map<String, Object>) allSystemData.get("System");
 
-            temperatureText = (String) systemData.getOrDefault("Temperature", "");
-            loadWeather((ArrayList<String>)systemData.getOrDefault("Weather", new ArrayList<String>()));
+            java.lang.System.out.println("Data: " + systemData);
+            temperature.setText((String) systemData.getOrDefault("Temperature", ""));
+            if (systemData.containsKey("Weather"))
+                weather.loadFrom(context, (Map<String, Object>) systemData.get("Weather"));
             frontImage.loadFrom(context, (Map<String, Object>) systemData.getOrDefault("Picture", new HashMap<String, Object>()));
 
         }
@@ -274,117 +170,30 @@ public class Front extends System
 
     }
 
-    private void createItems()
-    {
-
-        frontImage = new PictureItem("Front Image", mediaCategory, true);
-        mediaCategory.addItem(frontImage);
-
-    }
-
-    // Return the condition of the weather items. As of right now, only 1 of the main weathers is required to be a valid selection.
-    private boolean weatherChecked()
-    {
-
-        return sunny || stormy || cloudy;
-
-    }
-
     public String getTemp()
     {
 
-        return temperatureText;
+        return temperature.getText();
 
     }
 
     public String getWeather()
     {
 
-        StringBuilder weather = new StringBuilder();
+        StringBuilder weatherString = new StringBuilder();
+        ArrayList<String> weatherOptions = weather.getCheckedBoxes();
 
-        //One of these is required, so it comes first
-        if (sunny)
-            weather.append("Sunny");
-        else if(cloudy)
-            weather.append("Cloudy");
-        else if(stormy)
-            weather.append("Stormy");
-
-        //The next weather options are to further describe the above options.
-        if (rain)
-            weather.append(", Rain");
-        if (snow)
-            weather.append(", Snow");
-        if (hail)
-            weather.append(", Hail");
-        if (dry)
-            weather.append(", Dry");
-        if (humid)
-            weather.append(", Humid");
-        if (fog)
-            weather.append(", Fog");
-
-        return weather.toString();
-
-    }
-
-    //Save the types of the weather that are applicable
-    private ArrayList<String> saveWeather()
-    {
-
-        ArrayList<String> weather = new ArrayList<>();
-
-        if (sunny)
-            weather.add("Sunny");
-        if(stormy)
-            weather.add("Stormy");
-        if (cloudy)
-            weather.add("Cloudy");
-        if (rain)
-            weather.add("Rain");
-        if (snow)
-            weather.add("Snow");
-        if (hail)
-            weather.add("Hail");
-        if (dry)
-            weather.add("Dry");
-        if(humid)
-            weather.add("Humid");
-        if (fog)
-            weather.add("Fog");
-
-        return weather;
-
-    }
-
-    //Load the weathers based on the previous method's output.
-    private void loadWeather(ArrayList<String> savedWeather)
-    {
-
-        for (String weather : savedWeather)
+        for (int i = 0 ; i < weatherOptions.size(); i ++)
         {
 
-            if (weather.equals("Sunny"))
-                sunny = true;
-            else if (weather.equals("Stormy"))
-                stormy = true;
-            else if (weather.equals("Cloudy"))
-                cloudy = true;
-            else if (weather.equals("Rain"))
-                rain = true;
-            else if (weather.equals("Snow"))
-                snow = true;
-            else if (weather.equals("Hail"))
-                hail = true;
-            else if (weather.equals("Dry"))
-                dry = true;
-            else if (weather.equals("Humid"))
-                humid = true;
-            else if (weather.equals("Fog"))
-                fog = true;
+            weatherString.append(weatherOptions.get(i));
+
+            if (i != weatherOptions.size() - 1)
+                weatherString.append(", ");
 
         }
 
-    }
+        return weatherString.toString();
 
+    }
 }

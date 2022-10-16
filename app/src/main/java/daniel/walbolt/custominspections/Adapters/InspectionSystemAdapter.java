@@ -28,16 +28,11 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
 {
 
     private ArrayList<System> systems;
-    private Inspection inspection;
-    private ItemTouchHelper mTouchHelper;
     private boolean isSubSystems = false;
-
-    private int lastPosition = -1;
 
     public InspectionSystemAdapter(final RecyclerView thisRecyclerView, final TextView thisEmptyView, ArrayList<System> systems, boolean isSubSystems)
     {
 
-        this.inspection = Main.inspectionSchedule.inspection;
         this.systems = systems;
         this.isSubSystems = isSubSystems;
 
@@ -144,6 +139,7 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
     {
 
         System system = systems.get(position);
+        java.lang.System.out.println("Binding system: " + system.getDisplayName() + " to recycler view");
 
         holder.title.setText(system.getDisplayName());
         holder.mediaCount.setText(String.valueOf(system.getMediaCount()));
@@ -154,7 +150,6 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
 
         Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.scale_up);
         holder.itemView.setAnimation(animation);
-        lastPosition = position;
 
     }
 
@@ -174,11 +169,8 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
         public TextView commentCount;
 
         public RelativeLayout background;
-        public LinearLayout foreground;
 
         public RecyclerView tags;
-
-        GestureDetector mGestureDetector;
 
         public SystemHolder(@NonNull View itemView)
         {
@@ -200,7 +192,7 @@ public class InspectionSystemAdapter extends RecyclerView.Adapter<InspectionSyst
             //When the system is clicked on, open a new activity. (Visual effect which also gives back button functionality on android).
             Intent openSystem = new Intent(itemView.getContext(), SystemActivity.class);
 
-            //Is the system being opened a subsytem?
+            //Is the system being opened a subsystem?
             openSystem.putExtra("isSubSystem", isSubSystems);
 
             //If it is a subsystem, send the parent system

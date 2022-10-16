@@ -61,6 +61,8 @@ public class Main {
         if(schedule.inspection == null)
         {
 
+            //The following code is only done on first launch of an inspection.
+
             schedule.inspection = new Inspection(activity);
             schedule.inspection.loadDefaultSystems(activity);
 
@@ -80,7 +82,7 @@ public class Main {
         if(inspectionSchedule.isPastInspection)
         {
 
-            //Every time the Main page is accessed, this code will run. So the schedule
+            //Every time the Main page is accessed, this if statement will run. Keep track of if we already loaded data from the database.
             if(!schedule.inspection.hasLoaded) {
                 schedule.inspection.hasLoaded = true;
                 schedule.inspection.loadPastInspection(activity);
@@ -129,7 +131,7 @@ public class Main {
         createSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SystemsDialog(activity, inspectionSchedule.inspection.getSystemList(), null).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                new SystemsDialog(activity, null).setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         systemList.getAdapter().notifyDataSetChanged();
@@ -155,10 +157,10 @@ public class Main {
             if (system.isComplete() || system.isExcluded())
                 systemsComplete++;
 
-        if(inspectionSchedule.inspection.getSystemList().size() > 0)
+        if(allSystems.size() > 0)
         {
 
-            int progress = (int) (100 * ((double) systemsComplete / (double) inspectionSchedule.inspection.getSystemList().size()));
+            int progress = (int) (100 * ((double) systemsComplete / (double) allSystems.size()));
             String textProgress = "Progress (" + progress + "%):";
             progressText.setText(textProgress);
 
@@ -186,8 +188,6 @@ public class Main {
                 //Check if there were any incomplete MajorComponents.
                 if (!unsatisfiedComponents.isEmpty())
                 {
-
-                    Log.d("UPDATE", "Unable to open PDF: " + unsatisfiedComponents);
 
                     //Build a list showing the incomplete MajorComponents.
                     StringBuilder errorMessage = new StringBuilder("Incomplete Components!\n");
@@ -260,11 +260,8 @@ public class Main {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
 
         TextView emptyView = mActivity.findViewById(R.id.inspection_main_systems_emptyView);
-        ArrayList<System> systems = new ArrayList<>();
-        systems.addAll(inspectionSchedule.inspection.getCustomSystems());
-        systems.addAll(inspectionSchedule.inspection.getSystemList());
 
-        InspectionSystemAdapter systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, systems, false );
+        InspectionSystemAdapter systemListAdapter = new InspectionSystemAdapter(systemList, emptyView, inspectionSchedule.inspection.getAllSystems(), false );
 
         systemList.setAdapter(systemListAdapter);
         systemList.setLayoutManager(linearLayoutManager);

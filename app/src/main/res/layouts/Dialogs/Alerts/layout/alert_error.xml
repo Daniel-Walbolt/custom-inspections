@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
+    android:layout_width="350dp"
     android:layout_height="wrap_content"
-    android:minHeight="200dp"
     android:maxHeight="100dp"
     android:background="@drawable/dialog_orange_border"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -36,8 +35,6 @@
         android:layout_marginTop="20dp"
         style="@style/InformationText"
         android:layout_gravity="end"
-        android:layout_marginRight="10dp"
         android:background="@drawable/orange_button"/>
-
 
 </LinearLayout>

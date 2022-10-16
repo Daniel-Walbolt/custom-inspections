@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,16 @@ public class Inspection
 
     private ArrayList<System> systemList; // Stores all the system that currently are in the report.
     private ArrayList<System> customSystems; // Stores all the systems that are hard coded in every inspection. These systems are separated so the PDF doesn't try and render unique systems that don't have the same architecture.
+    private ArrayList<System> allSystems; // Stores both the user-created systems and custom systems. This data is used for the RecyclerView in the Main page.
     private ArrayList<MajorComponent> majorComponents; // Stores all items that are required in each inspection.
+
+    private Comparator<System> systemSorter = new Comparator<System>() {
+
+        @Override
+        public int compare(System sys1, System sys2) {
+            return sys2.getDisplayName().compareTo(sys1.getDisplayName());
+        }
+    };
 
     public Inspection(Activity mActivity)
     {
@@ -46,6 +56,7 @@ public class Inspection
 
         systemList = new ArrayList<>();
         customSystems = new ArrayList<>();
+        allSystems = new ArrayList<>();
         majorComponents = new ArrayList<>();
 
     }
@@ -55,10 +66,10 @@ public class Inspection
     {
 
         /*
-        Add all the default systems here. As of right now, the Front System is the only hard coded system.
+        Add all the custom systems here. As of right now, the Front System is the only hard coded system.
          */
         Front frontSystem = new Front();
-        customSystems.add(frontSystem);
+        addCustomSystem(frontSystem);
 
         Configuration.loadInspectionConfiguration(mActivity);
 
@@ -68,7 +79,7 @@ public class Inspection
     public System getSystemByName(String systemName)
     {
 
-        for(System system : systemList)
+        for(System system : getAllSystems())
         {
 
             if(system.getDisplayName().equals(systemName))
@@ -77,14 +88,6 @@ public class Inspection
                 return system;
 
             }
-
-        }
-
-        for (System customSystem : customSystems)
-        {
-
-            if (customSystem.getDisplayName().equals(systemName))
-                return customSystem;
 
         }
 
@@ -108,7 +111,7 @@ public class Inspection
     {
 
         ArrayList<InspectionData> data = new ArrayList<>();
-        for(System system : systemList)
+        for(System system : systemList) // Save every system created by the user
         {
 
             InspectionData systemData = system.save();
@@ -117,10 +120,20 @@ public class Inspection
 
         }
 
+        for (System system : customSystems) // Save every system hard-coded.
+        {
+
+            InspectionData systemData = system.save();
+            if (systemData != null)
+                data.add(systemData);
+
+        }
+
         return data;
 
     }
 
+    //Returns the system list, this method should only be used for retrieving just the user-created systems.
     public ArrayList<System> getSystemList()
     {
 
@@ -128,6 +141,7 @@ public class Inspection
 
     }
 
+    //Returns the custom system list, this method should only be used for retrieving the custom systems.
     public ArrayList<System> getCustomSystems()
     {
 
@@ -135,11 +149,44 @@ public class Inspection
 
     }
 
+    //Returns both the user-created, and custom systems list. This method should be used for the Main page.
+    public ArrayList<System> getAllSystems()
+    {
+
+        return allSystems;
+
+    }
+
+    public void addUserSystem(System newSystem)
+    {
+
+        systemList.add(newSystem); // Add the user system to the user-created system list.
+        allSystems.add(newSystem); // Add the system to the combined system list as well.
+
+    }
+
+    public void removeUserSystem(System system)
+    {
+
+        systemList.remove(system);
+        allSystems.remove(system);
+
+    }
+
+    public void addCustomSystem(System customSystem)
+    {
+
+        customSystems.add(customSystem);
+        allSystems.add(customSystem);
+
+
+    }
+
     public void loadPastInspection(Context context) // Starts the loading process
     {
 
-        ProgressDialog loading = new ProgressDialog(context);
-        new FirebaseBusiness().fetchInspectionSystems( loading);
+        ProgressDialog loading = new ProgressDialog(context); // Open a dialog that will show the loading progress to the user.
+        new FirebaseBusiness().fetchInspectionSystems(loading);
 
     }
 
@@ -162,6 +209,24 @@ public class Inspection
             }
 
         }
+
+        for (System system : customSystems) // Loop through all the custom systems, these are systems that are hard coded
+        {
+
+            //Find data that belongs to the custom systems
+            if (allSystemsData.containsKey(system.getDisplayName()))
+            {
+
+                java.lang.System.out.println("Found custom system data : " + system.getDisplayName());
+                //Get the system's data out of all the systems' data.
+                Map<String, Object> systemData = (Map<String, Object>)allSystemsData.getOrDefault(system.getDisplayName(), new HashMap<String, Object>());
+
+                system.loadFrom(context, systemData);
+
+            }
+
+        }
+
     }
 
     public ArrayList<String> getInspectedSystems()
@@ -174,6 +239,13 @@ public class Inspection
 
             //Here we store the name of the exact name of the system.
             // This list is used for the database to know the system files to look for while loading.
+            inspectedSystems.add(inspectedSystem.getDisplayName());
+
+        }
+
+        for (System inspectedSystem : getCustomSystems())
+        {
+
             inspectedSystems.add(inspectedSystem.getDisplayName());
 
         }

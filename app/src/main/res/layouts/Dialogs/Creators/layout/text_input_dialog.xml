@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/_250sdp"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_orange_border"
     android:paddingBottom="2dp">
@@ -9,58 +9,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/text_input_dialog_title"
             style="@style/HeaderText"
-            android:padding="8dp"
-            android:textSize="22sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/contrastColor"
+            android:padding="8dp"
             android:text="Enter Text"
-            android:id="@+id/text_input_dialog_title"
-            android:textStyle="bold"/>
+            android:textColor="@color/contrastColor"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/text_input_dialog_description"
+            style="@style/InformationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/InformationText"
-            android:id="@+id/text_input_dialog_description"
             android:text="This is a description of what the content does"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <EditText
-            android:inputType="textMultiLine"
-            android:maxLength="10"
             android:id="@+id/text_input_dialog_text"
-            android:layout_width="300dp"
-            android:maxLines="4"
+            style="@style/inspector_editText"
+            android:layout_width="@dimen/_230sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Start here"
+            android:maxLength="10"
+            android:maxLines="4"
+            android:inputType="textMultiLine"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
-            style="@style/inspector_editText"/>
+            android:textColor="@color/textColor" />
 
         <TextView
+            android:id="@+id/text_input_dialog_charMax"
+            style="@style/InformationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/InformationText"
-            android:id="@+id/text_input_dialog_charMax"
             android:text="Max of %% characters."
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <Button
             android:id="@+id/text_input_dialog_confirm"
+            style="@style/Subheading"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content"
             android:background="@drawable/orange_button"
-            android:text="Confirm"
-            style="@style/Subheading"/>
+            android:text="Confirm" />
 
     </LinearLayout>
 

@@ -23,14 +23,16 @@
             android:textStyle="bold"/>
 
         <EditText
-            android:inputType="text"
             android:id="@+id/create_system_name"
+            style="@style/inspector_editText"
             android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="System name"
+            android:inputType="text"
+            android:minHeight="48dp"
             android:textAlignment="center"
-            android:textColor="@color/textColor"
-            style="@style/inspector_editText"/>
+            android:textColor="@color/textColor" />
 
         <Button
             android:id="@+id/create_system_confirm"

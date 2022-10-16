@@ -100,7 +100,7 @@ dependencies {
 
     //CameraX Libraries
     def camerax_version = "1.2.0-alpha01"
-   implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-video:${camerax_version}"
@@ -117,6 +117,9 @@ dependencies {
     implementation 'com.xw.repo:bubbleseekbar:3.20'
     implementation 'com.google.code.gson:gson:2.9.0' // List to JSON converter for saving ordered lists
     implementation 'com.google.android.material:material:1.5.0'
+
+    implementation 'com.intuit.sdp:sdp-android:1.0.5' // Special unit of measurement that scales with screen size
+    implementation 'com.intuit.ssp:ssp-android:1.0.5' // Special unit of measurement for text that scales with screen size.
 
 
 }

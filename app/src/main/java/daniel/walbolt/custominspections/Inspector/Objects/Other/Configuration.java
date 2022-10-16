@@ -130,7 +130,7 @@ public class Configuration
             System mainSystem = loadMainSystemConfiguration(context, systemName);
 
             //Add the loaded system onto the inspection
-            Main.inspectionSchedule.inspection.getSystemList().add(mainSystem);
+            Main.inspectionSchedule.inspection.addUserSystem(mainSystem);
 
         }
 

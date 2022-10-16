@@ -78,7 +78,7 @@ public class TextArrayDialog extends Dialog
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextInputDialog textInput = new TextInputDialog(getContext(), "Add Text", "Text that appears at progress steps along a slider.", "",  textCharMax, true);
+                TextInputDialog textInput = new TextInputDialog(getContext(), "Add Text", "Text that appears at progress steps along a slider.", "",  textCharMax);
                 textInput.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {

@@ -13,8 +13,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,15 +24,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xw.repo.BubbleSeekBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import daniel.walbolt.custominspections.Inspector.Dialogs.Editors.CategoryDialog;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.DescriptionDialog;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.AdvancedCheckbox;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryGroup;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.CategoryItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Checkbox;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.DefectItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Numeric;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.ObservationItem;
+import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.PictureItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.RestrictionItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.SettingItem;
 import daniel.walbolt.custominspections.Inspector.Objects.CategoryItems.Slider;
@@ -157,8 +161,6 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
     }
 
     //Override this method because we need to load many types of layouts (this can be extended to more)!
-    //One layout is a text view and a nested recycler view (CategoryGroup).
-    // Otherwise, the default layout is just a CheckBox item.
     @Override
     public int getItemViewType(int position)
     {
@@ -171,16 +173,19 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
             return 2;
         else if(item instanceof Slider)
             return 3;
-        else if(item instanceof Numeric)
-            return 4;
+        else if(item instanceof Numeric) { if (((Numeric)item).isVersion2()) { return 5;} else return 4;}
         else if(item instanceof ObservationItem)
-            return 5;
-        else if(item instanceof RestrictionItem)
             return 6;
-        else if(item instanceof DefectItem)
+        else if(item instanceof RestrictionItem)
             return 7;
         else if(item instanceof SettingItem)
             return 8;
+        else if(item instanceof DefectItem)
+            return 9;
+        else if(item instanceof PictureItem)
+            return 10;
+        else if(item instanceof AdvancedCheckbox)
+            return 11;
         else
             return 0;
 
@@ -205,11 +210,17 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         else if(viewType == 4)
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.info_item_numeric_recycler, parent, false);
         else if(viewType == 5)
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.observation_item, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.info_item_numeric_2_recycler, parent, false);
         else if(viewType == 6)
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.restriction_item, parent, false);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.observation_item, parent, false);
         else if(viewType == 7)
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.restriction_item, parent, false);
+        else if(viewType == 9)
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.defect_item, parent, false);
+        else if(viewType == 10)
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.picture_item, parent, false);
+        else if(viewType == 11)
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.info_item_advanced_checkbox, parent, false);
 
         return new ItemHolder(v, viewType); // Initialize the view
 
@@ -273,6 +284,10 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 initDefectItem(holder, (DefectItem) item);
             else if(item instanceof SettingItem)
                 initSettingItem(holder, (SettingItem) item);
+            else if(item instanceof PictureItem)
+                initPictureItem(holder, (PictureItem) item);
+            else if(item instanceof AdvancedCheckbox)
+                initAdvancedCheckbox(holder, (AdvancedCheckbox) item);
 
         }
 
@@ -479,19 +494,27 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
     {
 
         //Initialize common views of an info-item.
-        initBasicInfoItem(holder, item);
+        if (!item.isVersion2())
+            initBasicInfoItem(holder, item);
+        else
+            holder.name.setText(item.getName());
 
         //Create checkbox functionality
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                item.setApplicability(isChecked);
-                animateViewOnVisibilityChange(holder.content, isChecked);
-            }
-        });
+        if (!item.isVersion2())
+        {
 
-        holder.checkBox.setChecked(item.isApplicable());
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                {
+                    item.setApplicability(isChecked);
+                    animateViewOnVisibilityChange(holder.content, isChecked);
+                }
+            });
+
+            holder.checkBox.setChecked(item.isApplicable());
+
+        }
 
         holder.numericInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -644,6 +667,94 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
 
     }
 
+    private void initPictureItem(ItemHolder holder, PictureItem pictureItem)
+    {
+
+        holder.name.setText(pictureItem.getName());
+        System.out.println("Status: " + pictureItem.getCompletionStatus());
+        holder.pictureView.setImageURI(pictureItem.getCompletionStatus() ? pictureItem.getMedia().getURI(holder.pictureView.getContext()) : null);
+        holder.picItemContent.setOnClickListener((e) -> {
+           pictureItem.getMedia().takePicture(holder.picItemContent.getContext());
+        });
+
+    }
+
+    private void initAdvancedCheckbox(ItemHolder holder, AdvancedCheckbox advCheckbox)
+    {
+
+        //Set the title of the section
+        holder.name.setText(advCheckbox.getName());
+
+        //Create a string to tell the user what the selection type is for this checkbox
+        StringBuilder type = new StringBuilder("");
+        switch (advCheckbox.getSelectionType())
+        {
+            case "ALL":
+                type.append("Select all that apply");
+                break;
+            case "MULTI":
+                type.append("Select up to " + advCheckbox.getSelectionAmount());
+                break;
+            case "SINGLE":
+                type.append("Select one");
+        }
+
+        //Show the selection type text.
+        holder.selectionType.setText(type);
+
+        //Get the checkboxes (represented by string and booleans) that we're rendering.
+        HashMap<String, Boolean> checkBoxes = advCheckbox.getCheckboxes();
+
+        //Separate the names from from the hashmap.
+        ArrayList<String> names = new ArrayList<>(checkBoxes.keySet());
+        ArrayList<CheckBox> checkboxes = new ArrayList<>(); // Temporarily store the checkboxes we create. This will be used for listeners later.
+        ArrayList<TextView> checkboxTitles = new ArrayList<>(); // Temporarily store the titles of each checkbox
+
+        LinearLayout row = new LinearLayout(holder.itemView.getContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        
+        // Create the checkbox options by inflating an xml file
+        for (String name : names)
+        {
+
+            //Get the container for the checkbox and the title
+            LinearLayout checkbox = (LinearLayout) LayoutInflater.from(holder.content.getContext()).inflate(R.layout.checkbox_option, row, false);
+
+            //Get the 4 different checkboxes from the view
+            CheckBox cb = checkbox.findViewById(R.id.checkbox_box);
+            TextView title = checkbox.findViewById(R.id.checkbox_title);
+
+            checkbox.removeAllViews(); // Remove both the checkbox and the textview from the layout, this is necessary for adding them somewhere else
+
+            title.setText(name);
+            checkboxes.add(cb);
+            checkboxTitles.add(title);
+
+        }
+        
+        //Loop through all the checkboxes we just created
+        for (int count = 0; count < checkboxes.size(); count++)
+        {
+
+            CheckBox button = checkboxes.get(count);
+            TextView title = checkboxTitles.get(count);
+
+            if (count % 4 == 0 || count == checkboxes.size() - 1) // If we've registered 4 checkboxes, go to next row
+            {
+                holder.content.addView(row);
+                row = new LinearLayout(holder.itemView.getContext());
+                row.setOrientation(LinearLayout.HORIZONTAL);
+            }
+
+            button.setOnCheckedChangeListener(advCheckbox.getListener(title.getText().toString(), checkboxes));
+            button.setChecked(checkBoxes.getOrDefault(title.getText().toString(), false));
+            row.addView(button);
+            row.addView(title);
+
+        }
+
+    }
+
     private void enablePictures(ItemHolder holder, CategoryItem item)
     {
 
@@ -700,6 +811,15 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
         //In the case the CategoryItem is a defect
         BubbleSeekBar severity;
 
+        //In the case the CategoryItem is a PictureItem
+        ImageView pictureView;
+
+        //In the case the CategoryItem is an advanced checkbox
+        TextView selectionType;
+
+        //In the case the CategoryItem is a PictureItem, relative layout is used for its content
+        RelativeLayout picItemContent;
+
         /*
 
         The ItemHolder's job is to properly assign the right Views/ID look-ups to the proper variables
@@ -746,7 +866,15 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 initCheckableItemCommonViews();
 
             }
-            else if(viewType == 5) // Item is an ObservationItem
+            else if(viewType == 5) // Item is a Numeric Entry, version 2.
+            {
+
+                name = itemView.findViewById(R.id.info_item_title);
+                numericInput = itemView.findViewById(R.id.info_item_numeric_input);
+                numericUnit = itemView.findViewById(R.id.info_item_numeric_unit);
+
+            }
+            else if(viewType == 6) // Item is an ObservationItem
             {
 
                 content = itemView.findViewById(R.id.observation_item_content);
@@ -760,7 +888,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 initCheckableItemCommonViews();
 
             }
-            else if(viewType == 6) // Item is a restriction
+            else if(viewType == 7) // Item is a restriction
             {
 
                 content = itemView.findViewById(R.id.restriction_item_content);
@@ -770,7 +898,7 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 initCheckableItemCommonViews();
 
             }
-            else if(viewType == 7) // Item is a defect
+            else if(viewType == 9) // Item is a defect
             {
 
                 content = itemView.findViewById(R.id.defect_item_content);
@@ -782,6 +910,23 @@ public class CategoryItemRecycler extends RecyclerView.Adapter<CategoryItemRecyc
                 severity = itemView.findViewById(R.id.defect_item_severity); // The severity slider
 
                 initCheckableItemCommonViews();
+
+            }
+            else if(viewType == 10) // Item is a PictureItem
+            {
+
+                picItemContent = itemView.findViewById(R.id.picture_item_container);
+
+                name = itemView.findViewById(R.id.picture_item_title);
+                pictureView = itemView.findViewById(R.id.picture_item_picture);
+
+            }
+            else if(viewType == 11) // Item is an Advanced Checkbox
+            {
+
+                content = itemView.findViewById(R.id.advanced_checkbox_content);
+                name = itemView.findViewById(R.id.advanced_checkbox_title);
+                selectionType = itemView.findViewById(R.id.advanced_checkbox_selection_type);
 
             }
 

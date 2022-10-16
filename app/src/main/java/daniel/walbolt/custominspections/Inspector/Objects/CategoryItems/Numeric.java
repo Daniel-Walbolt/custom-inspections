@@ -13,6 +13,7 @@ public class Numeric extends CategoryItem implements InfoItem
 
     private String text = ""; // While the entry type is always a number, it's stored as a string to avoid removing zero's in the suffix or prefix.
     private String unit = "Units"; // The unit that defines what the number is.
+    private boolean isVersion2 = false; // Boolean that decides how to render this item.
 
     public Numeric(String name, Category category)
     {
@@ -28,6 +29,21 @@ public class Numeric extends CategoryItem implements InfoItem
     {
 
         this.text = numericText;
+
+    }
+
+    //This method is a setter whether or not this numeric should be rendered using the 2nd layout of a numeric.
+    public void setVersion2(boolean version2)
+    {
+
+       this.isVersion2 = version2;
+
+    }
+
+    public boolean isVersion2()
+    {
+
+        return this.isVersion2;
 
     }
 

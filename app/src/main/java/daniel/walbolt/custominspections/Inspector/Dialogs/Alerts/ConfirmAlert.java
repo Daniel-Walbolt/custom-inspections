@@ -20,6 +20,7 @@ public class ConfirmAlert extends Dialog implements View.OnClickListener
     private Button no;
     private TextView message;
     private View.OnClickListener trueEvent; // The event to trigger when the user confirms the choice.
+    private View.OnClickListener falseEvent; // The event to trigger when the user cancels the choice.
 
     private Activity activity;
 
@@ -77,6 +78,9 @@ public class ConfirmAlert extends Dialog implements View.OnClickListener
         else if(v.getId() == R.id.confirm_no)
         {
 
+            if (falseEvent != null)
+                falseEvent.onClick(v);
+
             dismiss();
 
         }
@@ -89,6 +93,16 @@ public class ConfirmAlert extends Dialog implements View.OnClickListener
         super(context);
         init(message);
         trueEvent = confirmEvent;
+
+    }
+
+    public ConfirmAlert(Context context, String message, View.OnClickListener confirmEvent, View.OnClickListener cancelEvent)
+    {
+
+        super(context);
+        init(message);
+        trueEvent = confirmEvent;
+        falseEvent = cancelEvent;
 
     }
 

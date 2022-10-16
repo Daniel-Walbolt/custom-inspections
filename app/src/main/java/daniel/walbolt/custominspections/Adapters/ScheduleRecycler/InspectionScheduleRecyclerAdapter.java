@@ -25,8 +25,10 @@ import java.util.Locale;
 
 import daniel.walbolt.custominspections.Activities.InspectionActivity;
 import daniel.walbolt.custominspections.Adapters.ItemTouchHelperAdapter;
+import daniel.walbolt.custominspections.Inspector.Dialogs.Alerts.ConfirmAlert;
 import daniel.walbolt.custominspections.Inspector.Dialogs.Informative.ClientDialog;
 import daniel.walbolt.custominspections.Inspector.Objects.Schedule;
+import daniel.walbolt.custominspections.Libraries.FirebaseBusiness;
 import daniel.walbolt.custominspections.R;
 
 public class InspectionScheduleRecyclerAdapter extends RecyclerView.Adapter<InspectionScheduleRecyclerAdapter.ScheduleHolder> implements ItemTouchHelperAdapter
@@ -111,10 +113,7 @@ public class InspectionScheduleRecyclerAdapter extends RecyclerView.Adapter<Insp
 
         View v;
 
-        if(!isPastInspections)
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inspection_schedule_recycler, parent, false);
-        else
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.past_schedule_recycler, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.inspection_schedule_recycler, parent, false);
 
         return new ScheduleHolder(v, isPastInspections);
     }
@@ -127,14 +126,16 @@ public class InspectionScheduleRecyclerAdapter extends RecyclerView.Adapter<Insp
         holder.month.setText(schedule.date.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
 
         String day = String.valueOf(schedule.date.get(Calendar.DAY_OF_MONTH));
-        if(day.endsWith("3"))
-            day+= "rd,";
-        else if(day.endsWith("2"))
-            day+= "nd,";
-        else if(day.endsWith("1"))
-            day+= "st,";
+        if (day.startsWith("1") && day.length() == 2) // If the date is 10-19, add "th"
+            day += "th";
+        else if(day.endsWith("3")) // If the date ends with a 3 and is not 13, add "rd"
+            day+= "rd";
+        else if(day.endsWith("2")) // If the date ends with a 2 and is not 12, add "nd"
+            day+= "nd";
+        else if(day.endsWith("1")) // If the date ends with a 1 and is not 11, add "st"
+            day+= "st";
         else
-            day+="th,";
+            day+="th"; // If the date is not 13, 12, 11 and does not end with 3, 2, or 1. Add "th"
 
         holder.day.setText(day);
         holder.year.setText(String.valueOf(schedule.date.get(Calendar.YEAR)));
@@ -181,9 +182,16 @@ public class InspectionScheduleRecyclerAdapter extends RecyclerView.Adapter<Insp
     @Override
     public void onItemSwiped(int position)
     {
-        mSchedules.get(position).unschedule(mActivity);
-        mSchedules.remove(position);
-        notifyItemRemoved(position);
+
+        //Show a confirmation dialog to the user when the schedule is swiped.
+        new ConfirmAlert(mActivity, "Are you sure you want to delete this schedule?", (v) -> {
+            new FirebaseBusiness().removeSchedule(mSchedules.get(position), mActivity);
+            mSchedules.remove(position);
+            notifyItemRemoved(position);
+        }, (v) -> {
+            notifyItemChanged(position);
+        });
+
     }
 
     public void setTouchHelper(ItemTouchHelper helper)
@@ -261,7 +269,7 @@ public class InspectionScheduleRecyclerAdapter extends RecyclerView.Adapter<Insp
                     new ClientDialog(mActivity, mSchedules.get(getAdapterPosition()));
                 }
             });
-            begin = itemView.findViewById(R.id.recycler_schedule_begin);
+            begin = itemView.findViewById(R.id.recycler_schedule_begin); // Get the button that starts an inspection from a schedule.
             begin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

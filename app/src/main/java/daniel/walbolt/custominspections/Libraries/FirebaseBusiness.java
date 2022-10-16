@@ -89,8 +89,6 @@ public class FirebaseBusiness
         //Create a list to store the loaded schedules
         final ArrayList<Schedule> savedSchedules = new ArrayList<>();
 
-        System.out.println("Getting schedules");
-
         //Get the collection of schedules in the database
         db.collection("schedules").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -125,7 +123,7 @@ public class FirebaseBusiness
                         }
 
                         //Update the homepage after all schedules have been created.
-                        homePage.updateScheduledRecycler();
+                        homePage.updateScheduledRecycler(savedSchedules);
 
                     }
 
@@ -381,7 +379,7 @@ public class FirebaseBusiness
         dialog.setStatusText("Loading inspection...");
 
         /*
-        Every System is loaded into a HashMap including its internal Data structures
+        Every System is loaded from the database into a Map
 
         Map<String, Object> systemData;
         key - "System" - will hold the data located in the System document itself
@@ -391,7 +389,7 @@ public class FirebaseBusiness
                         | key - "System"  - contains the information of the SubSystem document itself
                         | key - "Data" - contains another HashMap
                               | key - "Categories" - contains a HashMap storing the data of each Category in the SubSystem
-                                    | key -  %CategoryName% - contains the category information of the category document itself
+                                    | key -  %CategoryName% - contains the information of the category document
                               | key - "SubSystems" - should be empty, because a SubSystem has no SubSystems.
             | key - "Categories" - contains a HashMap storing the data of each Category in the System
                   | key - %CategoryName% - contains the category information of the category document itself

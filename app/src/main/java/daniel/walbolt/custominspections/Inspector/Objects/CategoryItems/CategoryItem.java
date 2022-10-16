@@ -31,7 +31,9 @@ public abstract class CategoryItem
     Generic list items - are true false options (checkboxes)
     Numeric items - expand when marked, and require a numeric input.
     Slider items - expand when marked, provide a slider for selecting one of many options
-
+    Defect Items - Contain a checkbox that expands the item to show picture inputs, comments, and a severity slider
+    Restrictions - A checkbox that expands the item to reveal pictures, and a comment button.
+    Observations - A checkbox that expands the item to reveal pictures, and a comment button.
 
     Sections should be almost entirely customizable within working parameters of the app.
         - Pictures are an optional setting
@@ -45,7 +47,7 @@ public abstract class CategoryItem
     private Category category;
     private String name;
     private CategoryGroup group;
-    private long ID; // ID number to identify this item across name changes.
+    private long ID; // ID number to identify this item despite name changes.
 
     //Variables to store pictures & or comments
     private InspectionMedia commentMedia; // The comment media stores only a comment (in the case where no pictures are necessary)

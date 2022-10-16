@@ -270,7 +270,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit Description",
                         "This description is only displayed to you when filling out a report.\nIt can be accessed by pressing the info. icon on a section. ",
-                        editItem.getDescription() != null ? editItem.getDescription() : "", 500, false);
+                        editItem.getDescription() != null ? editItem.getDescription() : "", 300);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -286,7 +286,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit Hint",
                         "This hint is only displayed to you when opening a Comment Editor.\nIt should describe what 'topic' you want described in the comments.",
-                        editItem.getCommentHint() != null ? editItem.getCommentHint() : "", 500, false);
+                        editItem.getCommentHint() != null ? editItem.getCommentHint() : "", 300);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -302,7 +302,7 @@ public class CategoryItemDialog extends Dialog
             public void onClick(View v) {
                 TextInputDialog textInputDialog = new TextInputDialog(getContext(), "Edit PDF Description",
                         "This description is displayed to you AND CLIENTS in the final PDF.\nThis description is used to describe what this section means to a client.",
-                        editItem.getPdfDescription() != null ? editItem.getPdfDescription() : "", 200, false);
+                        editItem.getPdfDescription() != null ? editItem.getPdfDescription() : "", 200);
                 textInputDialog.setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -351,7 +351,7 @@ public class CategoryItemDialog extends Dialog
 
         editNumeric.setVisibility(editItem instanceof Numeric ? View.VISIBLE : View.GONE);
         editNumeric.setOnClickListener(v -> {
-            TextInputDialog input = new TextInputDialog(getContext(), "Numeric Unit", "The unit that describes the number being entered",  ((Numeric)editItem).getUnit(), 12, true);
+            TextInputDialog input = new TextInputDialog(getContext(), "Numeric Unit", "The unit that describes the number being entered",  ((Numeric)editItem).getUnit(), 12);
             input.setOnDismissListener(e -> {
                 ((Numeric)editItem).setUnit(input.getText());
             });

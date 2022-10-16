@@ -39,7 +39,7 @@ public class Sub_System extends Category{
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SystemsDialog(pageLayout.getContext(), getSystem().getSubSystems(), getSystem()).setOnDismissListener(
+                new SystemsDialog(pageLayout.getContext(), getSystem()).setOnDismissListener(
                         dialog -> categoryRecycler.getAdapter().notifyDataSetChanged()
                 );
             }

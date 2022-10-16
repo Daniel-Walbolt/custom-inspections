@@ -546,53 +546,16 @@ public class System implements Serializable
 
         //Remove the system from the inspection
         if (!isSubSystem())
-            Main.inspectionSchedule.inspection.getSystemList().remove(this); // Remove a MainSystem from the inspection
+            Main.inspectionSchedule.inspection.removeUserSystem(this); // Remove a MainSystem from the inspection
         else {
             getParentSystem().getSubSystems().remove(this); // Remove a Sub-System from a Main-System
         }
         activity.onBackPressed(); //Leave the System activity
 
         //Delete all the saved configurations of the items inside this system.
-        //While the system will no longer be saved, the items that belong to it will still persist in the preferences if we don't clear them.
+        //While the system will no longer be saved, the items the belonged to it will still persist in the preferences if we don't clear them.
         Configuration.deleteSystemConfiguration(activity, this);
 
-
-    }
-
-    public int countCommentsIn(ArrayList<? extends CategoryItem>... items)
-    {
-
-        int comments = 0;
-
-        for(ArrayList<? extends CategoryItem> itemList : items)
-            for(CategoryItem item : itemList)
-            {
-
-                if(item.isApplicable())
-                    comments += item.getCommentCount();
-
-            }
-
-        return comments;
-
-    }
-
-    public int countPicturesIn(ArrayList<? extends CategoryItem>... items)
-    {
-
-        int media = 0;
-
-        for(ArrayList<? extends CategoryItem> itemList : items)
-            for(CategoryItem item : itemList)
-            {
-
-                if(item.isApplicable())
-                    if(item.hasPictures())
-                        media += item.getMediaCount();
-
-            }
-
-        return media;
 
     }
 

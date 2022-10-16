@@ -60,20 +60,12 @@ public class PictureItem extends CategoryItem implements MajorComponent
 
     }
 
-    //This method should only be called after the CameraActivity closes with a result.
-    public void setPictureTaken(boolean pictureStatus)
-    {
-
-        this.pictureTaken = pictureStatus;
-
-    }
-
     @Override
     public boolean getCompletionStatus()
     {
 
         //Return true if there is an image saved in the file. Otherwise return false.
-        return pictureTaken;
+        return getPictures().get(0).getImageFile() != null;
 
     }
 

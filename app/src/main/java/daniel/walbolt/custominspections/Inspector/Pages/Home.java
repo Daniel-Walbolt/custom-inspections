@@ -67,10 +67,6 @@ public class Home
         //Set content view
         activity.setContentView(R.layout.app_home);
 
-        //Get the schedules (inspections TO BE COMPLETED)
-        schedules = new FirebaseBusiness().loadSchedules(this);
-        pastInspections = new ArrayList<>();
-
         //Initialize the page
         initTheme(activity);
 
@@ -79,11 +75,16 @@ public class Home
 
         //Initialize the text fields on the page
         initEditText(activity);
+        //Get the schedules (inspections TO BE COMPLETED)
+        schedules = new ArrayList<>();
+        new FirebaseBusiness().loadSchedules(this);
+        pastInspections = new ArrayList<>();
 
         //Initialize the scheduler that contains the scheduled inspections
         initSchedulesRecycler(activity);
 
         initPastInspectionRecycler(activity);
+
 
     }
 
@@ -121,9 +122,11 @@ public class Home
 
     }
 
-    public void updateScheduledRecycler()
+    public void updateScheduledRecycler(ArrayList<Schedule> schedules)
     {
 
+        this.schedules.clear();
+        this.schedules.addAll(schedules);
         sort(schedules);
         scheduleRecycler.getAdapter().notifyDataSetChanged();
 
@@ -175,6 +178,12 @@ public class Home
                 Intent scheduler = new Intent(mActivity, ScheduleActivity.class);
                 mActivity.startActivity(scheduler);
             }
+        });
+
+        Button reloadSchedules = mActivity.findViewById(R.id.inspector_home_schedule_reload);
+        reloadSchedules.setOnClickListener((v) -> {
+            new FirebaseBusiness().loadSchedules(this);// Retrieve schedules
+            Toast.makeText(mActivity, "Reloaded Schedules", Toast.LENGTH_SHORT);
         });
 
         Button searchPast = mActivity.findViewById(R.id.inspector_home_past_search);

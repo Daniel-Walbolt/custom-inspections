@@ -10,7 +10,7 @@
 
         <TextView
             style="@style/title_notch_text"
-            android:text="Scheduler"/>
+            android:text="Inspections"/>
 
         <TextView
             style="@style/title_notch_text"
@@ -48,12 +48,26 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/inspector_home_schedule_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    style="@style/InformationText"
                     android:text="+ New" />
+
+                <Button
+                    android:id="@+id/inspector_home_schedule_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/InformationText"
+                    android:text="Reload" />
 
             </LinearLayout>
 
@@ -61,7 +75,7 @@
                 style="@style/InformationText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start an inspection by pressing 'inspect' on a schedule" />
+                android:text="Start an inspection by pressing 'begin' on a schedule" />
 
             <View style="@style/Divider"/>
 

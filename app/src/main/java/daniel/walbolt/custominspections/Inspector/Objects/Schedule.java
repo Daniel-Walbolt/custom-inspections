@@ -83,13 +83,6 @@ public class Schedule implements Serializable
 
     }
 
-    public void unschedule(Context context)
-    {
-
-        new FirebaseBusiness().removeSchedule(this, context);
-
-    }
-
     public String formatDate()
     {
 

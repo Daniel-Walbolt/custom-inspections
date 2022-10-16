@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
-    android:layout_height="wrap_content"
-    android:minHeight="300dp"
+    android:layout_width="@dimen/_300sdp"
+    android:layout_height="@dimen/_320sdp"
     android:background="@drawable/dialog_orange_border"
     android:orientation="vertical"
     android:padding="5dp">
