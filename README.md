@@ -58,4 +58,7 @@ The final category in every system is the Settings category. This category is no
 ![SystemCompletionShowcase](https://user-images.githubusercontent.com/61804729/196004360-d16655a2-2ede-4881-b4ff-f4919987faf8.gif)
 ![SystemExclusionAndQualityShowcase](https://user-images.githubusercontent.com/61804729/196004364-020efa69-f2ba-442c-860c-7b5bf9acac21.gif)
 
+After the inspector has finished entering all the applicable data for every system, the inspector can upload the data to the database. Uploading this data is crucial for any business to keep a record of what the inspector reported. If a client reaches out after an inspection, the inspector can reload the past inspection from the database to follow up on any questions/concerns.
+
+Due to emulator problems, my custom camera-x implementation is unable to work. Due to this, the PDF can't be created with pictures using the emulator. However, I can show screenshots of it working on a physical device. Inspectors can take a picture very quickly inside the app by pressing the image icon on a category-item that has pictures. The picture is saved into temporary local storage, and the inspector is shown a preview of it. With this preview, the inspector can add a circle or square to the image, drag and resize these shapes, and put them over the image to indicate importance. I.e. for a defect, a circle on the image will help show where the defect exactly is in the image. After finishing editing, the inspector confirms the image, and the original image file is replaced with the the image including the shapes.
 
