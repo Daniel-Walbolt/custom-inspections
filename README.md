@@ -62,3 +62,6 @@ After the inspector has finished entering all the applicable data for every syst
 
 Due to emulator problems, my custom camera-x implementation is unable to work. Due to this, the PDF can't be created with pictures using the emulator. However, I can show screenshots of it working on a physical device. Inspectors can take a picture very quickly inside the app by pressing the image icon on a category-item that has pictures. The picture is saved into temporary local storage, and the inspector is shown a preview of it. With this preview, the inspector can add a circle or square to the image, drag and resize these shapes, and put them over the image to indicate importance. I.e. for a defect, a circle on the image will help show where the defect exactly is in the image. After finishing editing, the inspector confirms the image, and the original image file is replaced with the the image including the shapes.
 
+![PicturePreview](https://user-images.githubusercontent.com/61804729/197367147-beb606b2-f17b-4c7e-84a3-cc458e98283f.png)
+![ShapesOnImage](https://user-images.githubusercontent.com/61804729/197367150-73ffab2e-3e9b-4955-afd9-82d8019b91c6.png)
+![PictureInObservation](https://user-images.githubusercontent.com/61804729/197367152-cf6dc9b3-3475-44e1-a806-849d60099bf8.png)
